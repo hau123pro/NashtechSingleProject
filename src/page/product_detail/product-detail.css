@@ -1,0 +1,31 @@
+.widget-product li {
+    list-style: none;
+}
+
+.widget-product {
+    border: 1px solid #eae8e4
+}
+
+.widget-product li img {
+    max-width: 60px;
+}
+
+.product-detail-body img {
+    margin-left: 12% !important;
+    max-width: 100% !important;
+    height: auto
+}
+
+.widget-product h6 {
+    overflow: hidden;
+    height: 2.5rem;
+}
+
+.widget-product .product-list-widget .price-bold {
+    font-weight: 500;
+}
+
+
+.font-size-reviews {
+    font-size: 14px;
+}
