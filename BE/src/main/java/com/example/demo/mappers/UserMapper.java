@@ -44,15 +44,14 @@ public class UserMapper {
 		
 	}
 	public CartItemRespone converCartToRepone(CartDetail cartItem) {
-		CartItemRespone respone=new CartItemRespone();
-		respone.setFinalPrice(cartItem.getFisrtPrice());
-		respone.setFisrtPrice(cartItem.getFinalPrice());
-		respone.setFormatBonusPrice(cartItem.getProductFormat().getFormat().getBonusPrice());
-		respone.setFormatName(cartItem.getProductFormat().getFormat().getFormatName());
-		respone.setImgUrl(cartItem.getProductFormat().getProduct().getImgUrl());
-		respone.setProductName(cartItem.getProductFormat().getProduct().getProductName());
-		respone.setQuantity(cartItem.getQuantity());
-		return respone;
+		return CartItemRespone.builder()
+								.fisrtPrice(cartItem.getFisrtPrice())
+								.finalPrice(cartItem.getFinalPrice())
+								.FormatBonusPrice(cartItem.getProductFormat().getFormat().getBonusPrice())
+								.formatName(cartItem.getProductFormat().getFormat().getFormatName())
+								.imgUrl(cartItem.getProductFormat().getProduct().getImgUrl())
+								.productName(cartItem.getProductFormat().getProduct().getProductName())
+								.quantity(cartItem.getQuantity()).build();
 	}
 	
 }
