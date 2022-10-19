@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.DTO.reponse.CartItemRespone;
+import com.example.demo.DTO.reponse.OrderItemRespone;
 import com.example.demo.DTO.reponse.OrderRespone;
 import com.example.demo.DTO.reponse.UserInformationRespone;
 import com.example.demo.entity.Cart;
@@ -53,10 +54,10 @@ public class UserController {
 	public ResponseEntity<OrderRespone> getOrders(@PathVariable Integer orderId) {
 		return ResponseEntity.ok(orderMapper.getOrderById(orderId));
 	}
-//	@GetMapping("/order/{orderId}/item")
-//	public ResponseEntity<List<>> getOrders(@PathVariable Integer orderId) {
-//		return ResponseEntity.ok(orderMapper.getOrderById(orderId));
-//	}
+	@GetMapping("/order/{orderId}/item")
+	public ResponseEntity<List<OrderItemRespone>> getOrderItem(@PathVariable Integer orderId) {
+		return ResponseEntity.ok(orderMapper.getItemOderById(orderId));
+	}
 	@GetMapping("/carts")
 	public ResponseEntity<Cart> gethh() {
 		return ResponseEntity.ok(userRepo.findById(1).get().getCart());

@@ -47,6 +47,7 @@ public class OrderMapper {
 	}
 	public List<OrderItemRespone> getItemOderById(Integer orderId) {
 		Orders order=orderService.getOrderById(orderId);
+		System.out.println(order.getOrderDetails().size());
 		return order.getOrderDetails().stream()
 			.map(item->converOrderItemToRepone(item))
 			.collect(Collectors.toList());
