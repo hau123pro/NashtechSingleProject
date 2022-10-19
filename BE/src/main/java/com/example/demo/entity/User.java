@@ -50,7 +50,7 @@ public class User implements Serializable{
 	private String email;
 	
 	@Column(name="User_Name")
-	private String userName;
+	private String name;
 	
 	@Column(name="Password")
 	private String password;
@@ -81,6 +81,12 @@ public class User implements Serializable{
 	@OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE,CascadeType.REMOVE})
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Set<Review> listReview;
+	
+	 @OneToOne(mappedBy = "user")
+	    private WishList wishList;
+	
+	 @OneToOne(mappedBy = "user")
+	    private Cart cart;
 	
 	
 }

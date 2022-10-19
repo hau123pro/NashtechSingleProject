@@ -36,7 +36,7 @@ public class CustomerDetailService implements UserDetailsService{
 		GrantedAuthority authority=new SimpleGrantedAuthority("ROLE_USER");
 		authorities.add(authority);
 		//trả về userdetail chứa username,password và list quyền của nó
-		return new org.springframework.security.core.userdetails.User(user.getUserName(),user.getPassword(),authorities);
+		return new org.springframework.security.core.userdetails.User(user.getEmail(),user.getPassword(),authorities);
 
 
 	}

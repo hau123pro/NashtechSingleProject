@@ -15,7 +15,7 @@ import javax.validation.constraints.Size;
 public class RegistrationRequest {
 
     @NotBlank(message = " name cannot be empty")
-    private String userName;
+    private String name;
 
     @Size(min = 6, max = 16, message = "The password must be between 6 and 16 characters long")
     private String password;

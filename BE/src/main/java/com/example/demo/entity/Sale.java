@@ -44,4 +44,9 @@ public class Sale {
 	@OneToMany(mappedBy = "sale", cascade = {CascadeType.PERSIST, CascadeType.MERGE,CascadeType.REMOVE})
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Set<SaleDetail> listSaleDetail;
+	
+	@OneToMany(mappedBy = "sale", cascade = {CascadeType.PERSIST, CascadeType.MERGE,CascadeType.REMOVE})
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	
+	private Set<Cart> carts;
 }

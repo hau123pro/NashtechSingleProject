@@ -1,5 +1,6 @@
 package com.example.demo.mappers;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
@@ -19,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 public class AuthenticationMapper {
 	
 	@Autowired
-	private UtilMapper utilMapper;
+	private ModelMapper mapper;
 	
 	@Autowired
 	private AuthenticationService authenticationService;
@@ -29,7 +30,7 @@ public class AuthenticationMapper {
         	System.out.println(bindingResult.getFieldErrors());
             throw new InputFieldException(bindingResult);
         }
-        User user = utilMapper.convertToEntity(registrationRequest, User.class);
+        User user = mapper.map(registrationRequest, User.class);
         return authenticationService.registerUser(user, registrationRequest.getPassword2());
     }
 	
@@ -40,4 +41,8 @@ public class AuthenticationMapper {
             return authenticationService.changePassword(passwordReset.getEmail(),passwordReset.getPassword(), passwordReset.getPassword2());
         }
     }
+	public String sendPasswordResetCode(String email) {
+		
+		return null;
+	}
 }

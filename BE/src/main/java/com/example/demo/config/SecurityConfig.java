@@ -67,6 +67,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 			.authorizeHttpRequests()
 			//cho phép các link trong ".." được xác thực 
 			.antMatchers("/api/v1/author/**").permitAll()
+			.antMatchers("/api/v1/client/**").hasAuthority("ROLE_USER")
 			.antMatchers("/api/v1/registration**").permitAll()
 			.antMatchers("/api/v1/**").permitAll()
 			.antMatchers("/swagger-ui/**").permitAll()

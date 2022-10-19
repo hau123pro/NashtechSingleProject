@@ -37,7 +37,7 @@ public class Format {
 	private int ID;
 	
 	@Column(name="Name")
-	private String name;
+	private String formatName;
 	
 	@Column(name="Description")
 	private String description;
@@ -45,15 +45,10 @@ public class Format {
 	@Column(name="Bonus_Price")
 	private int bonusPrice;
 	
+	
+	
 	@OneToMany(mappedBy = "format", cascade = {CascadeType.PERSIST, CascadeType.MERGE,CascadeType.REMOVE})
 	@OnDelete(action = OnDeleteAction.CASCADE)
-	private Set<OrderDetail> orderDetail;
-	
-	@ManyToMany
-	@JoinTable(
-	  name = "product_format", 
-	  joinColumns = @JoinColumn(name = "Format_ID"), 
-	  inverseJoinColumns = @JoinColumn(name = "Product_ID"))
 	@JsonIgnore
-	private Set<Product> listProduct;
+	private Set<ProductFormat> productFormats;
 }

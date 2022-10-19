@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,5 +30,9 @@ public class AuthenticationController {
     public ResponseEntity<String> updateUserPassword(@Valid @RequestBody PasswordResetRequest passwordReset,
                                                      BindingResult bindingResult) {
         return ResponseEntity.ok(authenticationMapper.passwordReset( passwordReset, bindingResult));
+    }
+	@GetMapping("/forgot/{email}")
+    public ResponseEntity<String> forgotPassword(@PathVariable String email) {
+        return ResponseEntity.ok(authenticationMapper.sendPasswordResetCode(email));
     }
 }

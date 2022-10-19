@@ -16,7 +16,7 @@ import com.example.demo.entity.Author;
 import com.example.demo.service.AuthorService;
 
 @RestController
-@RequestMapping("/api/v1/author")
+@RequestMapping("/api/v1/admin/author")
 @Validated
 public class AuthorController {
 	@Autowired

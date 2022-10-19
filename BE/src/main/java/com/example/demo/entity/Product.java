@@ -39,7 +39,7 @@ public class Product {
 	private int ID;
 	
 	@Column(name="Name")
-	private String name;
+	private String productName;
 	
 	@Column(name="Description")
 	private String description;
@@ -58,9 +58,7 @@ public class Product {
 	@JsonIgnore
 	private Author author;
 	
-	@OneToMany(mappedBy = "product", cascade = {CascadeType.PERSIST, CascadeType.MERGE,CascadeType.REMOVE})
-	@OnDelete(action = OnDeleteAction.CASCADE)
-	private Set<OrderDetail> orderDetail;
+	
 	
 	@OneToMany(mappedBy = "product", cascade = {CascadeType.PERSIST, CascadeType.MERGE,CascadeType.REMOVE})
 	@OnDelete(action = OnDeleteAction.CASCADE)
@@ -73,18 +71,18 @@ public class Product {
 	  inverseJoinColumns = @JoinColumn(name = "Category_ID"))
 	private Set<Category> listCategory;
 	
-	@ManyToMany
-	@JoinTable(
-	  name = "product_format", 
-	  joinColumns = @JoinColumn(name = "Product_ID"), 
-	  inverseJoinColumns = @JoinColumn(name = "Format_ID"))
-	private Set<Format> listFormat;
+	@OneToMany(mappedBy = "product", cascade = {CascadeType.PERSIST, CascadeType.MERGE,CascadeType.REMOVE})
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	@JsonIgnore
+	private Set<ProductFormat> productFormats;
 	
 	@OneToMany(mappedBy = "product", cascade = {CascadeType.PERSIST, CascadeType.MERGE,CascadeType.REMOVE})
 	@OnDelete(action = OnDeleteAction.CASCADE)
+	@JsonIgnore
 	private Set<SaleDetail> listSaleDetail;
 	
 	@OneToMany(mappedBy = "product", cascade = {CascadeType.PERSIST, CascadeType.MERGE,CascadeType.REMOVE})
 	@OnDelete(action = OnDeleteAction.CASCADE)
+	@JsonIgnore
 	private Set<WishListDetail> listWishListDetails;
 }

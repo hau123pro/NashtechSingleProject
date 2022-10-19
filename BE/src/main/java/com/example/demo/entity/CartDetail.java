@@ -1,5 +1,6 @@
 package com.example.demo.entity;
 
+import java.io.Serializable;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -15,7 +16,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.example.demo.entity.ManytoManyID.CartProductFormatID;
-import com.example.demo.entity.ManytoManyID.OrderItemID;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
@@ -28,25 +28,24 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name="order_detail")
-public class OrderDetail {
+@Table(name="cart_detail")
+public class CartDetail {
 	@EmbeddedId
-	private OrderItemID Id;
-	
+	private CartProductFormatID Id;
 	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(name = "Order_ID",insertable = false, updatable = false)
+    @JoinColumn(name = "Cart_ID",insertable = false, updatable = false)
 	@JsonIgnore
-	private Orders order;
+	private Cart cart;
 	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	 @JoinColumns({
 	      @JoinColumn(name = "Product_ID", referencedColumnName = "Product_ID", insertable = false, updatable = false),
 	      @JoinColumn(name = "Format_ID", referencedColumnName = "Format_ID", insertable = false, updatable = false)
 	    })
 	private ProductFormat productFormat;
-	
-	
-	@Column(name="Price")
-	private double price;
+	@Column(name="Fisrt_Price")
+	private double fisrtPrice;
+	@Column(name="Final_Price")
+	private double finalPrice;
 	@Column(name="Quantity")
 	private int quantity;
-}
+	}
