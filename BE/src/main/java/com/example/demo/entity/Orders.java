@@ -48,8 +48,10 @@ public class Orders {
 	@Column(name="Status")
 	private String status;
 	
-	@Column(name="Total_Price")
-	private double totalPrice;
+	@Column(name="first_price")
+	private double firstPrice;
+	@Column(name="final_price")
+	private double finalPrice;
 	
 	@Column(name="Discount")
 	private int discount;

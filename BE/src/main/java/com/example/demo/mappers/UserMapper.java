@@ -1,7 +1,10 @@
 package com.example.demo.mappers;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import javax.persistence.criteria.Order;
@@ -27,20 +30,20 @@ import lombok.RequiredArgsConstructor;
 public class UserMapper {
 
 	@Autowired
-	private ModelMapper mapper;
+	private UtilMapper utilMapper;
 	
 	@Autowired
 	private UserService userService;
 	
 	public UserInformationRespone getUserInfo(String email) {
-		return mapper.map(userService.getUserByEmail(email), UserInformationRespone.class);
+		return utilMapper.convertToEntity(userService.getCartByUser(email), UserInformationRespone.class);
 	}
 	public List<CartItemRespone> getCart(String email) {
-		Set<CartDetail> list=userService.getCartByUser(email).getCartDetails();
+		List<CartItemRespone> set=userService.getCartByUser(email).getCartDetails()
+				.stream().map(item->converCartToRepone(item)).collect(Collectors.toList());
 		
-		return list.stream()
-			.map(item->converCartToRepone(item))
-			.collect(Collectors.toList());
+		
+		return utilMapper.convertToResponseList(set, CartItemRespone.class);
 		
 	}
 	public CartItemRespone converCartToRepone(CartDetail cartItem) {

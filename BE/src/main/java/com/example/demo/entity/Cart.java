@@ -52,7 +52,7 @@ public class Cart {
 	@Column(name="Quantity")
 	private int quantity;
 	
-	@OneToMany(mappedBy = "cart", cascade = {CascadeType.PERSIST, CascadeType.MERGE,CascadeType.REMOVE})
+	@OneToMany(mappedBy = "cart", cascade = {CascadeType.PERSIST, CascadeType.MERGE,CascadeType.REMOVE},orphanRemoval = true)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Set<CartDetail> cartDetails;
 	

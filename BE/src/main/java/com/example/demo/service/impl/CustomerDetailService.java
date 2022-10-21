@@ -5,6 +5,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.constant.ErrorString;
 import com.example.demo.entity.User;
 import com.example.demo.repository.UserRepository;
 
@@ -29,7 +30,7 @@ public class CustomerDetailService implements UserDetailsService{
 		 System.out.print(email);
 		 Optional<User> userOptional = userRepo.findUserByEmail(email);
 		 
-	     User user = userOptional.orElseThrow(()-> new UsernameNotFoundException("User not found"));
+	     User user = userOptional.orElseThrow(()-> new UsernameNotFoundException(ErrorString.USER_NOT_FOUND));
 	    
 	     //tạo list authoritis để nhận quyền của tài khoản
 		List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();

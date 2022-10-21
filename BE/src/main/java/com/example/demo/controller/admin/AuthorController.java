@@ -5,6 +5,8 @@ import java.util.List;
 import javax.validation.constraints.Min;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,10 +26,11 @@ public class AuthorController {
 	
 	@GetMapping()
 	public List<Author> getAllAuthor(
-			@RequestParam(value="page",defaultValue="1") @Min(value=1,message="Can't set value page less than one") Integer page
+			@PageableDefault(size=2) Pageable page
 			){
-			List<Author> list= authorService.getAllAuthor(page-1).getContent();
+			List<Author> list= authorService.getAllAuthor(page).getContent();
 			return list;
 	}
+	
 	
 }

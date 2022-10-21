@@ -18,22 +18,20 @@ import com.example.demo.entity.Cart;
 import com.example.demo.mappers.OrderMapper;
 import com.example.demo.mappers.UserMapper;
 import com.example.demo.repository.UserRepository;
+import com.example.demo.service.OrderService;
 
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/client/users")
+@RequestMapping("/api/v1/client")
 public class UserController {
 	
 	@Autowired
 	private UserMapper userMapper;
 	
 	@Autowired
-	private OrderMapper orderMapper;
-	
-	@Autowired
-	private UserRepository userRepo;
+	private OrderService orderService;
 	
 	@GetMapping("/info")
 	public ResponseEntity<UserInformationRespone> getInfor(Principal principal) {
@@ -46,20 +44,17 @@ public class UserController {
 	}
 	
 	@GetMapping("/orders")
-	public ResponseEntity<List<OrderRespone>> getOrders(Principal principal) {
-		return ResponseEntity.ok(orderMapper.getOrder(principal.getName()));
+	public ResponseEntity<List<OrderRespone>> getOrdersUser(Principal principal) {
+		return ResponseEntity.ok(orderService.getOrderByUser(principal.getName()));
 	}
 	
 	@GetMapping("/order/{orderId}")
-	public ResponseEntity<OrderRespone> getOrders(@PathVariable Integer orderId) {
-		return ResponseEntity.ok(orderMapper.getOrderById(orderId));
+	public ResponseEntity<OrderRespone> getOrdersUserById(@PathVariable Integer orderId) {
+		return ResponseEntity.ok(orderService.getOrderById(orderId));
 	}
 	@GetMapping("/order/{orderId}/item")
-	public ResponseEntity<List<OrderItemRespone>> getOrderItem(@PathVariable Integer orderId) {
-		return ResponseEntity.ok(orderMapper.getItemOderById(orderId));
+	public ResponseEntity<List<OrderItemRespone>> getOrderItemByOrderId(@PathVariable Integer orderId) {
+		return ResponseEntity.ok(orderService.getAllItemOrderById(orderId));
 	}
-	@GetMapping("/carts")
-	public ResponseEntity<Cart> gethh() {
-		return ResponseEntity.ok(userRepo.findById(1).get().getCart());
-	}
+	
 }

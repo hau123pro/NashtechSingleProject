@@ -4,20 +4,18 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 
+import com.example.demo.DTO.reponse.HeaderResponse;
+
 import lombok.RequiredArgsConstructor;
-
-
 
 @Component
 @RequiredArgsConstructor
 public class UtilMapper {
     
-	@Autowired
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
 
     <T, S> S convertToEntity(T data, Class<S> type) {
         return modelMapper.map(data, type);
@@ -32,6 +30,13 @@ public class UtilMapper {
                 .map(list -> convertToResponse(list, type))
                 .collect(Collectors.toList());
     }
-
     
+
+    <T, S> HeaderResponse<S> getHeaderResponse(List<T> orders, Integer totalPages, Long totalElements, Class<S> type) {
+        List<S> orderResponses = convertToResponseList(orders, type);
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.add("page-total-count", String.valueOf(totalPages));
+        responseHeaders.add("page-total-elements", String.valueOf(totalElements));
+        return new HeaderResponse<S>(orderResponses, responseHeaders);
+    }
 }

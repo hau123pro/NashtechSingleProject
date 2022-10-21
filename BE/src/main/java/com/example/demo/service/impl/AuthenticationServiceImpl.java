@@ -1,5 +1,6 @@
 package com.example.demo.service.impl;
 
+import java.sql.Date;
 import java.util.Collections;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.constant.ErrorString;
 import com.example.demo.entity.User;
 import com.example.demo.enums.Role;
 import com.example.demo.exception.ApiException;
@@ -24,22 +26,22 @@ public class AuthenticationServiceImpl implements AuthenticationService{
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	
+	
 	@Override
 	public String registerUser(User user, String password2) {
-		// TODO Auto-generated method stub
 		if(user.getPassword()!=null&&!user.getPassword().equals(password2)) {
-			throw new BadRequestException("Password not match!");
+			throw new BadRequestException(ErrorString.PASS_NOT_MATCH);
 		}
 		if(userRepository.findUserByEmail(user.getEmail()).isPresent())
 		{
-			throw new BadRequestException("Email is already used.");
+			throw new BadRequestException(ErrorString.EMAIL_IN_USE);
 		}
 		user.setStatus("Active");
 		user.setRoles(Role.USER);
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		long millis=System.currentTimeMillis();   
 	    // creating a new object of the class Date  
-	    java.sql.Date date = new java.sql.Date(millis);  
+	    Date date = new Date(millis);  
 	    user.setDateCreate(date);
 	    user.setDateOfBirth(date);
 	    user.setPhone("");
@@ -49,13 +51,12 @@ public class AuthenticationServiceImpl implements AuthenticationService{
 
 	@Override
 	public String changePassword(String email, String password, String password2) {
-		// TODO Auto-generated method stub
 		
 		if (password != null && !password.equals(password2)) {
-            throw new BadRequestException("Passwords do not match.");
+            throw new BadRequestException(ErrorString.PASS_NOT_MATCH);
         }
 		 User user = userRepository.findUserByEmail(email)
-	                .orElseThrow(()->new UsernameNotFoundException("User not found"));
+	                .orElseThrow(()->new UsernameNotFoundException(ErrorString.USER_NOT_FOUND));
 		 user.setPassword(password2);
 		 userRepository.save(user);
 		return "Password successfully changed!";
