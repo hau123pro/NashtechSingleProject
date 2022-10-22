@@ -1,5 +1,6 @@
 package com.example.demo.entity;
 
+import java.sql.Date;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -29,11 +30,10 @@ public class Review {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="Id")
-	private int ID;
+	private int Id;
 	
 	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "User_ID")
-	@JsonIgnore
 	private User user;
 	
 	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
@@ -47,4 +47,7 @@ public class Review {
 	
 	@Column(name="Rating")
 	private int rating;
+	
+	@Column(name="Date_Create")
+	private Date dateCreate;
 }

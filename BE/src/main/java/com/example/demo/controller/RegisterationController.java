@@ -28,5 +28,5 @@ public class RegisterationController {
     public ResponseEntity<String> registration(@Valid @RequestBody RegistrationRequest user, BindingResult bindingResult) {
         return ResponseEntity.ok(authenticationMapper.registerUser( user, bindingResult));
     }
-
+	
 }

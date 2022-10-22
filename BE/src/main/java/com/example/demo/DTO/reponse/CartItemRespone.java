@@ -2,6 +2,8 @@ package com.example.demo.DTO.reponse;
 
 import javax.validation.constraints.NotBlank;
 
+import com.example.demo.entity.ManytoManyID.CartProductFormatID;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,6 +16,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 public class CartItemRespone {
+	private CartProductFormatID cartProductFormatID;
 	private String productName;
 	private String formatName;
 	private String imgUrl;

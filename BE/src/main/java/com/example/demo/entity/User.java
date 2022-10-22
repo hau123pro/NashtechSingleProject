@@ -80,6 +80,7 @@ public class User implements Serializable{
 	
 	@OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE,CascadeType.REMOVE})
 	@OnDelete(action = OnDeleteAction.CASCADE)
+	@JsonIgnore
 	private Set<Review> listReview;
 	
 	 @OneToOne(mappedBy = "user")

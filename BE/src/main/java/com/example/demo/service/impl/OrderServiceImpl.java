@@ -74,28 +74,26 @@ public class OrderServiceImpl implements OrderService{
 		User user = userRepository.findUserByEmail(email)
 									.orElseThrow(()-> new BadRequestException(ErrorString.USER_NOT_FOUND));
 		Orders orders=orderMapper.convertCartToOrders(user.getCart(),user);
-//		List<OrderDetail> details=orderMapper.convertCartItemToOrder(user);
-//		for(OrderDetail detail:details) {
-//			
-//		}
-//		orders.setUser(user);
-//		orders.setStatus("Active");
-//		orders=orderRepository.save(orders);
-//		List<OrderDetail> details=orderMapper.convertCartItemToOrder(user);
-//		Set<OrderDetail> set=new HashSet<>(details);
-//		for(OrderDetail detail:set) {
-//			detail.setOrder(orders);
-//			OrderItemID id=new OrderItemID(detail.getOrder().getID(),detail.getProductFormat().getProduct().getID(),	
-//										detail.getProductFormat().getFormat().getID());
-//			detail.setId(id);
-//		}
-//		orders.setOrderDetails(set);
-//		orderRepository.save(orders);
-		cartService.deleteCart(user.getCart());
+		
+		orders.setUser(user);
+		orders.setStatus("Active");
+		orders=orderRepository.save(orders);
+		List<OrderDetail> details=orderMapper.convertCartItemToOrder(user);
+		Set<OrderDetail> set=new HashSet<>(details);
+		for(OrderDetail detail:set) {
+			detail.setOrder(orders);
+			OrderItemID id=new OrderItemID(detail.getOrder().getID(),detail.getProductFormat().getProduct().getID(),	
+										detail.getProductFormat().getFormat().getID());
+			detail.setId(id);
+		}
+		orders.setOrderDetails(set);
+		orderRepository.save(orders);
+		cartService.deleteAllCartItem(user.getCart());
 		return "Order sucessfully add";
 		
 //		return orders;
 	}
+	
 
 	@Override
 	public List<OrderRespone> getOrderByUser(String email) {

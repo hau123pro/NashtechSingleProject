@@ -35,11 +35,11 @@ public class ProductFormat {
 	@EmbeddedId
     private ProductFormatID id;
 	
-	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	@ManyToOne(cascade = {CascadeType.PERSIST})
     @JoinColumn(name = "Product_ID",insertable = false, updatable = false)
 	private Product product;
 	
-	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	@ManyToOne(cascade = {CascadeType.PERSIST})
     @JoinColumn(name = "Format_ID",insertable = false, updatable = false)
 	private Format format;
 	

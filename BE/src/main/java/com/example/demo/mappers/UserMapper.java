@@ -16,10 +16,12 @@ import org.springframework.stereotype.Component;
 import com.example.demo.DTO.reponse.CartItemRespone;
 import com.example.demo.DTO.reponse.OrderRespone;
 import com.example.demo.DTO.reponse.UserInformationRespone;
+import com.example.demo.DTO.request.CartItemRequest;
 import com.example.demo.entity.Cart;
 import com.example.demo.entity.CartDetail;
 import com.example.demo.entity.OrderDetail;
 import com.example.demo.entity.Orders;
+import com.example.demo.entity.ManytoManyID.CartProductFormatID;
 import com.example.demo.exception.BadRequestException;
 import com.example.demo.service.UserService;
 
@@ -36,7 +38,7 @@ public class UserMapper {
 	private UserService userService;
 	
 	public UserInformationRespone getUserInfo(String email) {
-		return utilMapper.convertToEntity(userService.getCartByUser(email), UserInformationRespone.class);
+		return utilMapper.convertToEntity(userService.getUserByEmail(email), UserInformationRespone.class);
 	}
 	public List<CartItemRespone> getCart(String email) {
 		List<CartItemRespone> set=userService.getCartByUser(email).getCartDetails()
@@ -48,6 +50,7 @@ public class UserMapper {
 	}
 	public CartItemRespone converCartToRepone(CartDetail cartItem) {
 		return CartItemRespone.builder()
+								.cartProductFormatID(cartItem.getId())
 								.fisrtPrice(cartItem.getFisrtPrice())
 								.finalPrice(cartItem.getFinalPrice())
 								.FormatBonusPrice(cartItem.getProductFormat().getFormat().getBonusPrice())
@@ -56,5 +59,4 @@ public class UserMapper {
 								.productName(cartItem.getProductFormat().getProduct().getProductName())
 								.quantity(cartItem.getQuantity()).build();
 	}
-	
 }

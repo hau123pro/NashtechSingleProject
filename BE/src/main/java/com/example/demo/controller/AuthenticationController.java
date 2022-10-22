@@ -33,6 +33,8 @@ public class AuthenticationController {
     }
 	@GetMapping("/forgot/{email}")
     public ResponseEntity<String> forgotPassword(@PathVariable String email) {
+		
+		
         return ResponseEntity.ok(authenticationMapper.sendPasswordResetCode(email));
     }
 }
