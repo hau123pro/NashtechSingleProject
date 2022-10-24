@@ -8,9 +8,9 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import dto.reponse.AuthorResponse;
 import dto.reponse.CategoryRespone;
 import dto.reponse.FormatRespone;
-import dto.reponse.ProductAuthorResponse;
 import dto.reponse.ProductRespone;
 import entity.Format;
 import entity.Product;
@@ -44,9 +44,13 @@ public class ProductMapper {
 							.productName(product.getProductName())
 							.imgUrl(product.getImgUrl())
 							.authorResponse(
-									ProductAuthorResponse.builder()
+									AuthorResponse.builder()
 									.Id(product.getAuthor().getId())
 									.authorName(product.getAuthor().getFirstName()+" "+product.getAuthor().getLastName())
+									.description(product.getAuthor().getDescription())
+									.imgUrl(product.getAuthor().getImgUrl())
+									.publishBook(product.getAuthor().getPublishBook())
+									.quantitySale(product.getAuthor().getQuantitySale())
 									.build()
 									)
 							.description(product.getDescription())
@@ -56,6 +60,10 @@ public class ProductMapper {
 																								.collect(Collectors.toList())
 																						))
 							.formatRespones(formatMapper.convertListFormatToResponse(formats))
+							.reviewRespones(reviewMapper.convertToListReviewResponse(product.getListReview()
+																							.stream()
+																							.collect(Collectors.toList())
+									))
 							.build();
 							
 							

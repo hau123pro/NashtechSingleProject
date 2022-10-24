@@ -21,6 +21,7 @@ import org.hibernate.annotations.OnDeleteAction;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -29,6 +30,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Entity
 @Table(name="cart")
 public class Cart {
@@ -52,8 +54,7 @@ public class Cart {
 	@Column(name="Quantity")
 	private int quantity;
 	
-	@OneToMany(mappedBy = "cart",orphanRemoval = true)
-	@OnDelete(action = OnDeleteAction.CASCADE)
+	@OneToMany(mappedBy = "cart",cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	private Set<CartDetail> cartDetails;
 	
 	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})

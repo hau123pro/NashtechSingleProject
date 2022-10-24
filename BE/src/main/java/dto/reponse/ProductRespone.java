@@ -23,9 +23,9 @@ public class ProductRespone {
 	
 	private String imgUrl;
 	
-	private ProductAuthorResponse authorResponse;
+	private AuthorResponse authorResponse;
 	
-//	private List<ReviewRespone> reviewRespones;
+	private List<ReviewRespone> reviewRespones;
 	
 	private List<FormatRespone> formatRespones;
 	

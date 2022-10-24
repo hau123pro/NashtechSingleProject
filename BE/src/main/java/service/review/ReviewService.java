@@ -24,7 +24,7 @@ public class ReviewService implements IReviewService{
 	public List<ReviewRespone> getAllReview() {
 		// TODO Auto-generated method stub
 		List<Review> reviews=iReviewRepository.findAll();
-		return reviewMapper.getAllReview(reviews);
+		return reviewMapper.convertToListReviewResponse(reviews);
 	}
 
 }

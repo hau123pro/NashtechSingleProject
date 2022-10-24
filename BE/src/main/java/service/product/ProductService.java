@@ -36,15 +36,26 @@ public class ProductService implements IProductService {
 		Page<Product> products = productRepository.findAll(pageable);
 		List<ProductRespone> productRespones = new ArrayList<>();
 		for (Product product : products.getContent()) {
-			List<ProductFormat> formats = productFormatRepository.findAll();
-			List<Format> listFormat = new ArrayList<Format>();
-			for (ProductFormat format : formats) {
-				listFormat.add(format.getFormat());
-			}
-			ProductRespone productRespone = productMapper.convertToProductResponse(product, listFormat);
-			productRespones.add(productRespone);
+			productRespones.add(getProductById(product.getId()));
 		}
 		return productRespones;
 	}
+
+	@Override
+	public ProductRespone getProductById(Integer id) {
+		// TODO Auto-generated method stub
+		if(id==null)
+			throw new BadRequestException("Id cannot be empty");
+		Product product=productRepository.findById(id)
+										.orElseThrow(()->new BadRequestException("Product not found"));
+		List<ProductFormat> formats = productFormatRepository.findAll();
+		List<Format> listFormat = new ArrayList<Format>();
+		for (ProductFormat format : formats) {
+			listFormat.add(format.getFormat());
+		}
+		ProductRespone productRespone = productMapper.convertToProductResponse(product, listFormat);
+		return productRespone;
+	}
+	
 
 }

@@ -3,6 +3,8 @@ package controller;
 import java.security.Principal;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.hibernate.sql.Delete;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import dto.reponse.CartItemRespone;
+import dto.reponse.CartRespone;
 import dto.reponse.OrderItemRespone;
 import dto.reponse.OrderRespone;
 import dto.reponse.ProductRespone;
@@ -37,6 +40,7 @@ public class UserController {
 	
 	@Autowired
 	private UserMapper userMapper;
+
 	
 	@Autowired
 	private IOrderService iOrderService;
@@ -55,8 +59,8 @@ public class UserController {
 	}
 	
 	@GetMapping("/cart")
-	public ResponseEntity<List<CartItemRespone>> getCart(Principal principal) {
-		return ResponseEntity.ok(userMapper.getCart(principal.getName()));
+	public ResponseEntity<CartRespone> getCart(Principal principal) {
+		return ResponseEntity.ok(iCartService.getCart(principal.getName()));
 	}
 	
 	@GetMapping("/orders")
@@ -82,9 +86,10 @@ public class UserController {
 	private ResponseEntity<List<ReviewRespone>> getAllReview(){
 		return ResponseEntity.ok(iReviewService.getAllReview());
 	}
-//	@GetMapping("/shop")
-//	private ResponseEntity<List<ProductRespone>> getAllProduct(){
-//		
-//	}
+	
+	@PostMapping("/cart/add")
+	public ResponseEntity<String> addProductToCart(@Valid @RequestBody CartItemRequest cartItemRequest,Principal principal){
+		return ResponseEntity.ok(iCartService.addProductToCart(cartItemRequest, principal.getName()));
+	}
 	
 }

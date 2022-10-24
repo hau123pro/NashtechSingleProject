@@ -9,4 +9,6 @@ import entity.Product;
 
 public interface IProductService {
 	public List<ProductRespone> getAllProduct(Pageable pageable);
+	
+	public ProductRespone getProductById(Integer id);
 }

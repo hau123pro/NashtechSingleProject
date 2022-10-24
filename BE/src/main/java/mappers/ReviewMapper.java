@@ -16,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 public class ReviewMapper {
 	@Autowired
 	private UtilMapper utilMapper;
-	public List<ReviewRespone> getAllReview(List<Review> list){
+	public List<ReviewRespone> convertToListReviewResponse(List<Review> list){
 		List<ReviewRespone> listRespone=new ArrayList<>();
 	 for(Review review:list) {
 		 ReviewRespone reviewRespone=ReviewRespone.builder()

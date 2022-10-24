@@ -1,6 +1,8 @@
 package dto.request;
 
 import javax.persistence.Column;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import entity.ProductFormat;
 import entity.ManytoManyID.CartProductFormatID;
@@ -15,12 +17,15 @@ import lombok.Setter;
 @AllArgsConstructor
 public class CartItemRequest {
 	
+	@NotNull(message="Cart Id cannot empty")
 	private int cartID;
 	
+	@NotNull(message="Product Id cannot empty")
 	private int productID;
 	
+	@NotNull(message="Format Id cannot empty")
 	private int formatID;
+	
+	private int quantity;
 
-	
-	
 }

@@ -31,7 +31,6 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-
 @Entity
 @Table(name="product_format")
 public class ProductFormat {
@@ -47,5 +46,9 @@ public class ProductFormat {
     @JoinColumn(name = "Format_ID",insertable = false, updatable = false)
 	private Format format;
 	
+	@Column(name="Quantity")
+	private int quantity;
 	
+	@Column(name="Price")
+	private double price;
 }
