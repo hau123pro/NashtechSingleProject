@@ -41,24 +41,24 @@ public class Cart {
 	private int ID;
 	
 	@OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "User_ID", referencedColumnName = "id")
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
 	@JsonIgnore
 	private User user;
 	
-	@Column(name="Total_Price")
+	@Column(name="first_price")
 	private double firstPrice;
-	@Column(name="Final_Price")
+	@Column(name="final_price")
 	private double finalPrice;
-	@Column(name="Date_Create")
+	@Column(name="date_create")
 	private Date dateCreate;
-	@Column(name="Quantity")
+	@Column(name="quantity")
 	private int quantity;
 	
 	@OneToMany(mappedBy = "cart",cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	private Set<CartDetail> cartDetails;
 	
 	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(name = "Sale_ID")
+    @JoinColumn(name = "sale_id")
 	@JsonIgnore
 	private Sale sale;
 }

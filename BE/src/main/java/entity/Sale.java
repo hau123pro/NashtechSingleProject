@@ -31,13 +31,13 @@ public class Sale {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="Id")
 	private int ID;
-	@Column(name="Title")
+	@Column(name="title")
 	private String title;
-	@Column(name="Description")
+	@Column(name="description")
 	private String description;
-	@Column(name="Date_Start")
+	@Column(name="date_start")
 	private Date dateStart;
-	@Column(name="Date_End")
+	@Column(name="date_end")
 	private Date dateEnd;
 
 	

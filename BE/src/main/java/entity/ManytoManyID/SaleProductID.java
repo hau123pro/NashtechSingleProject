@@ -11,16 +11,17 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @Embeddable
-public class ProductFormatID implements Serializable{
+public class SaleProductID implements Serializable{
 	
 	@Column(name="product_id")
 	private int productID;
-	@Column(name="format_id")
-	private int formatID;
+	@Column(name="sale_id")
+	private int saleID;
 }

@@ -34,7 +34,7 @@ public class WishList {
 	private int ID;
 	
 	@OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "User_ID", referencedColumnName = "id")
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 	
 	@OneToMany(mappedBy = "wishList", cascade = {CascadeType.PERSIST, CascadeType.MERGE,CascadeType.REMOVE})

@@ -33,21 +33,21 @@ public class Review {
 	private int Id;
 	
 	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(name = "User_ID")
+    @JoinColumn(name = "user_id")
 	private User user;
 	
 	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(name = "Product_ID")
+    @JoinColumn(name = "product_id")
 	@JsonIgnore
 	private Product product;
 	
 	
-	@Column(name="Content")
+	@Column(name="content")
 	private String content;
 	
-	@Column(name="Rating")
+	@Column(name="rating")
 	private int rating;
 	
-	@Column(name="Date_Create")
+	@Column(name="date_create")
 	private Date dateCreate;
 }

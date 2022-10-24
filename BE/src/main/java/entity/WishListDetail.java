@@ -25,12 +25,12 @@ public class WishListDetail {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="Id")
-	private int ID;
+	private int Id;
 	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(name = "Wishlist_ID")
+    @JoinColumn(name = "wishlist_id")
 	private WishList wishList;
 	
 	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(name = "Product_ID")
+    @JoinColumn(name = "product_id")
 	private Product product;
 }

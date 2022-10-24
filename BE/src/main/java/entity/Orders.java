@@ -38,14 +38,14 @@ public class Orders {
 	private int ID;
 	
 	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(name = "User_ID")
+    @JoinColumn(name = "user_id")
 	@JsonIgnore
 	private User user;
 	
-	@Column(name="Date_Create")
+	@Column(name="date_create")
 	private Date dateCreate;
 	
-	@Column(name="Status")
+	@Column(name="status")
 	private String status;
 	
 	@Column(name="first_price")
@@ -53,10 +53,10 @@ public class Orders {
 	@Column(name="final_price")
 	private double finalPrice;
 	
-	@Column(name="Discount")
+	@Column(name="discount")
 	private int discount;
 	
-	@Column(name="Quantity")
+	@Column(name="quantity")
 	private int quantity;
 	
 	@OneToMany(mappedBy = "order", cascade = {CascadeType.PERSIST, CascadeType.MERGE,CascadeType.REMOVE})

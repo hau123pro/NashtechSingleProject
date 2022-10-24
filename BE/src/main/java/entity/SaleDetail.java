@@ -2,6 +2,7 @@ package entity;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,6 +13,8 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import entity.ManytoManyID.ProductFormatID;
+import entity.ManytoManyID.SaleProductID;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,20 +27,18 @@ import lombok.Setter;
 @Entity
 @Table(name="sale_detail")
 public class SaleDetail {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="Id")
-	private int ID;
+	@EmbeddedId
+    private SaleProductID id;
 	
 	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(name = "Sale_ID")
+    @JoinColumn(name = "sale_id",insertable = false, updatable = false)
 	@JsonIgnore
 	private Sale sale;
 	
 	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(name = "Product_ID")
+    @JoinColumn(name = "product_id",insertable = false, updatable = false)
 	private Product product;
 	
-	@Column(name="Invoice")
+	@Column(name="invoice")
 	private int invoice;
 }

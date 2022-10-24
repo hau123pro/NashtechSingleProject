@@ -35,19 +35,19 @@ public class CartDetail {
 	@EmbeddedId
 	private CartProductFormatID Id;
 	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(name = "Cart_ID",insertable = false, updatable = false)
+    @JoinColumn(name = "cart_id",insertable = false, updatable = false)
 	@JsonIgnore
 	private Cart cart;
 	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	 @JoinColumns({
-	      @JoinColumn(name = "Product_ID", referencedColumnName = "Product_ID", insertable = false, updatable = false),
-	      @JoinColumn(name = "Format_ID", referencedColumnName = "Format_ID", insertable = false, updatable = false)
+	      @JoinColumn(name = "product_id", referencedColumnName = "product_id", insertable = false, updatable = false),
+	      @JoinColumn(name = "format_id", referencedColumnName = "format_id", insertable = false, updatable = false)
 	    })
 	private ProductFormat productFormat;
-	@Column(name="Fisrt_Price")
-	private double fisrtPrice;
-	@Column(name="Final_Price")
+	@Column(name="first_price")
+	private double firstPrice;
+	@Column(name="final_price")
 	private double finalPrice;
-	@Column(name="Quantity")
+	@Column(name="quantity")
 	private int quantity;
 	}

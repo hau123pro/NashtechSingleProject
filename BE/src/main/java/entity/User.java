@@ -47,31 +47,31 @@ public class User implements Serializable{
 	@Column(name="Id")
 	private int userID;
 	
-	@Column(name="Email")
+	@Column(name="email")
 	private String email;
 	
-	@Column(name="User_Name")
+	@Column(name="user_name")
 	private String name;
 	
-	@Column(name="Password")
+	@Column(name="password")
 	private String password;
 	
 	@JsonFormat(pattern = "yyyy-MM-dd")
-	@Column(name="Date_of_Birth")
+	@Column(name="date_of_birth")
 	private Date dateOfBirth;
 	
-	@Column(name="Phone")
+	@Column(name="phone")
 	private String phone;
 	
 	@JsonFormat(pattern = "yyyy-MM-dd")
-	@Column(name="Date_Create")
+	@Column(name="date_create")
 	private Date dateCreate;
 	
-	@Column(name="Status")
+	@Column(name="status")
 	private String status;
 	
 //	@ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
-	@Column(name="Role")
+	@Column(name="role")
     private Integer roles;
 	
 	@OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE,CascadeType.REMOVE})

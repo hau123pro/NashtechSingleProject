@@ -18,11 +18,11 @@ import lombok.Setter;
 @Builder
 public class CartProductFormatID implements Serializable{
 	
-		@Column(name="Cart_ID")
+		@Column(name="cart_id")
 		private int cartID;
-		@Column(name="Product_ID")
+		@Column(name="product_id")
 		private int productID;
-		@Column(name="Format_ID")
+		@Column(name="format_id")
 		private int formatID;
 	
 }

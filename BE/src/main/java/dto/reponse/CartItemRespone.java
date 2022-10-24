@@ -21,6 +21,6 @@ public class CartItemRespone {
 	private String imgUrl;
 	private int FormatBonusPrice;
 	private int quantity;
-	private double fisrtPrice;
+	private double firstPrice;
 	private double finalPrice;
 }

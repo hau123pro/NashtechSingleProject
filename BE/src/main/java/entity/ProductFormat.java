@@ -38,17 +38,17 @@ public class ProductFormat {
     private ProductFormatID id;
 	
 	@ManyToOne(cascade = {CascadeType.PERSIST})
-    @JoinColumn(name = "Product_ID",insertable = false, updatable = false)
+    @JoinColumn(name = "product_id",insertable = false, updatable = false)
 	@JsonIgnore
 	private Product product;
 	
 	@ManyToOne(cascade = {CascadeType.PERSIST})
-    @JoinColumn(name = "Format_ID",insertable = false, updatable = false)
+    @JoinColumn(name = "format_id",insertable = false, updatable = false)
 	private Format format;
 	
-	@Column(name="Quantity")
+	@Column(name="quantity")
 	private int quantity;
 	
-	@Column(name="Price")
+	@Column(name="price")
 	private double price;
 }

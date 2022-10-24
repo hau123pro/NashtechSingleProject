@@ -43,23 +43,23 @@ public class Product implements Serializable {
 	@Column(name="Id")
 	private int Id;
 	
-	@Column(name="Name")
+	@Column(name="name")
 	private String productName;
 	
-	@Column(name="Description")
+	@Column(name="description")
 	private String description;
 	
-	@Column(name="Img_Url")
+	@Column(name="img_url")
 	private String imgUrl;
 	
-	@Column(name="Date_Create")
+	@Column(name="date_create")
 	private Date dateCreate;
 	
-	@Column(name="Status")
+	@Column(name="status")
 	private String status;
 	
 	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(name = "Author_ID")
+    @JoinColumn(name = "author_id")
 	@JsonIgnore
 	private Author author;
 	
@@ -72,8 +72,8 @@ public class Product implements Serializable {
 	@ManyToMany
 	@JoinTable(
 	  name = "product_categories", 
-	  joinColumns = @JoinColumn(name = "Product_ID"), 
-	  inverseJoinColumns = @JoinColumn(name = "Category_ID"))
+	  joinColumns = @JoinColumn(name = "product_id"), 
+	  inverseJoinColumns = @JoinColumn(name = "category_id"))
 	private Set<Category> listCategory;
 	
 	@OneToMany(mappedBy = "product", cascade = {CascadeType.PERSIST, CascadeType.MERGE,CascadeType.REMOVE})

@@ -38,22 +38,22 @@ public class Author {
 	@Column(name="Id")
 	private int Id;
 	
-	@Column(name="First_Name")
+	@Column(name="first_name")
 	private String firstName;
 	
-	@Column(name="Last_Name")
+	@Column(name="last_name")
 	private String lastName;
 	
-	@Column(name="Publish_Book")
+	@Column(name="publish_book")
 	private int publishBook;
 	
-	@Column(name="Quantity_Sale")
+	@Column(name="quantity_sale")
 	private int quantitySale;
 	
-	@Column(name="Description")
+	@Column(name="description")
 	private String description;
 	
-	@Column(name="Img_Url")
+	@Column(name="img_url")
 	private String imgUrl;
 //	
 	@OneToMany(mappedBy = "author", cascade = {CascadeType.PERSIST, CascadeType.MERGE,CascadeType.REMOVE})

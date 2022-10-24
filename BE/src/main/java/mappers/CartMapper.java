@@ -28,7 +28,7 @@ public class CartMapper {
 	public CartItemRespone converCartToRepone(CartDetail cartItem) {
 		return CartItemRespone.builder()
 								.cartProductFormatID(cartItem.getId())
-								.fisrtPrice(cartItem.getFisrtPrice())
+								.firstPrice(cartItem.getFirstPrice())
 								.finalPrice(cartItem.getFinalPrice())
 								.FormatBonusPrice(cartItem.getProductFormat().getFormat().getBonusPrice())
 								.formatName(cartItem.getProductFormat().getFormat().getFormatName())

@@ -11,10 +11,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderItemID implements Serializable{
-	@Column(name="Order_ID")
+	@Column(name="order_id")
 	private int orderID;
-	@Column(name="Product_ID")
+	@Column(name="product_id")
 	private int productID;
-	@Column(name="Format_ID")
+	@Column(name="format_id")
 	private int formatID;
 }

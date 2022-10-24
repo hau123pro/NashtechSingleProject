@@ -34,19 +34,19 @@ public class OrderDetail {
 	private OrderItemID Id;
 	
 	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(name = "Order_ID",insertable = false, updatable = false)
+    @JoinColumn(name = "order_id",insertable = false, updatable = false)
 	@JsonIgnore
 	private Orders order;
 	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	 @JoinColumns({
-	      @JoinColumn(name = "Product_ID", referencedColumnName = "Product_ID", insertable = false, updatable = false),
-	      @JoinColumn(name = "Format_ID", referencedColumnName = "Format_ID", insertable = false, updatable = false)
+	      @JoinColumn(name = "product_id", referencedColumnName = "product_id", insertable = false, updatable = false),
+	      @JoinColumn(name = "format_id", referencedColumnName = "format_id", insertable = false, updatable = false)
 	    })
 	private ProductFormat productFormat;
 	
 	
-	@Column(name="Price")
+	@Column(name="price")
 	private double price;
-	@Column(name="Quantity")
+	@Column(name="quantity")
 	private int quantity;
 }

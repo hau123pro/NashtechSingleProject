@@ -36,13 +36,13 @@ public class Format {
 	@Column(name="Id")
 	private int ID;
 	
-	@Column(name="Name")
+	@Column(name="name")
 	private String formatName;
 	
-	@Column(name="Description")
+	@Column(name="description")
 	private String description;
 	
-	@Column(name="Bonus_Price")
+	@Column(name="bonus_price")
 	private int bonusPrice;
 	
 	
