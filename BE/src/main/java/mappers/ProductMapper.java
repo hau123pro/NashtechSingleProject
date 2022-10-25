@@ -12,6 +12,7 @@ import dto.reponse.AuthorResponse;
 import dto.reponse.CategoryRespone;
 import dto.reponse.FormatRespone;
 import dto.reponse.ProductRespone;
+import dto.request.ProductInfoRequest;
 import entity.Format;
 import entity.Product;
 import lombok.RequiredArgsConstructor;
@@ -38,7 +39,6 @@ public class ProductMapper {
 		List<CategoryRespone> categoryRespone=categoryMapper.convertListToCategoryResponse(product.getListCategory()
 																							.stream()
 																							.collect(Collectors.toList()));
-		System.out.println("");
 		return ProductRespone.builder()
 							.Id(product.getId())
 							.productName(product.getProductName())
@@ -67,5 +67,8 @@ public class ProductMapper {
 							.build();
 							
 							
+	}
+	public Product convertRequestToProduct(ProductInfoRequest infoRequest) {
+		return utilMapper.convertToEntity(infoRequest, Product.class);
 	}
 }

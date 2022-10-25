@@ -23,6 +23,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import entity.ManytoManyID.ProductFormatID;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -33,6 +34,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Entity
 @Table(name="product_format")
+@Builder
 public class ProductFormat {
 	@EmbeddedId
     private ProductFormatID id;

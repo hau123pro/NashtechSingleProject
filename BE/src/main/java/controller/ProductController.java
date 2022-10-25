@@ -2,16 +2,20 @@ package controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import dto.reponse.ProductRespone;
+import dto.request.ProductInfoRequest;
 import entity.Product;
 import repository.product.IProductRepository;
 import service.product.ProductService;
@@ -33,8 +37,8 @@ public class ProductController {
 	public ResponseEntity<ProductRespone> getProductById(Integer id){
 		return ResponseEntity.ok(productService.getProductById(id));
 	}
-	@PutMapping("/{id}/update")
-	public ResponseEntity<String> updateProductById(Integer id){
-		return ResponseEntity.ok(productService.getProductById(id));
+	@PutMapping("/update")
+	public ResponseEntity<String> updateProductById( @RequestBody ProductInfoRequest infoRequest){
+		return ResponseEntity.ok(productService.updateInfoProduct(infoRequest));
 	}
 }

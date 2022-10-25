@@ -58,10 +58,11 @@ public class CartService implements ICartService {
 				.orElseThrow(() -> new UsernameNotFoundException(ErrorString.USER_NOT_FOUND));
 		Cart cart = user.getCart();
 		if (cart == null)
-			throw new BadRequestException("Cart is empty");
+			throw new BadRequestException(ErrorString.CART_EMPTY);
 		List<CartItemRespone> cartItemRespones = cartMapper.convertToCartItemResponse(cart.getCartDetails());
-		Set<CartItemRespone> set = new HashSet<>();
+		Set<CartItemRespone> set = new HashSet<>(cartItemRespones);
 		CartRespone cartRespone = cartMapper.converToCartResponse(cart, set);
+		System.out.println("");
 		return cartRespone;
 	}
 
@@ -79,7 +80,7 @@ public class CartService implements ICartService {
 	public String deleteCartItemById(CartItemRequest cartItemRequest) {
 		// TODO Auto-generated method stub
 		Cart cart = cartRepository.findById(cartItemRequest.getCartID())
-				.orElseThrow(() -> new BadRequestException("cart not found"));
+				.orElseThrow(() -> new BadRequestException(ErrorString.CART_NOT_FOUND));
 		for (CartDetail detail : cart.getCartDetails()) {
 			if (detail.getId().getCartID() == cartItemRequest.getCartID()
 					&& detail.getId().getFormatID() == cartItemRequest.getFormatID()
@@ -88,7 +89,7 @@ public class CartService implements ICartService {
 			}
 		}
 		cartRepository.save(cart);
-		return SuccessString.CART_ITEM_DELETE;
+		return SuccessString.CART_ITEM_DELETE_SUCCESS;
 	}
 
 	@Override
@@ -101,9 +102,9 @@ public class CartService implements ICartService {
 		ProductFormatID formatID = ProductFormatID.builder().formatID(cartItemRequest.getFormatID())
 				.productID(cartItemRequest.getProductID()).build();
 		ProductFormat productFormat = productFormatRepository.findById(formatID)
-				.orElseThrow(() -> new BadRequestException("Product type not found"));
+				.orElseThrow(() -> new BadRequestException(ErrorString.PRODUCT_TYPE_NOT_FOUND));
 		if (productFormat.getQuantity() < cartItemRequest.getQuantity())
-			throw new BadRequestException("Not have enough quantity Product");
+			throw new BadRequestException(ErrorString.QUANTITY_NOT_ENOUGH);
 		Cart cart = cartRepository.findById(cartProductFormatID.getCartID()).orElse(null);
 		long millis = System.currentTimeMillis();
 		Date date = new Date(millis);
@@ -121,7 +122,7 @@ public class CartService implements ICartService {
 		cartDetails.add(cartDetail);
 		cart.setCartDetails(cartDetails);
 		productFormatRepository.save(productFormat);
-		return "Add to Cart Success";
+		return SuccessString.CART_ITEM_ADD_SUCCESS;
 	}
 
 }
