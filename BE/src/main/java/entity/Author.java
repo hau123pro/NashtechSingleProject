@@ -27,9 +27,6 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-//@JsonIdentityInfo(
-//        generator = ObjectIdGenerators.PropertyGenerator.class,
-//        property = "Id")
 @Entity
 @Table(name="author")
 public class Author {
@@ -55,7 +52,10 @@ public class Author {
 	
 	@Column(name="img_url")
 	private String imgUrl;
-//	
+	
+	@Column(name="status")
+	private int status;
+
 	@OneToMany(mappedBy = "author", cascade = {CascadeType.PERSIST, CascadeType.MERGE,CascadeType.REMOVE})
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Set<Product> product;

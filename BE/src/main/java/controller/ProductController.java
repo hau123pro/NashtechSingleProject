@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,12 +34,21 @@ public class ProductController {
 		return ResponseEntity.ok(productService.getAllProduct(page));
 	}
 	
+	@GetMapping("/shop")
+	public ResponseEntity<List<ProductRespone>> getProductActive(@PageableDefault(size=2) Pageable page) {
+		return ResponseEntity.ok(productService.getAllProduct(page));
+	}
+	
 	@GetMapping("/{id}")
 	public ResponseEntity<ProductRespone> getProductById(Integer id){
 		return ResponseEntity.ok(productService.getProductById(id));
 	}
 	@PutMapping("/update")
-	public ResponseEntity<String> updateProductById( @RequestBody ProductInfoRequest infoRequest){
+	public ResponseEntity<String> updateProductById(@Valid @RequestBody ProductInfoRequest infoRequest){
+		return ResponseEntity.ok(productService.updateInfoProduct(infoRequest));
+	}
+	@PostMapping("/insert")
+	public ResponseEntity<String> insertProduct(@Valid @RequestBody ProductInfoRequest infoRequest){
 		return ResponseEntity.ok(productService.updateInfoProduct(infoRequest));
 	}
 }

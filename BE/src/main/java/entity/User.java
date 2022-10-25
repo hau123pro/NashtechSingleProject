@@ -68,7 +68,7 @@ public class User implements Serializable{
 	private Date dateCreate;
 	
 	@Column(name="status")
-	private String status;
+	private int status;
 	
 //	@ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
 	@Column(name="role")

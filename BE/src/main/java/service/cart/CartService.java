@@ -1,6 +1,7 @@
 package service.cart;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -106,8 +107,7 @@ public class CartService implements ICartService {
 		if (productFormat.getQuantity() < cartItemRequest.getQuantity())
 			throw new BadRequestException(ErrorString.QUANTITY_NOT_ENOUGH);
 		Cart cart = cartRepository.findById(cartProductFormatID.getCartID()).orElse(null);
-		long millis = System.currentTimeMillis();
-		Date date = new Date(millis);
+		Date date = Date.valueOf(LocalDate.now());
 		if (cart == null) {
 			cart = Cart.builder().firstPrice(productFormat.getPrice()).finalPrice(productFormat.getPrice())
 					.dateCreate(date).user(user).quantity(cartItemRequest.getQuantity()).build();

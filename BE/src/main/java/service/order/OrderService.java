@@ -26,6 +26,7 @@ import repository.orders.IOrderRepository;
 import repository.user.IUserRepository;
 import service.cart.ICartService;
 import utils.constant.ErrorString;
+import utils.constant.Status;
 @Service
 public class OrderService implements IOrderService{
 	
@@ -71,7 +72,7 @@ public class OrderService implements IOrderService{
 		Orders orders=orderMapper.convertCartToOrders(user.getCart(),user);
 		
 		orders.setUser(user);
-		orders.setStatus("Active");
+		orders.setStatus(Status.ACTIVE.getValue());
 		orders=iOrderRepository.save(orders);
 		List<OrderDetail> details=orderMapper.convertCartItemToOrder(user);
 		Set<OrderDetail> set=new HashSet<>(details);

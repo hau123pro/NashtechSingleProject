@@ -14,4 +14,8 @@ public interface IProductService {
 	public ProductRespone getProductById(Integer id);
 	
 	public String updateInfoProduct(ProductInfoRequest infoRequest);
+
+	List<ProductRespone> getAllProductActive(Pageable pageable);
+
+	String insertProduct(ProductInfoRequest infoRequest);
 }

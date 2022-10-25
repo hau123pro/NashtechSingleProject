@@ -55,8 +55,12 @@ public class Product implements Serializable {
 	@Column(name="date_create")
 	private Date dateCreate;
 	
+	@Column(name="date_update")
+	private Date dateUpdate;
+	
+	
 	@Column(name="status")
-	private String status;
+	private int status;
 	
 	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "author_id")

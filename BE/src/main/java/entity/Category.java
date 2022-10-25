@@ -29,7 +29,7 @@ public class Category {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="Id")
-	private int ID;
+	private int id;
 	
 	@Column(name="Name")
 	private String name;

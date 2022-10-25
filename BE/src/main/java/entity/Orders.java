@@ -46,7 +46,7 @@ public class Orders {
 	private Date dateCreate;
 	
 	@Column(name="status")
-	private String status;
+	private int status;
 	
 	@Column(name="first_price")
 	private double firstPrice;

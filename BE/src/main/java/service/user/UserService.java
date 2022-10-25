@@ -16,6 +16,7 @@ import exception.BadRequestException;
 import repository.user.IUserRepository;
 import utils.constant.ErrorString;
 import utils.constant.Role;
+import utils.constant.Status;
 
 @Service
 public class UserService implements IUserService{
@@ -56,7 +57,7 @@ public class UserService implements IUserService{
 		if (userRepository.findUserByEmail(user.getEmail()).isPresent()) {
 			throw new BadRequestException(ErrorString.EMAIL_IN_USE);
 		}
-		user.setStatus("Active");
+		user.setStatus(Status.ACTIVE.getValue());
 		user.setRoles(Role.USER.getValue());
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		long millis = System.currentTimeMillis();

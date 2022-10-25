@@ -19,4 +19,6 @@ public class ErrorString {
 	public static final String CART_EMPTY="Cart is empty";
 	//check quantity
 	public static final String QUANTITY_NOT_ENOUGH="Not have enough quantity Product";
+	//check exist
+	public static final String PRODUCT_EXIST="Product is already exist";
 }

@@ -26,6 +26,7 @@ public class CartItemRequest {
 	@NotNull(message="Format Id cannot empty")
 	private int formatID;
 	
+	@NotNull(message="Quantity cannot empty")
 	private int quantity;
 
 }
