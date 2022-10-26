@@ -75,7 +75,7 @@ public class ProductMapper {
 	}
 	public Product convertRequestToUpdateProduct(ProductInfoRequest infoRequest,Product product) {
 		Date date = Date.valueOf(LocalDate.now());
-		Set<Category> categories=new HashSet<>(categoryMapper.convertRequestToCategory(infoRequest.getCategoryRequests()));
+		Set<Category> categories=new HashSet<>(categoryMapper.convertRequestToCategoryList(infoRequest.getCategoryRequests()));
 		Set<ProductCategory> productCategories=categoryMapper.convertRequestToProductCategory(categories, product);
 		return Product.builder().Id(infoRequest.getProductId())
 								.imgUrl(infoRequest.getImgUrl())
@@ -93,7 +93,7 @@ public class ProductMapper {
 	}
 	public Product convertRequestToProduct(ProductInfoRequest infoRequest,Product product) {
 		Date date = Date.valueOf(LocalDate.now());
-		Set<Category> categories=new HashSet<>(categoryMapper.convertRequestToCategory(infoRequest.getCategoryRequests()));
+		Set<Category> categories=new HashSet<>(categoryMapper.convertRequestToCategoryList(infoRequest.getCategoryRequests()));
 		Set<ProductCategory> productCategories=categoryMapper.convertRequestToProductCategory(categories, product);
 		return Product.builder()
 								.Id(product.getId())
@@ -109,7 +109,7 @@ public class ProductMapper {
 	}
 	public Product convertRequestToInsertProduct(ProductInfoRequest infoRequest) {
 		Date date = Date.valueOf(LocalDate.now());
-		Set<Category> categories=new HashSet<>(categoryMapper.convertRequestToCategory(infoRequest.getCategoryRequests()));
+		Set<Category> categories=new HashSet<>(categoryMapper.convertRequestToCategoryList(infoRequest.getCategoryRequests()));
 		return Product.builder()
 								.imgUrl(infoRequest.getImgUrl())
 								.description(infoRequest.getDescription())

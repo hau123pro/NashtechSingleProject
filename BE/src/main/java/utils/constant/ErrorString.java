@@ -10,6 +10,7 @@ public class ErrorString {
 	public static final String CART_NOT_FOUND="Cart not found";
 	public static final String PRODUCT_TYPE_NOT_FOUND="Cart not found";
 	public static final String AUTHOR_NOT_FOUND="Author not found";
+	public static final String CATEGORY_NOT_FOUND="Category not found";
 
 	//check pass, email
 	public static final String PASS_NOT_MATCH="Password not match!";

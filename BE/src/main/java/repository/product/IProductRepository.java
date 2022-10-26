@@ -14,10 +14,10 @@ public interface IProductRepository extends JpaRepository<Product, Integer>{
 	public Page<Product> findByStatus(Pageable pageable,int status);
 	
 	@Query("SELECT DISTINCT p "
-			+ "FROM Product p , ProductCategory pc"
+			+ "FROM Product p , ProductCategory pc "
 			+ "WHERE p.Id=pc.product.Id "
-			+ " and pc.category.Id=:categoryId")
+			+ "and (pc.category.id=:category or :category is null)")
 	public Page<Product> findByCategoryId(
-			@Param("categoryId") Integer categoryId,
+			@Param("category") Integer categoryid,
 			Pageable pageable);
 }

@@ -1,6 +1,7 @@
-package dto.reponse;
+package dto.request;
 
-import java.sql.Date;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,15 +11,13 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@Builder
-@NoArgsConstructor
 @AllArgsConstructor
-public class CategoryRespone {
+@NoArgsConstructor
+@Builder
+public class CategoryInsertRequest {
 	
-	private int Id;
-	
+	@NotBlank(message="Name category cannot be empty")
 	private String name;
 	
 	private String description;
-	
 }

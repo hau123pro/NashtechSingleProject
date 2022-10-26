@@ -15,6 +15,10 @@ import lombok.Setter;
 @AllArgsConstructor
 public class FormatRespone {
 	private int ID;
+	
 	private String formatName;
+	
 	private int bonusPrice;
+	
+	private String description;
 }

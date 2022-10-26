@@ -41,6 +41,7 @@ public class ProductFormat {
 	
 	@ManyToOne(cascade = {CascadeType.PERSIST})
     @JoinColumn(name = "product_id",insertable = false, updatable = false)
+//	@JsonIgnore
 	private Product product;
 	
 	@ManyToOne(cascade = {CascadeType.PERSIST})

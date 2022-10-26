@@ -34,7 +34,7 @@ public class Format {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="Id")
-	private int ID;
+	private int Id;
 	
 	@Column(name="name")
 	private String formatName;
@@ -45,7 +45,8 @@ public class Format {
 	@Column(name="bonus_price")
 	private int bonusPrice;
 	
-	
+	@Column(name="status")
+	private int status;
 	
 	@OneToMany(mappedBy = "format", cascade = {CascadeType.PERSIST, CascadeType.MERGE,CascadeType.REMOVE})
 	@OnDelete(action = OnDeleteAction.CASCADE)

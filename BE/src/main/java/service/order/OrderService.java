@@ -79,7 +79,7 @@ public class OrderService implements IOrderService{
 		for(OrderDetail detail:set) {
 			detail.setOrder(orders);
 			OrderItemID id=new OrderItemID(detail.getOrder().getID(),detail.getProductFormat().getProduct().getId(),	
-										detail.getProductFormat().getFormat().getID());
+										detail.getProductFormat().getFormat().getId());
 			detail.setId(id);
 		}
 		orders.setOrderDetails(set);

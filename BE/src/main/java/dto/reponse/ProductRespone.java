@@ -31,4 +31,6 @@ public class ProductRespone {
 	
 	private List<CategoryRespone> categoryRespones;
 	
+	private PageResponse pageResponse;
+	
 }

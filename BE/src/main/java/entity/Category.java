@@ -36,11 +36,14 @@ public class Category {
 	@Column(name="Id")
 	private int id;
 	
-	@Column(name="Name")
+	@Column(name="name")
 	private String name;
 	
-	@Column(name="Description")
+	@Column(name="description")
 	private String description;
+	
+	@Column(name="status")
+	private int status;
 	
 	@OneToMany(mappedBy = "category", cascade = {CascadeType.PERSIST, CascadeType.MERGE,CascadeType.REMOVE})
 	@OnDelete(action = OnDeleteAction.CASCADE)

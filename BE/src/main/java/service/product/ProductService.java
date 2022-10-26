@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import dto.reponse.PageResponse;
 import dto.reponse.ProductRespone;
 import dto.request.FilterRequest;
 import dto.request.ProductInfoRequest;
@@ -23,7 +25,7 @@ import entity.ManytoManyID.ProductFormatID;
 import exception.BadRequestException;
 import mappers.ProductMapper;
 import repository.author.IAuthorRepository;
-import repository.format.FormatRepository;
+import repository.format.IFormatRepository;
 import repository.product.IProductRepository;
 import repository.productformat.IProductFormatRepository;
 import utils.constant.ErrorString;
@@ -43,7 +45,7 @@ public class ProductService implements IProductService {
 	ProductMapper productMapper;
 
 	@Autowired
-	FormatRepository formatRepository;
+	IFormatRepository iFormatRepository;
 
 	@Autowired
 	IAuthorRepository authorRepository;
@@ -53,25 +55,33 @@ public class ProductService implements IProductService {
 		Page<Product> products = productRepository.findAll(pageable);
 		List<ProductRespone> productRespones = new ArrayList<>();
 		for (Product product : products.getContent()) {
-			productRespones.add(getProductById(product.getId()));
+			ProductRespone productResponse = getProductById(product.getId());
+			productResponse.setPageResponse(
+					PageResponse.builder().page(pageable.getPageNumber()).size(pageable.getPageSize()).build());
+			productRespones.add(productResponse);
 		}
 		return productRespones;
 	}
+
 	@Override
 	public List<ProductRespone> getAllProductActive(Pageable pageable) {
-		Page<Product> products = productRepository.findByStatus(pageable, Status.ACTIVE.getValue());
-		List<ProductRespone> productRespones = new ArrayList<>();
-		for (Product product : products.getContent()) {
-			productRespones.add(getProductById(product.getId()));
-		}
-		return productRespones;
-	}
-	@Override
-	public List<ProductRespone> getProductFilter(Pageable pageable,FilterRequest filter) {
 		Page<Product> products = productRepository.findAll(pageable);
 		List<ProductRespone> productRespones = new ArrayList<>();
 		for (Product product : products.getContent()) {
 			productRespones.add(getProductById(product.getId()));
+		}
+		return productRespones;
+	}
+
+	@Override
+	public List<ProductRespone> getProductFilter(Pageable pageable, FilterRequest filter) {
+		Page<Product> products = productRepository.findByCategoryId(filter.getCategoryId(), pageable);
+		List<ProductRespone> productRespones = new ArrayList<>();
+		for (Product product : products.getContent()) {
+			ProductRespone productResponse = getProductById(product.getId());
+			productResponse.setPageResponse(
+					PageResponse.builder().page(pageable.getPageNumber()).size(pageable.getPageSize()).build());
+			productRespones.add(productResponse);
 		}
 		return productRespones;
 	}
@@ -85,7 +95,7 @@ public class ProductService implements IProductService {
 				.orElseThrow(() -> new BadRequestException(ErrorString.PRODUCT_NOT_FOUND));
 		List<ProductFormat> formats = productFormatRepository.findAll();
 		List<Format> listFormat = new ArrayList<Format>();
-		for (ProductFormat format : formats) 
+		for (ProductFormat format : formats)
 			listFormat.add(format.getFormat());
 		ProductRespone productRespone = productMapper.convertToProductResponse(product, listFormat);
 		return productRespone;
@@ -99,7 +109,7 @@ public class ProductService implements IProductService {
 		ProductFormat productFormat = productFormatRepository.findById(productFormatID).orElse(null);
 		Product product = productRepository.findById(infoRequest.getProductId())
 				.orElseThrow(() -> new BadRequestException(ErrorString.PRODUCT_NOT_FOUND));
-		Format format = formatRepository.findById(infoRequest.getFormatId())
+		Format format = iFormatRepository.findById(infoRequest.getFormatId())
 				.orElseThrow(() -> new BadRequestException(ErrorString.FORMAT_NOT_FOUND));
 		Author author = authorRepository.findById(infoRequest.getAuthorId())
 				.orElseThrow(() -> new BadRequestException(ErrorString.AUTHOR_NOT_FOUND));
@@ -121,19 +131,20 @@ public class ProductService implements IProductService {
 		productRepository.save(product);
 		return SuccessString.PRODUCT_UPDATE_SUCCESS;
 	}
+
 	@Override
 	public String insertProduct(ProductInfoRequest infoRequest) {
-		// TODO Auto-generated method stub		
-		Format format = formatRepository.findById(infoRequest.getFormatId())
+		// TODO Auto-generated method stub
+		Format format = iFormatRepository.findById(infoRequest.getFormatId())
 				.orElseThrow(() -> new BadRequestException(ErrorString.FORMAT_NOT_FOUND));
 		Author author = authorRepository.findById(infoRequest.getAuthorId())
 				.orElseThrow(() -> new BadRequestException(ErrorString.AUTHOR_NOT_FOUND));
 		Product product = productMapper.convertRequestToInsertProduct(infoRequest);
 		product.setAuthor(author);
-		product=productRepository.save(product);
-		product=productMapper.convertRequestToProduct(infoRequest,product);
+		product = productRepository.save(product);
+		product = productMapper.convertRequestToProduct(infoRequest, product);
 		ProductFormat productFormat = ProductFormat.builder().product(product).format(format)
-					.quantity(infoRequest.getQuantity()).price(infoRequest.getPrice()).build();
+				.quantity(infoRequest.getQuantity()).price(infoRequest.getPrice()).build();
 		ProductFormatID productFormatID = ProductFormatID.builder().productID(productFormat.getProduct().getId())
 				.formatID(infoRequest.getFormatId()).build();
 		productFormat.setId(productFormatID);
@@ -144,6 +155,7 @@ public class ProductService implements IProductService {
 		productFormatRepository.save(productFormat);
 		return SuccessString.PRODUCT_INSERT_SUCCESS;
 	}
+
 	@Override
 	public String updateStatusProduct(ProductStatusRequest productStatusRequest) {
 		Product product = productRepository.findById(productStatusRequest.getId())
@@ -151,6 +163,5 @@ public class ProductService implements IProductService {
 		product.setStatus(productStatusRequest.getStatus());
 		return SuccessString.PRODUCT_UPDATE_STATUS_SUCCESS;
 	}
-	
 
 }

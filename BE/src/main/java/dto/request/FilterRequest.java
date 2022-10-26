@@ -11,7 +11,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class FilterRequest {
-	@NotNull
 	private int categoryId;
 //	private int 
 }
