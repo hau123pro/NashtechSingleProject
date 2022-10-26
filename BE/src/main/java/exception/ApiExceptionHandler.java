@@ -17,16 +17,16 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class ApiExceptionHandler {
 
-    @ExceptionHandler(BadRequestException.class)
-    public ResponseEntity<?> apiExceptionHandler(BadRequestException e) {
-        HttpStatus statusCode = HttpStatus.BAD_REQUEST;
-
-        ApiException apiException = new ApiException(
-                e.getMessage(),
-                statusCode
-        );
-        return new ResponseEntity<>(apiException, statusCode);
-    }
+//    @ExceptionHandler(BadRequestException.class)
+//    public ResponseEntity<?> apiExceptionHandler(BadRequestException e) {
+//        HttpStatus statusCode = HttpStatus.BAD_REQUEST;
+//
+//        ApiException apiException = new ApiException(
+//                e.getMessage(),
+//                statusCode
+//        );
+//        return new ResponseEntity<>(apiException, statusCode);
+//    }
 
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<?> apiExceptionHandler(NotFoundException e) {

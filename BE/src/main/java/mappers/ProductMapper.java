@@ -20,6 +20,7 @@ import dto.request.ProductInfoRequest;
 import entity.Category;
 import entity.Format;
 import entity.Product;
+import entity.ProductCategory;
 import lombok.RequiredArgsConstructor;
 import utils.constant.Status;
 @Component
@@ -40,9 +41,13 @@ public class ProductMapper {
 	
 	
 	public ProductRespone convertToProductResponse(Product product,List<Format> formats) {
-		List<CategoryRespone> categoryRespone=categoryMapper.convertListToCategoryResponse(product.getListCategory()
-																							.stream()
-																							.collect(Collectors.toList()));
+		List<ProductCategory> productCategories=product.getListCategory()
+				.stream().collect(Collectors.toList());
+		List<Category> categories=new ArrayList<>();
+		for(ProductCategory productCategory:productCategories) {
+			categories.add(productCategory.getCategory());
+		}
+		List<CategoryRespone> categoryRespone=categoryMapper.convertListToCategoryResponse(categories);
 		return ProductRespone.builder()
 							.Id(product.getId())
 							.productName(product.getProductName())
@@ -58,11 +63,7 @@ public class ProductMapper {
 									.build()
 									)
 							.description(product.getDescription())
-							.categoryRespones(
-											categoryMapper.convertListToCategoryResponse(product.getListCategory()
-																								.stream()
-																								.collect(Collectors.toList())
-																						))
+							.categoryRespones(categoryRespone)
 							.formatRespones(formatMapper.convertListFormatToResponse(formats))
 							.reviewRespones(reviewMapper.convertToListReviewResponse(product.getListReview()
 																							.stream()
@@ -75,6 +76,7 @@ public class ProductMapper {
 	public Product convertRequestToUpdateProduct(ProductInfoRequest infoRequest,Product product) {
 		Date date = Date.valueOf(LocalDate.now());
 		Set<Category> categories=new HashSet<>(categoryMapper.convertRequestToCategory(infoRequest.getCategoryRequests()));
+		Set<ProductCategory> productCategories=categoryMapper.convertRequestToProductCategory(categories, product);
 		return Product.builder().Id(infoRequest.getProductId())
 								.imgUrl(infoRequest.getImgUrl())
 								.description(infoRequest.getDescription())
@@ -83,23 +85,39 @@ public class ProductMapper {
 								.dateUpdate(date)
 								.status(product.getStatus())
 								.author(product.getAuthor())
-								.listCategory(categories)
+								.listCategory(productCategories)
 								.listReview(product.getListReview())
 								.listSaleDetail(product.getListSaleDetail())
 								.listWishListDetails(product.getListWishListDetails())
 								.build();
 	}
-	public Product convertRequestToProduct(ProductInfoRequest infoRequest) {
+	public Product convertRequestToProduct(ProductInfoRequest infoRequest,Product product) {
 		Date date = Date.valueOf(LocalDate.now());
 		Set<Category> categories=new HashSet<>(categoryMapper.convertRequestToCategory(infoRequest.getCategoryRequests()));
-		return Product.builder().Id(infoRequest.getProductId())
+		Set<ProductCategory> productCategories=categoryMapper.convertRequestToProductCategory(categories, product);
+		return Product.builder()
+								.Id(product.getId())
 								.imgUrl(infoRequest.getImgUrl())
 								.description(infoRequest.getDescription())
 								.productName(infoRequest.getProductName())
 								.dateCreate(date)
 								.dateUpdate(date)
-								.listCategory(categories)
+								.author(product.getAuthor())
+								.listCategory(productCategories)
 								.status(Status.ACTIVE.getValue())
 								.build();
 	}
+	public Product convertRequestToInsertProduct(ProductInfoRequest infoRequest) {
+		Date date = Date.valueOf(LocalDate.now());
+		Set<Category> categories=new HashSet<>(categoryMapper.convertRequestToCategory(infoRequest.getCategoryRequests()));
+		return Product.builder()
+								.imgUrl(infoRequest.getImgUrl())
+								.description(infoRequest.getDescription())
+								.productName(infoRequest.getProductName())
+								.dateCreate(date)
+								.dateUpdate(date)
+								.status(Status.ACTIVE.getValue())
+								.build();
+	}
+	
 }

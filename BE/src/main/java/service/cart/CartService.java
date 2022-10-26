@@ -121,6 +121,7 @@ public class CartService implements ICartService {
 		Set<CartDetail> cartDetails = new HashSet<>();
 		cartDetails.add(cartDetail);
 		cart.setCartDetails(cartDetails);
+		cartRepository.save(cart);
 		productFormatRepository.save(productFormat);
 		return SuccessString.CART_ITEM_ADD_SUCCESS;
 	}

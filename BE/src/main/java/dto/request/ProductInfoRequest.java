@@ -33,15 +33,10 @@ public class ProductInfoRequest {
 	@NotBlank(message="Product name cannot empty")
 	private String productName;
 
-	@NotBlank(message="Description Product cannot empty")
 	private String description;
 
 	@NotBlank(message="Image URL Product cannot empty")
 	private String imgUrl;
-	
-	@Min(value=0,message="Status cannot smaller than 0")
-	@Max(value=1,message="Status cannot bigger than 1")
-	private int status;
 	
 	@NotNull(message="Author ID cannot null")
 	private int authorId;

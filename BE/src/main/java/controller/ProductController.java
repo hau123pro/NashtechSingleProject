@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import dto.reponse.ProductRespone;
+import dto.request.FilterRequest;
 import dto.request.ProductInfoRequest;
+import dto.request.ProductStatusRequest;
 import entity.Product;
 import repository.product.IProductRepository;
 import service.product.ProductService;
@@ -34,21 +36,29 @@ public class ProductController {
 		return ResponseEntity.ok(productService.getAllProduct(page));
 	}
 	
-	@GetMapping("/shop")
+	@GetMapping(value="/shop")
 	public ResponseEntity<List<ProductRespone>> getProductActive(@PageableDefault(size=2) Pageable page) {
 		return ResponseEntity.ok(productService.getAllProduct(page));
 	}
 	
-	@GetMapping("/{id}")
+	@GetMapping(value="/{id}")
 	public ResponseEntity<ProductRespone> getProductById(Integer id){
 		return ResponseEntity.ok(productService.getProductById(id));
 	}
-	@PutMapping("/update")
+	@PutMapping(value="/update")
 	public ResponseEntity<String> updateProductById(@Valid @RequestBody ProductInfoRequest infoRequest){
 		return ResponseEntity.ok(productService.updateInfoProduct(infoRequest));
 	}
-	@PostMapping("/insert")
+	@PostMapping(value="/insert")
 	public ResponseEntity<String> insertProduct(@Valid @RequestBody ProductInfoRequest infoRequest){
-		return ResponseEntity.ok(productService.updateInfoProduct(infoRequest));
+		return ResponseEntity.ok(productService.insertProduct(infoRequest));
+	}
+	@PutMapping(value="/status/update")
+	public ResponseEntity<String> updateStatusProduct(@Valid @RequestBody ProductStatusRequest request){
+		return ResponseEntity.ok(productService.updateStatusProduct(request));
+	}
+	@GetMapping("/filter")
+	public ResponseEntity<List<ProductRespone>> getProductFilter(@PageableDefault(size=2) Pageable page, @Valid @RequestBody FilterRequest filter ) {
+		return ResponseEntity.ok(productService.getProductFilter(page, filter));
 	}
 }

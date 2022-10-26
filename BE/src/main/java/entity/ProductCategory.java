@@ -1,26 +1,17 @@
 package entity;
 
-import java.sql.Date;
-import java.util.Set;
-
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
+import entity.ManytoManyID.OrderItemID;
+import entity.ManytoManyID.ProductCategoryId;
 import entity.ManytoManyID.ProductFormatID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,24 +23,21 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table(name="product_format")
 @Builder
-public class ProductFormat {
+@Entity
+@Table(name="product_categories")
+public class ProductCategory {
 	@EmbeddedId
-    private ProductFormatID id;
+    private ProductCategoryId id;
 	
 	@ManyToOne(cascade = {CascadeType.PERSIST})
     @JoinColumn(name = "product_id",insertable = false, updatable = false)
+	@JsonIgnore
 	private Product product;
 	
 	@ManyToOne(cascade = {CascadeType.PERSIST})
-    @JoinColumn(name = "format_id",insertable = false, updatable = false)
-	private Format format;
+    @JoinColumn(name = "category_id",insertable = false, updatable = false)
+	private Category category;
 	
-	@Column(name="quantity")
-	private int quantity;
 	
-	@Column(name="price")
-	private double price;
 }

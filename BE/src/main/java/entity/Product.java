@@ -73,15 +73,11 @@ public class Product implements Serializable {
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Set<Review> listReview;
 	
-	@ManyToMany
-	@JoinTable(
-	  name = "product_categories", 
-	  joinColumns = @JoinColumn(name = "product_id"), 
-	  inverseJoinColumns = @JoinColumn(name = "category_id"))
-	private Set<Category> listCategory;
+	@OneToMany(mappedBy = "category", cascade = {CascadeType.PERSIST, CascadeType.MERGE,CascadeType.REMOVE})
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	private Set<ProductCategory> listCategory;
 	
 	@OneToMany(mappedBy = "product", cascade = {CascadeType.PERSIST, CascadeType.MERGE,CascadeType.REMOVE})
-	@OnDelete(action = OnDeleteAction.CASCADE)
 //	@JsonIgnore
 	private Set<ProductFormat> productFormats;
 	

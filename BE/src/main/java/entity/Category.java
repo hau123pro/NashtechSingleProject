@@ -2,6 +2,7 @@ package entity;
 
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,7 +11,11 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -37,11 +42,8 @@ public class Category {
 	@Column(name="Description")
 	private String description;
 	
-	@ManyToMany
-	@JoinTable(
-	  name = "product_categories", 
-	  joinColumns = @JoinColumn(name = "Category_ID"), 
-	  inverseJoinColumns = @JoinColumn(name = "Product_ID"))
+	@OneToMany(mappedBy = "category", cascade = {CascadeType.PERSIST, CascadeType.MERGE,CascadeType.REMOVE})
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JsonIgnore
-	private Set<Product> listProduct;
+	private Set<ProductCategory> listProduct;
 }
