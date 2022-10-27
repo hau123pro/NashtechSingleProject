@@ -12,4 +12,6 @@ public class SuccessString {
 	public static final String FORMAT_UPDATE_SUCCESS="FORMAT successfully updated";
 	public static final String FORMAT_INSERT_SUCCESS="FORMAT successfully inserted";
 	public static final String FORMAT_UPDATE_STATUS_SUCCESS="Format status successfully updated";
+	public static final String REVIEW_ADD_SUCCESS="Review successfully added";
+	public static final String REVIEW_UPDATE_STATUS_SUCCESS="Review status successfully updated";
 }

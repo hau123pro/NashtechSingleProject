@@ -24,6 +24,7 @@ import dto.reponse.ProductRespone;
 import dto.reponse.ReviewRespone;
 import dto.reponse.UserInformationRespone;
 import dto.request.CartItemRequest;
+import dto.request.ReviewRequest;
 import entity.Cart;
 import entity.Review;
 import lombok.RequiredArgsConstructor;
@@ -43,13 +44,13 @@ public class UserController {
 
 	
 	@Autowired
-	private IOrderService iOrderService;
+	private IOrderService orderService;
 	
 	@Autowired
-	private ICartService iCartService;
+	private ICartService cartService;
 	
 	@Autowired
-	private IReviewService iReviewService;
+	private IReviewService reviewService;
 	
 
 		
@@ -60,36 +61,39 @@ public class UserController {
 	
 	@GetMapping("/cart")
 	public ResponseEntity<CartRespone> getCart(Principal principal) {
-		return ResponseEntity.ok(iCartService.getCart(principal.getName()));
+		return ResponseEntity.ok(cartService.getCart(principal.getName()));
 	}
 	
 	@GetMapping("/orders")
 	public ResponseEntity<List<OrderRespone>> getOrdersUser(Principal principal) {
-		return ResponseEntity.ok(iOrderService.getOrderByUser(principal.getName()));
+		return ResponseEntity.ok(orderService.getOrderByUser(principal.getName()));
 	}
 	
 	@GetMapping("/order/{orderId}")
 	public ResponseEntity<OrderRespone> getOrdersUserById(@PathVariable Integer orderId) {
-		return ResponseEntity.ok(iOrderService.getOrderById(orderId));
+		return ResponseEntity.ok(orderService.getOrderById(orderId));
 	}
 	@GetMapping("/order/{orderId}/item")
 	public ResponseEntity<List<OrderItemRespone>> getOrderItemByOrderId(@PathVariable Integer orderId) {
-		return ResponseEntity.ok(iOrderService.getAllItemOrderById(orderId));
+		return ResponseEntity.ok(orderService.getAllItemOrderById(orderId));
 	}
 	@PostMapping("/cart/delete/item")
 	public ResponseEntity<String> removeItemInCart(
 			@RequestBody CartItemRequest cartItem){
 //		return ResponseEntity.ok(""+cartItem.getProductID());
-		return ResponseEntity.ok(iCartService.deleteCartItemById(cartItem));
+		return ResponseEntity.ok(cartService.deleteCartItemById(cartItem));
 	}
 	@GetMapping("/review")
 	private ResponseEntity<List<ReviewRespone>> getAllReview(){
-		return ResponseEntity.ok(iReviewService.getAllReview());
+		return ResponseEntity.ok(reviewService.getAllReview());
 	}
 	
 	@PostMapping("/cart/add")
 	public ResponseEntity<String> addProductToCart(@Valid @RequestBody CartItemRequest cartItemRequest,Principal principal){
-		return ResponseEntity.ok(iCartService.addProductToCart(cartItemRequest, principal.getName()));
+		return ResponseEntity.ok(cartService.addProductToCart(cartItemRequest, principal.getName()));
 	}
-	
+	@PostMapping("/review/add")
+	public ResponseEntity<String> addReviewProduct(@Valid @RequestBody ReviewRequest reviewRequest,Principal principal){
+		return ResponseEntity.ok(reviewService.addReviewToProduct(reviewRequest, principal.getName()));
+	}
 }

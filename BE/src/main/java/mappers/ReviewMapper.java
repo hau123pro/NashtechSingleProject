@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import dto.reponse.ReviewRespone;
+import dto.request.ReviewRequest;
 import entity.Review;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 public class ReviewMapper {
 	@Autowired
 	private UtilMapper utilMapper;
+	
 	public List<ReviewRespone> convertToListReviewResponse(List<Review> list){
 		List<ReviewRespone> listRespone=new ArrayList<>();
 	 for(Review review:list) {
@@ -28,5 +30,9 @@ public class ReviewMapper {
 		 listRespone.add(reviewRespone);
 	 }
 	 return listRespone;
+	}
+	
+	public Review convertRequestToReview(ReviewRequest request) {
+		return utilMapper.convertToEntity(request, Review.class);
 	}
 }

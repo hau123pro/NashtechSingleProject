@@ -37,7 +37,7 @@ public class CategoryController {
 	}
 	
 	@PutMapping("/update")
-	public ResponseEntity<String> updateProduct(@Valid @RequestBody CategoryRequest categoryRequest){
+	public ResponseEntity<String> updateCategory(@Valid @RequestBody CategoryRequest categoryRequest){
 		return ResponseEntity.ok(categoryService.updateCategory(categoryRequest));
 	}
 	
@@ -51,7 +51,7 @@ public class CategoryController {
 		return ResponseEntity.ok(categoryService.insertCategory(categoryRequest));
 	}
 	@PostMapping("/update/status")
-	public ResponseEntity<String> insertProduct(@Valid @RequestBody CategoryStatusRequest statusRequest){
+	public ResponseEntity<String> updateStatusCategory(@Valid @RequestBody CategoryStatusRequest statusRequest){
 		return ResponseEntity.ok(categoryService.updateStatusCategory(statusRequest));
 	}
 }

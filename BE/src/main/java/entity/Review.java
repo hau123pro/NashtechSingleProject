@@ -50,4 +50,7 @@ public class Review {
 	
 	@Column(name="date_create")
 	private Date dateCreate;
+	
+	@Column(name="status")
+	private int status;
 }

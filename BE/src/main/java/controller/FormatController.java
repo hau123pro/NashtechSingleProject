@@ -34,12 +34,12 @@ public class FormatController {
 	IFormatService formatService;
 	
 	@GetMapping
-	public ResponseEntity<List<FormatRespone>> getCategoryByPage(Pageable pageable){
+	public ResponseEntity<List<FormatRespone>> getFormatByPage(Pageable pageable){
 		HeaderResponse<FormatRespone> headerResponse=formatService.getFormatByPage(pageable);
 		return ResponseEntity.ok().headers(headerResponse.getHeaders()).body(headerResponse.getItems());
 	}
 	@PutMapping("/update")
-	public ResponseEntity<String> updateProduct(@Valid @RequestBody FormatRequest formatRequest){
+	public ResponseEntity<String> updateFormat(@Valid @RequestBody FormatRequest formatRequest){
 		return ResponseEntity.ok(formatService.updateFormat(formatRequest));
 	}
 	
@@ -49,11 +49,11 @@ public class FormatController {
 	}
 	
 	@PostMapping("/insert")
-	public ResponseEntity<String> insertProduct(@Valid @RequestBody FormatInsertRequest insertRequest){
+	public ResponseEntity<String> insertFormat(@Valid @RequestBody FormatInsertRequest insertRequest){
 		return ResponseEntity.ok(formatService.insertFormat(insertRequest));
 	}
 	@PostMapping("/update/status")
-	public ResponseEntity<String> insertProduct(@Valid @RequestBody FormatStatusRequest formatStatusRequest){
+	public ResponseEntity<String> updateFormatStatus(@Valid @RequestBody FormatStatusRequest formatStatusRequest){
 		return ResponseEntity.ok(formatService.updateStatusFormat(formatStatusRequest));
 	}
 }
