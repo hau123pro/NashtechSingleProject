@@ -7,6 +7,8 @@ import javax.validation.Valid;
 
 import org.hibernate.sql.Delete;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,8 +18,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cozastore.dto.reponse.AuthorResponse;
 import com.cozastore.dto.reponse.CartItemRespone;
 import com.cozastore.dto.reponse.CartRespone;
+import com.cozastore.dto.reponse.HeaderResponse;
 import com.cozastore.dto.reponse.OrderItemRespone;
 import com.cozastore.dto.reponse.OrderRespone;
 import com.cozastore.dto.reponse.ProductRespone;
@@ -25,10 +29,12 @@ import com.cozastore.dto.reponse.ReviewRespone;
 import com.cozastore.dto.reponse.UserInformationRespone;
 import com.cozastore.dto.request.CartItemRequest;
 import com.cozastore.dto.request.ReviewRequest;
+import com.cozastore.dto.request.ReviewStatusRequest;
 import com.cozastore.entity.Cart;
 import com.cozastore.entity.Review;
 import com.cozastore.mappers.OrderMapper;
 import com.cozastore.mappers.UserMapper;
+import com.cozastore.service.author.IAuthorService;
 import com.cozastore.service.cart.ICartService;
 import com.cozastore.service.order.IOrderService;
 import com.cozastore.service.review.IReviewService;
@@ -53,7 +59,8 @@ public class UserController {
 	@Autowired
 	private IReviewService reviewService;
 	
-
+	@Autowired
+	IAuthorService authorService;
 		
 	@GetMapping("/info")
 	public ResponseEntity<UserInformationRespone> getInfor(Principal principal) {
@@ -74,6 +81,10 @@ public class UserController {
 	public ResponseEntity<OrderRespone> getOrdersUserById(@PathVariable Integer orderId) {
 		return ResponseEntity.ok(orderService.getOrderById(orderId));
 	}
+	@PostMapping("/add")
+	public String  addNewOrder(Principal principal) {
+		return orderService.addOrder(principal.getName());
+	}
 	@GetMapping("/order/{orderId}/item")
 	public ResponseEntity<List<OrderItemRespone>> getOrderItemByOrderId(@PathVariable Integer orderId) {
 		return ResponseEntity.ok(orderService.getAllItemOrderById(orderId));
@@ -84,10 +95,12 @@ public class UserController {
 //		return ResponseEntity.ok(""+cartItem.getProductID());
 		return ResponseEntity.ok(cartService.deleteCartItemById(cartItem));
 	}
-	@GetMapping("/review")
-	private ResponseEntity<List<ReviewRespone>> getAllReview(){
-		return ResponseEntity.ok(reviewService.getAllReview());
+	@GetMapping
+	public ResponseEntity<List<ReviewRespone>> getReviewByPage(Pageable pageable){
+		HeaderResponse<ReviewRespone> headerResponse=reviewService.getReviewActiveByPage(pageable);
+		return ResponseEntity.ok().headers(headerResponse.getHeaders()).body(headerResponse.getItems());
 	}
+	
 	
 	@PostMapping("/cart/add")
 	public ResponseEntity<String> addProductToCart(@Valid @RequestBody CartItemRequest cartItemRequest,Principal principal){
@@ -96,5 +109,15 @@ public class UserController {
 	@PostMapping("/review/add")
 	public ResponseEntity<String> addReviewProduct(@Valid @RequestBody ReviewRequest reviewRequest,Principal principal){
 		return ResponseEntity.ok(reviewService.addReviewToProduct(reviewRequest, principal.getName()));
+	}
+	@GetMapping("/author")
+	public ResponseEntity<List<AuthorResponse>> getAuthorActiveByPage( @PageableDefault(size=10) Pageable page ){
+		HeaderResponse<AuthorResponse> headerResponse=authorService.getActiveAuthorByPage(page);
+		return ResponseEntity.ok().headers(headerResponse.getHeaders()).body(headerResponse.getItems());
+	}
+	@GetMapping("/author/{id}")
+	public ResponseEntity<AuthorResponse> getAuthorActiveById(@PathVariable Integer id){
+		AuthorResponse authorResponse=authorService.getAuthorById(id);
+		return ResponseEntity.ok(authorResponse);
 	}
 }

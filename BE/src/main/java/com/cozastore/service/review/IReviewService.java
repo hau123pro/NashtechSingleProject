@@ -14,7 +14,7 @@ public interface IReviewService {
 	
 	public HeaderResponse<ReviewRespone> getReviewByPage(Pageable pageable);
 	
-	public HeaderResponse<ReviewRespone> getReviewActiveyPage(Pageable pageable);
+	public HeaderResponse<ReviewRespone> getReviewActiveByPage(Pageable pageable);
 
 	
 	public String addReviewToProduct(ReviewRequest reviewRequest,String email);

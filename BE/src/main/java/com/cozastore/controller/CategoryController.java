@@ -25,13 +25,13 @@ import com.cozastore.service.category.ICategoryService;
 import com.cozastore.utils.constant.Status;
 
 @RestController
-@RequestMapping("/v1/admin/category")
+@RequestMapping("/v1/category")
 public class CategoryController {
 	
 	@Autowired
 	ICategoryService categoryService;
 	
-	@GetMapping
+	@GetMapping("/admin")
 	public ResponseEntity<List<CategoryRespone>> getCategoryByPage( @PageableDefault(size=8) Pageable pageable){
 		HeaderResponse<CategoryRespone> headerResponse=categoryService.getCategoryByPage(pageable);
 		return ResponseEntity.ok().headers(headerResponse.getHeaders()).body(headerResponse.getItems());
@@ -42,8 +42,13 @@ public class CategoryController {
 		HeaderResponse<CategoryRespone> headerResponse=categoryService.getCategoryActiveByPage(pageable);
 		return ResponseEntity.ok().headers(headerResponse.getHeaders()).body(headerResponse.getItems());
 	}
+	@GetMapping("/active/all")
+	public ResponseEntity<List<CategoryRespone>> getAllCategoryActive( ){
+		List<CategoryRespone> categoryRespones=categoryService.getAllCategoryActive();
+		return ResponseEntity.ok(categoryRespones);
+	}
 	
-	@PutMapping("/update")
+	@PutMapping("/admin/update")
 	public ResponseEntity<String> updateCategory(@Valid @RequestBody CategoryRequest categoryRequest){
 		return ResponseEntity.ok(categoryService.updateCategory(categoryRequest));
 	}
@@ -53,11 +58,11 @@ public class CategoryController {
 		return ResponseEntity.ok(categoryService.getCategoryById(id));
 	}
 	
-	@PostMapping("/insert")
+	@PostMapping("/admin/insert")
 	public ResponseEntity<String> insertProduct(@Valid @RequestBody CategoryInsertRequest categoryRequest){
 		return ResponseEntity.ok(categoryService.insertCategory(categoryRequest));
 	}
-	@PostMapping("/update/status")
+	@PostMapping("/admin/update/status")
 	public ResponseEntity<String> updateStatusCategory(@Valid @RequestBody CategoryStatusRequest statusRequest){
 		return ResponseEntity.ok(categoryService.updateStatusCategory(statusRequest));
 	}

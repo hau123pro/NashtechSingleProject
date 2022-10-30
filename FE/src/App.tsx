@@ -4,31 +4,16 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import './App.css';
 import "./assets/css/main.css"
 import Footer from './component/footer/footer';
-import NavBar from './component/nav';
+import NavBar from './component/navbar/nav';
 import Body from './page/home/body';
 import Product from './page/product/product';
 import ProductDetail from './page/product_detail/product_detail';
 import Cart from './page/cart/cart';
 import CartDrawer from './component/cart/cart-drawer'
+import Order from './page/order/order';
+import Login from './page/login/login';
 const App: React.FC = () => {
-  // interface a {
-  //   id: number,
-  //   hehe: string
-  // }
-  // let s = [{
-  //   movieName: 'k',
-  //   imgUrl: ['huhu', 'huhu']
-  // }]
-  // let c = {
-  //   movieName: 'k',
-  //   imgUrl: ['huhu', 'huhu']
-  // };
-  // useEffect(() => {
-  //   let a = [...s, {
-  //     ...c, movieName: 'v'
-  //   }];
-  //   console.log(a);
-  // }, [])
+
 
   return (
     <>
@@ -41,6 +26,8 @@ const App: React.FC = () => {
             <Route path='/productDetail' element={<ProductDetail />} />
             <Route path='/cart' element={<Cart />} />
             <Route path='/cartDrawer' element={<CartDrawer />} />
+            <Route path='/order' element={<Order />} />
+            <Route path='/login' element={<Login />} />
           </Routes>
 
         </Router>

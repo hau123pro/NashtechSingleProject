@@ -17,6 +17,7 @@ import com.cozastore.dto.reponse.CategoryRespone;
 import com.cozastore.dto.reponse.FormatRespone;
 import com.cozastore.dto.reponse.ProductRespone;
 import com.cozastore.dto.request.ProductInfoRequest;
+import com.cozastore.dto.request.ProductRequest;
 import com.cozastore.entity.Category;
 import com.cozastore.entity.Format;
 import com.cozastore.entity.Product;
@@ -55,8 +56,9 @@ public class ProductMapper {
 							.imgUrl(product.getImgUrl())
 							.authorResponse(
 									AuthorResponse.builder()
-									.Id(product.getAuthor().getId())
-									.authorName(product.getAuthor().getFirstName()+" "+product.getAuthor().getLastName())
+									.id(product.getAuthor().getId())
+									.firstName(product.getAuthor().getFirstName())
+									.lastName(product.getAuthor().getLastName())
 									.description(product.getAuthor().getDescription())
 									.imgUrl(product.getAuthor().getImgUrl())
 									.publishBook(product.getAuthor().getPublishBook())
@@ -79,10 +81,10 @@ public class ProductMapper {
 		Set<Category> categories=new HashSet<>(categoryMapper.convertRequestToCategoryList(infoRequest.getCategoryRequests()));
 		Set<ProductCategory> productCategories=categoryMapper.convertRequestToProductCategory(categories, product);
 		return Product.builder().Id(infoRequest.getProductId())
-								.imgUrl(infoRequest.getImgUrl())
 								.description(infoRequest.getDescription())
 								.productName(infoRequest.getProductName())
 								.dateCreate(product.getDateCreate())
+								.imgUrl(product.getImgUrl())
 								.dateUpdate(date)
 								.status(product.getStatus())
 								.author(product.getAuthor())
@@ -92,15 +94,15 @@ public class ProductMapper {
 								.listWishListDetails(product.getListWishListDetails())
 								.build();
 	}
-	public Product convertRequestToProduct(ProductInfoRequest infoRequest,Product product) {
+	public Product convertRequestToProduct(ProductRequest infoRequest,Product product) {
 		Date date = Date.valueOf(LocalDate.now());
 		Set<Category> categories=new HashSet<>(categoryMapper.convertRequestToCategoryList(infoRequest.getCategoryRequests()));
 		Set<ProductCategory> productCategories=categoryMapper.convertRequestToProductCategory(categories, product);
 		return Product.builder()
 								.Id(product.getId())
-								.imgUrl(infoRequest.getImgUrl())
 								.description(infoRequest.getDescription())
 								.productName(infoRequest.getProductName())
+								.imgUrl(product.getImgUrl())
 								.dateCreate(date)
 								.dateUpdate(date)
 								.author(product.getAuthor())
@@ -108,11 +110,10 @@ public class ProductMapper {
 								.status(Status.ACTIVE.getValue())
 								.build();
 	}
-	public Product convertRequestToInsertProduct(ProductInfoRequest infoRequest) {
+	public Product convertRequestToInsertProduct(ProductRequest infoRequest) {
 		Date date = Date.valueOf(LocalDate.now());
 		Set<Category> categories=new HashSet<>(categoryMapper.convertRequestToCategoryList(infoRequest.getCategoryRequests()));
 		return Product.builder()
-								.imgUrl(infoRequest.getImgUrl())
 								.description(infoRequest.getDescription())
 								.productName(infoRequest.getProductName())
 								.dateCreate(date)

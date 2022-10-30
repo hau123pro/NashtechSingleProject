@@ -1,6 +1,7 @@
 package com.cozastore.dto.request;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -12,7 +13,10 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.cozastore.entity.Author;
+import com.cozastore.utils.constant.Status;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
@@ -22,8 +26,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class ProductInfoRequest {
 	
@@ -34,9 +38,6 @@ public class ProductInfoRequest {
 	private String productName;
 
 	private String description;
-
-	@NotBlank(message="Image URL Product cannot empty")
-	private String imgUrl;
 	
 	@NotNull(message="Author ID cannot null")
 	private int authorId;
@@ -50,6 +51,9 @@ public class ProductInfoRequest {
 	@NotNull(message="Price cannot null")
 	private double price;
 	
+	@NotNull(message="Image file cannot null")
+	private MultipartFile imgFile;
+	
 	@NotNull(message="Category list cannot empty")
-	private List<CategoryRequest> categoryRequests;
+	private List<CategoryRequest> categoryRequests= new ArrayList<>();;
 }

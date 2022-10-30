@@ -22,6 +22,6 @@ public class CategoryStatusRequest {
 	@NotNull(message="id cannot be null")
 	private int id;
 	
-	@NotBlank(message="Status cannot be empty")
+	@NotNull(message="Status cannot be empty")
 	private Status status;
 }

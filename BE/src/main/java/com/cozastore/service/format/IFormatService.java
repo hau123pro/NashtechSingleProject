@@ -19,6 +19,8 @@ public interface IFormatService {
 	public HeaderResponse<FormatRespone> getFormatByPage(Pageable pageable);
 	
 	public HeaderResponse<FormatRespone> getFormatActiveByPage(Pageable pageable);
+	
+	public List<FormatRespone> getAllFormatActive();
 
 	public String updateFormat(FormatRequest formatRequest);
 

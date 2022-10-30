@@ -21,22 +21,18 @@ import com.cozastore.mappers.OrderMapper;
 import com.cozastore.service.order.IOrderService;
 
 @RestController
-@RequestMapping("/v1/admin/order")
+@RequestMapping("/v1/order")
 public class OrderController {
 	
 	@Autowired 
 	private IOrderService iOrderService;
 	
-	@GetMapping()
+	@GetMapping("/admin")
 	public ResponseEntity<List<OrderRespone>> getAllOrder(@PageableDefault(size=5) Pageable pageable){
 		HeaderResponse<OrderRespone> headerResponse=iOrderService.getAllOrder(pageable);
 		return ResponseEntity.ok().headers(headerResponse.getHeaders()).body(headerResponse.getItems());
 	}
-	@PostMapping("/add")
-	public String  addNewOrder(Principal principal) {
-		return iOrderService.addOrder(principal.getName());
-	}
-//	@PutMapping("/update")
-//	public 
+	
+
 	
 }	

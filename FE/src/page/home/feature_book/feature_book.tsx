@@ -109,7 +109,7 @@ const FeatureBook: React.FC = () => {
                                             <a href=''><i className="bi bi-bag"></i></a>
                                         </div>
                                         <div className="wish-list-icon">
-                                            <i style={{ marginLeft: "26%", marginTop: "10%" }} className="bi bi-heart icon pointer"></i>
+                                            <i className="bi bi-heart icon pointer"></i>
                                         </div>
                                     </div>
                                 </div>

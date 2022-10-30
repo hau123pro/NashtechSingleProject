@@ -22,6 +22,8 @@ public interface ICategoryService {
 	
 	public HeaderResponse<CategoryRespone> getCategoryActiveByPage(Pageable pageable);
 	
+	public List<CategoryRespone> getAllCategoryActive();
+	
 	public String updateCategory(CategoryRequest categoryRequest);
 	
 	public CategoryRespone getCategoryById(int id);

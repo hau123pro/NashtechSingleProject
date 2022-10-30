@@ -1,7 +1,10 @@
 import React, { FC, ReactElement, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import logo2 from "../images/icons/logo-01.png"
-
+import logo2 from "../../images/icons/logo-01.png";
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import { Col, Row } from "react-bootstrap";
+import MenuAccount from "./menu/menu";
+import "./navbar.css"
 const NavBar: React.FC = () => {
     const [classes, setClasses] = useState<string>("");
     useEffect(() => {
@@ -13,9 +16,8 @@ const NavBar: React.FC = () => {
             }
         });
 
-        // <-- DOM-Window, extends DOM-EventTarget
-
     }, []);
+
     return (
         <div className="container-menu-desktop" id="container-menu-desktop">
             <nav className={`navbar fixed-top how-shadow1 wrap-menu ${classes} `} >
@@ -31,10 +33,16 @@ const NavBar: React.FC = () => {
                             <li><Link to={'/productDetail'} className="nav-link mr-auto"> ProductDetail </Link></li>
                             <li><Link to={'/cart'} className="nav-link mr-auto "> Cart </Link></li>
                             <li><Link to={'/cartDrawer'} className="nav-link mr-auto "> Cart </Link></li>
+                            <li><Link to={'/order'} className="nav-link mr-auto "> Order </Link></li>
                         </ul>
                     </div>
                     <div className='help-line'>
-                        <a href=''>0945437332</a></div>
+                        <Row>
+                            <Col xs={3}><a href=''><ShoppingCartIcon className="icon_cart" style={{ fontSize: "30px" }} /></a> </Col>
+                            <Col xs={9}><MenuAccount /></Col>
+                        </Row>
+                    </div>
+
                 </div>
             </nav>
         </div>

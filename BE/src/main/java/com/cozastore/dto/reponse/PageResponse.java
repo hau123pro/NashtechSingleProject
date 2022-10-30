@@ -18,4 +18,9 @@ public class PageResponse {
 	private int size;
 	
 	private int page;
+	
+	private int totalPage;
+	
+	private long totalElement;
 }
+	

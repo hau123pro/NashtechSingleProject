@@ -53,6 +53,13 @@ public class CategoryService implements ICategoryService {
 		HeaderResponse<CategoryRespone> headerResponse=new HeaderResponse<>(categoryResponses, responseHeaders);
 		return headerResponse;
 	}
+	
+	@Override
+	public List<CategoryRespone> getAllCategoryActive() {
+		List<Category> categories=categoryRepository.findByStatus(Status.ACTIVE.getValue());
+		List<CategoryRespone> categoryResponses = categoryMapper.convertListToCategoryResponse(categories);
+		return categoryResponses;
+	}
 
 	@Override
 	public String updateCategory(CategoryRequest categoryRequest) {
@@ -89,6 +96,8 @@ public class CategoryService implements ICategoryService {
 		category.setStatus(statusRequest.getStatus().getValue());
 		return SuccessString.CATEGORY_UPDATE_STATUS_SUCCESS;
 	}
+
+	
 
 	
 	

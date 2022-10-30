@@ -14,9 +14,11 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AuthorResponse {
-	private int Id;
+	private int id;
 	
-	private String authorName;
+	private String firstName;
+	
+	private String lastName;
 	
 	private String description;
 	

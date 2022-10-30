@@ -3,6 +3,8 @@ package com.cozastore.dto.request;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,6 +29,6 @@ public class AuthorInsertRequest {
 	@NotNull(message="quantity sale Book cannot be empty")
 	private int quantitySale;
 	
-	@NotBlank(message="Image Author cannot be empty")
-	private String imgUrl;
+	@NotNull(message="Image file cannot null")
+	private MultipartFile imgFile;
 }

@@ -1,5 +1,6 @@
 package com.cozastore.service.product;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -16,6 +17,7 @@ import com.cozastore.dto.reponse.PageResponse;
 import com.cozastore.dto.reponse.ProductRespone;
 import com.cozastore.dto.request.FilterRequest;
 import com.cozastore.dto.request.ProductInfoRequest;
+import com.cozastore.dto.request.ProductRequest;
 import com.cozastore.dto.request.ProductStatusRequest;
 import com.cozastore.entity.Author;
 import com.cozastore.entity.Format;
@@ -29,6 +31,7 @@ import com.cozastore.repository.author.IAuthorRepository;
 import com.cozastore.repository.format.IFormatRepository;
 import com.cozastore.repository.product.IProductRepository;
 import com.cozastore.repository.productformat.IProductFormatRepository;
+import com.cozastore.service.cloudinary.ICloudinaryService;
 import com.cozastore.utils.constant.ErrorString;
 import com.cozastore.utils.constant.Status;
 import com.cozastore.utils.constant.SuccessString;
@@ -51,14 +54,18 @@ public class ProductService implements IProductService {
 	@Autowired
 	IAuthorRepository authorRepository;
 
+	@Autowired
+	ICloudinaryService cloudinaryService;
+
 	@Override
 	public List<ProductRespone> getAllProduct(Pageable pageable) {
 		Page<Product> products = productRepository.findAll(pageable);
 		List<ProductRespone> productRespones = new ArrayList<>();
 		for (Product product : products.getContent()) {
 			ProductRespone productResponse = getProductById(product.getId());
-			productResponse.setPageResponse(
-					PageResponse.builder().page(pageable.getPageNumber()).size(pageable.getPageSize()).build());
+			productResponse
+					.setPageResponse(PageResponse.builder().page(pageable.getPageNumber()).size(pageable.getPageSize())
+							.totalPage(products.getTotalPages()).totalElement(products.getTotalElements()).build());
 			productRespones.add(productResponse);
 		}
 		return productRespones;
@@ -69,6 +76,10 @@ public class ProductService implements IProductService {
 		Page<Product> products = productRepository.findByStatus(Status.ACTIVE.getValue(), pageable);
 		List<ProductRespone> productRespones = new ArrayList<>();
 		for (Product product : products.getContent()) {
+			ProductRespone productResponse = getProductById(product.getId());
+			productResponse
+					.setPageResponse(PageResponse.builder().page(pageable.getPageNumber()).size(pageable.getPageSize())
+							.totalPage(products.getTotalPages()).totalElement(products.getTotalElements()).build());
 			productRespones.add(getProductById(product.getId()));
 		}
 		return productRespones;
@@ -76,12 +87,16 @@ public class ProductService implements IProductService {
 
 	@Override
 	public List<ProductRespone> getProductFilter(Pageable pageable, FilterRequest filter) {
-		Page<Product> products = productRepository.findByCategoryId(filter.getCategoryId(), pageable);
+		Page<Product> products = productRepository.findProductsByFilterParams(filter.getCategoryId(),
+				filter.getAuthorId(),filter.getFormatId(),filter.getPriceStart(),filter.getPriceEnd(), pageable);
 		List<ProductRespone> productRespones = new ArrayList<>();
 		for (Product product : products.getContent()) {
 			ProductRespone productResponse = getProductById(product.getId());
 			productResponse.setPageResponse(
-					PageResponse.builder().page(pageable.getPageNumber()).size(pageable.getPageSize()).build());
+					PageResponse.builder().page(pageable.getPageNumber())
+					.size(pageable.getPageSize())
+					.totalPage(products.getTotalPages())
+					.totalElement(products.getTotalElements()).build());
 			productRespones.add(productResponse);
 		}
 		return productRespones;
@@ -102,7 +117,7 @@ public class ProductService implements IProductService {
 	}
 
 	@Override
-	public String updateInfoProduct(ProductInfoRequest infoRequest) {
+	public String updateInfoProduct(ProductInfoRequest infoRequest) throws IOException {
 		// TODO Auto-generated method stub
 		ProductFormatID productFormatID = ProductFormatID.builder().productID(infoRequest.getProductId())
 				.formatID(infoRequest.getFormatId()).build();
@@ -127,13 +142,14 @@ public class ProductService implements IProductService {
 		Set<ProductFormat> productFormats = new HashSet<>();
 		productFormats.add(productFormat);
 		product.setProductFormats(productFormats);
+		product.setImgUrl(cloudinaryService.upload(infoRequest.getImgFile()));
 		productFormatRepository.save(productFormat);
 		productRepository.save(product);
 		return SuccessString.PRODUCT_UPDATE_SUCCESS;
 	}
 
 	@Override
-	public String insertProduct(ProductInfoRequest infoRequest) {
+	public String insertProduct(ProductRequest infoRequest) throws IOException {
 		// TODO Auto-generated method stub
 		Format format = iFormatRepository.findById(infoRequest.getFormatId())
 				.orElseThrow(() -> new NotFoundException(ErrorString.FORMAT_NOT_FOUND));
@@ -141,6 +157,7 @@ public class ProductService implements IProductService {
 				.orElseThrow(() -> new NotFoundException(ErrorString.AUTHOR_NOT_FOUND));
 		Product product = productMapper.convertRequestToInsertProduct(infoRequest);
 		product.setAuthor(author);
+		product.setImgUrl(cloudinaryService.upload(infoRequest.getImgFile()));
 		product = productRepository.save(product);
 		product = productMapper.convertRequestToProduct(infoRequest, product);
 		ProductFormat productFormat = ProductFormat.builder().product(product).format(format)

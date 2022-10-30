@@ -61,7 +61,7 @@ public class ReviewService implements IReviewService{
 		return headerResponse;
 	}
 	@Override
-	public HeaderResponse<ReviewRespone> getReviewActiveyPage(Pageable pageable) {
+	public HeaderResponse<ReviewRespone> getReviewActiveByPage(Pageable pageable) {
 		Page<Review> reviews=reviewRepository.findByStatus(Status.ACTIVE.getValue(), pageable);
 		HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.add("page-total-count", String.valueOf(reviews.getTotalPages()));

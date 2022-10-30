@@ -24,9 +24,8 @@ import com.cozastore.utils.JwtTokenUtil;
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true)
-
 public class SecurityConfig {
-	
+
 
 	@Autowired
 	JwtTokenUtil jwtUtil;
@@ -54,12 +53,14 @@ public class SecurityConfig {
 		http.cors().and().csrf().disable()
 				.authorizeHttpRequests()
 				// cho phép các link trong ".." được xác thực
-				.antMatchers("/swagger-ui.html/**").permitAll().antMatchers("/swagger-ui/**").permitAll()
+				.antMatchers("/swagger-ui.html/**").permitAll()
+				.antMatchers("/swagger-ui/**").permitAll()
 				.antMatchers("/api-docs/**").permitAll()
 				.antMatchers("/v1/author/**").permitAll()
-				.antMatchers("/v1/client/**").hasAuthority("ROLE_USER")
+				.antMatchers("/v1/client/**").permitAll()
+//				.antMatchers("/v1/client/**").hasAuthority("ROLE_USER")
 				.antMatchers("/v1/registration**").permitAll()
-				.antMatchers("/v1/**").permitAll()
+				
 				.and()
 				.addFilterBefore(new AuthorizationFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
 				;

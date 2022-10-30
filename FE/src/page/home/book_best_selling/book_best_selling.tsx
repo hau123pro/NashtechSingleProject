@@ -136,7 +136,7 @@ const BookBestSelling: React.FC = () => {
                                                         <a href=''>Add to cart</a>
                                                     </div>
                                                     <div className="wish-list-icon">
-                                                        <i style={{ marginLeft: "23%", marginTop: "10%" }} className="bi bi-heart icon pointer"></i>
+                                                        <i className="bi bi-heart icon pointer"></i>
                                                     </div>
                                                 </div>
                                             </div>

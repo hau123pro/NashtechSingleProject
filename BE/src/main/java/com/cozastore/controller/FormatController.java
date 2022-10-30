@@ -28,37 +28,41 @@ import com.cozastore.dto.request.FormatStatusRequest;
 import com.cozastore.service.format.IFormatService;
 
 @RestController
-@RequestMapping("/v1/admin/format")
+@RequestMapping("/v1/format")
 public class FormatController {
 	
 	@Autowired
 	IFormatService formatService;
 	
-	@GetMapping
+	@GetMapping("/admin")
 	public ResponseEntity<List<FormatRespone>> getFormatByPage(@PageableDefault(size=8) Pageable pageable){
 		HeaderResponse<FormatRespone> headerResponse=formatService.getFormatByPage(pageable);
 		return ResponseEntity.ok().headers(headerResponse.getHeaders()).body(headerResponse.getItems());
 	}
 	@GetMapping("/active")
-	public ResponseEntity<List<FormatRespone>> getCategoryActiveByPage( @PageableDefault(size=8) Pageable pageable){
+	public ResponseEntity<List<FormatRespone>> getFormatActiveByPage( @PageableDefault(size=8) Pageable pageable){
 		HeaderResponse<FormatRespone> headerResponse=formatService.getFormatActiveByPage(pageable);
 		return ResponseEntity.ok().headers(headerResponse.getHeaders()).body(headerResponse.getItems());
 	}
-	@PutMapping("/update")
+	@GetMapping("/active/all")
+	public ResponseEntity<List<FormatRespone>> getAllFormatActive(){
+		return ResponseEntity.ok(formatService.getAllFormatActive());
+	}
+	@PutMapping("/admin/update")
 	public ResponseEntity<String> updateFormat(@Valid @RequestBody FormatRequest formatRequest){
 		return ResponseEntity.ok(formatService.updateFormat(formatRequest));
 	}
 	
-	@GetMapping("/{id}")
+	@GetMapping("/admin/{id}")
 	public ResponseEntity<FormatRespone> getFormatById(@PathVariable Integer id){
 		return ResponseEntity.ok(formatService.getFormatById(id));
 	}
 	
-	@PostMapping("/insert")
+	@PostMapping("/admin/insert")
 	public ResponseEntity<String> insertFormat(@Valid @RequestBody FormatInsertRequest insertRequest){
 		return ResponseEntity.ok(formatService.insertFormat(insertRequest));
 	}
-	@PostMapping("/update/status")
+	@PostMapping("/admin/update/status")
 	public ResponseEntity<String> updateFormatStatus(@Valid @RequestBody FormatStatusRequest formatStatusRequest){
 		return ResponseEntity.ok(formatService.updateStatusFormat(formatStatusRequest));
 	}

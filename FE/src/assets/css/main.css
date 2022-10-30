@@ -24,12 +24,10 @@
   color: white;
 }
 
-.help-line a {
+.help-line {
   width: auto;
   height: 35px;
-  padding: 0 30px;
-  background-color: #ff084e;
-  color: #fff;
+  color: rgb(60, 60, 60);
   display: block;
   line-height: 35px;
   font-size: 14px;

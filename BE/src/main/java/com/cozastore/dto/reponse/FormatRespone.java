@@ -14,7 +14,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class FormatRespone {
-	private int ID;
+	private int id;
 	
 	private String formatName;
 	

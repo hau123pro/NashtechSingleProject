@@ -34,7 +34,7 @@ public class Format {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="Id")
-	private int Id;
+	private int id;
 	
 	@Column(name="name")
 	private String formatName;

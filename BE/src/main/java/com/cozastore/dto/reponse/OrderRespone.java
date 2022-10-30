@@ -12,7 +12,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class OrderRespone {
-	private int ID;
+	private int id;
 	private Date dateCreate;
 	private String status;
 	private double totalPrice;

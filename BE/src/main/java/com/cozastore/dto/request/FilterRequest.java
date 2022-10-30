@@ -13,4 +13,12 @@ import lombok.Setter;
 public class FilterRequest {
 	private int categoryId;
 //	private int 
+	private int formatId;
+	
+	private int authorId;
+	
+	private int priceStart;
+	
+	private int PriceEnd;
+	
 }

@@ -56,7 +56,12 @@ public class FormatService implements IFormatService{
 		HeaderResponse<FormatRespone> headerResponse=new HeaderResponse<>(formatRespones, responseHeaders);
 		return headerResponse;
 	}
-
+	@Override
+	public List<FormatRespone> getAllFormatActive() {
+		List<Format> list = formatRepository.findByStatus(Status.ACTIVE.getValue());
+		List<FormatRespone> formatRespones = formatMapper.convertListFormatToResponse(list);
+		return formatRespones;
+	}
 	@Override
 	public String updateFormat(FormatRequest formatRequest) {
 		Format format=formatRepository.findById(formatRequest.getId())
@@ -92,5 +97,6 @@ public class FormatService implements IFormatService{
 		formatRepository.save(format);
 		return SuccessString.FORMAT_UPDATE_STATUS_SUCCESS;
 	}
+	
 
 }
