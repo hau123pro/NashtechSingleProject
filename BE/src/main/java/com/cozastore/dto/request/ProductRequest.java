@@ -42,5 +42,5 @@ public class ProductRequest {
 	private MultipartFile imgFile;
 	
 	@NotNull(message="Category list cannot empty")
-	private List<CategoryRequest> categoryRequests= new ArrayList<>();;
+	private List<Integer> categoryIds= new ArrayList<>();;
 }

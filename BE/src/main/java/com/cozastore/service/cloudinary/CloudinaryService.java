@@ -28,18 +28,10 @@ public class CloudinaryService implements ICloudinaryService {
 		Cloudinary cloudinary = new Cloudinary(ObjectUtils.asMap("cloud_name", CLOUDINARY_CLOUD_NAME, "api_key",
 				CLOUDINARY_API_KEY, "api_secret", CLOUDINARY_API_SECRET, "secure", true));
 		
-		File file = ConvertMultipartFileToFile(multipartFile);
-		Map cloudinaryApi = cloudinary.uploader().upload(file, ObjectUtils.asMap("resource_type", "auto"));
+		Map cloudinaryApi = cloudinary.uploader().upload(multipartFile, ObjectUtils.asMap("resource_type", "auto"));
         String url = (String) cloudinaryApi.get("url");
         return url;
 	}
-	private File ConvertMultipartFileToFile(MultipartFile multipartFile) throws IOException {
-        File file = new File(Objects.requireNonNull(multipartFile.getOriginalFilename()));
-        FileOutputStream fos = new FileOutputStream(file);
-        fos.write(multipartFile.getBytes());
-        fos.close();
-        return file;
-    }
 	
 
 	

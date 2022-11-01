@@ -36,6 +36,8 @@ export interface ProductResponse {
     productName: string,
     description: string,
     imgUrl: string
+    maxPrice: number,
+    minPrice: number
 }
 export interface AuthorResponse {
     id: number,
@@ -49,11 +51,11 @@ export interface AuthorResponse {
 export interface Filter {
     page: number,
     size: number,
-    categoryId: number,
-    formatId: number,
-    authorId: number,
-    finalPrice: number,
-    firstPrice: number
+    categoryId: number | null,
+    formatId: number | null,
+    authorId: number | null,
+    finalPrice: number | null,
+    firstPrice: number | null
 }
 export interface ReviewResponse {
     userName: string,
@@ -69,9 +71,16 @@ export interface CategoryResponse {
 export interface FormatResponse {
     id: number,
     formatName: string,
-    bonusPrice: number,
     description: string
+}
+export interface FormatProductResponse extends FormatResponse {
+    price: number
 }
 export interface listCategory {
     category: Array<CategoryResponse>
+}
+
+export interface AuthContextInterface {
+    token: string | null;
+    isAuthenticated: boolean;
 }

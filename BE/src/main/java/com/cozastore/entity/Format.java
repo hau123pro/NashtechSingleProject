@@ -42,9 +42,6 @@ public class Format {
 	@Column(name="description")
 	private String description;
 	
-	@Column(name="bonus_price")
-	private int bonusPrice;
-	
 	@Column(name="status")
 	private int status;
 	

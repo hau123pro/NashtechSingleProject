@@ -50,6 +50,10 @@ public class ProductController {
 	public ResponseEntity<List<ProductRespone>> getProductActive(@PageableDefault(size=8) Pageable page) {
 		return ResponseEntity.ok(productService.getAllProduct(page));
 	}
+	@GetMapping(value="/feature")
+	public ResponseEntity<List<ProductRespone>> getProductFeatureActive() {
+		return ResponseEntity.ok(productService.getProductFeature());
+	}
 	
 	@GetMapping(value="/{id}")
 	public ResponseEntity<ProductRespone> getProductById(@PathVariable Integer id){
@@ -68,7 +72,8 @@ public class ProductController {
 		return ResponseEntity.ok(productService.updateStatusProduct(request));
 	}
 	@GetMapping("/filter")
-	public ResponseEntity<List<ProductRespone>> getProductFilter(@PageableDefault(size=2) Pageable page,@RequestBody FilterRequest filter ) {
+	public ResponseEntity<List<ProductRespone>> getProductFilter(@PageableDefault(size=2) Pageable page, FilterRequest filter ) {
+		System.out.println(filter.getAuthorId());
 		return ResponseEntity.ok(productService.getProductFilter(page, filter));
 	}
 }

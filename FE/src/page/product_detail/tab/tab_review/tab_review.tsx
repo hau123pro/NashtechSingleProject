@@ -21,7 +21,7 @@ const TabReview: React.FC = () => {
                             <div className='ms-3'>
                                 <div className='ps-1'>2 reviews</div>
                                 <div>
-                                    <Rating name="read-only" defaultValue={4} readOnly />
+                                    <Rating name="read-only" defaultValue={3} readOnly />
                                 </div>
                             </div>
                         </div>

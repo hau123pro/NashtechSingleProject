@@ -31,7 +31,6 @@ public class CartMapper {
 								.cartProductFormatID(cartItem.getId())
 								.firstPrice(cartItem.getFirstPrice())
 								.finalPrice(cartItem.getFinalPrice())
-								.FormatBonusPrice(cartItem.getProductFormat().getFormat().getBonusPrice())
 								.formatName(cartItem.getProductFormat().getFormat().getFormatName())
 								.imgUrl(cartItem.getProductFormat().getProduct().getImgUrl())
 								.productName(cartItem.getProductFormat().getProduct().getProductName())

@@ -23,11 +23,17 @@ public class ProductRespone {
 	
 	private String imgUrl;
 	
+	private int averageRating;
+	
+	private double maxPrice;
+	
+	private double minPrice;
+	
 	private AuthorResponse authorResponse;
 	
 	private List<ReviewRespone> reviewRespones;
 	
-	private List<FormatRespone> formatRespones;
+	private List<FormatProductResponse> formatRespones;
 	
 	private List<CategoryRespone> categoryRespones;
 	

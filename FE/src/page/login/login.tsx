@@ -1,14 +1,20 @@
 import React from 'react'
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { Grid, Paper, Avatar, TextField, Button, Typography, Link, Alert, CircularProgress } from '@mui/material';
 import LockIcon from '@mui/icons-material/Lock';
-import { userlogin, AuthState } from "../../types/type";
+import { userlogin, AuthState, AuthContextInterface } from "../../types/type";
 import loginService from '../../service/loginService';
 import "./login.css"
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from '../../context/authContext';
+interface Context {
+    dispatchUser?: any,
+    user?: AuthContextInterface
+}
 
 const Login: React.FC = () => {
     const navigation = useNavigate();
+    const { dispatch }: any = useContext(AuthContext);
     const [authSate, setLoading] = useState<AuthState>(
         {
             email: "",
@@ -45,6 +51,10 @@ const Login: React.FC = () => {
             response => {
                 localStorage.setItem("token", response.data.accesToken);
                 navigation("/");
+                dispatch({
+                    type: "Login",
+                    payload: response.data.accesToken
+                });
             }
         ).catch(
             error => {

@@ -56,7 +56,6 @@ public class OrderMapper {
 	public OrderItemRespone converOrderItemToRepone(OrderDetail orderDetail) {
 		return OrderItemRespone.builder()
 								.fisrtPrice(orderDetail.getPrice())
-								.FormatBonusPrice(orderDetail.getProductFormat().getFormat().getBonusPrice())
 								.formatName(orderDetail.getProductFormat().getFormat().getFormatName())
 								.imgUrl(orderDetail.getProductFormat().getProduct().getImgUrl())
 								.productName(orderDetail.getProductFormat().getProduct().getProductName())

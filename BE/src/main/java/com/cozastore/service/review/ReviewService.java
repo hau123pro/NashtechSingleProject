@@ -3,6 +3,7 @@ package com.cozastore.service.review;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -76,13 +77,24 @@ public class ReviewService implements IReviewService{
 		Product product=productRepository.findById(reviewRequest.getProductId())
 				.orElseThrow(()->new NotFoundException(ErrorString.PRODUCT_NOT_FOUND));
 		User user=userRepository.findUserByEmail(email).orElseThrow(()->new NotFoundException(ErrorString.USER_NOT_FOUND));
+		int countRating=0;
+		int i=0;
+		for(Review review:product.getListReview()) {
+			countRating+=review.getRating();
+			i+=1;
+		}
 		Date date = Date.valueOf(LocalDate.now());
 		Review review=reviewMapper.convertRequestToReview(reviewRequest);
 		review.setProduct(product);
 		review.setUser(user);
 		review.setDateCreate(date);
 		review.setStatus(Status.ACTIVE.getValue());
+		product.setAverageRating(countRating/i);
+		Set<Review> reviews=product.getListReview();
+		reviews.add(review);
+		product.setListReview(reviews);
 		reviewRepository.save(review);
+		productRepository.save(product);
 		return SuccessString.REVIEW_ADD_SUCCESS;
 	}
 

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 import com.cozastore.dto.reponse.AuthorResponse;
 import com.cozastore.dto.reponse.CategoryRespone;
+import com.cozastore.dto.reponse.FormatProductResponse;
 import com.cozastore.dto.reponse.FormatRespone;
 import com.cozastore.dto.reponse.ProductRespone;
 import com.cozastore.dto.request.ProductInfoRequest;
@@ -42,7 +43,7 @@ public class ProductMapper {
 	ReviewMapper reviewMapper;
 	
 	
-	public ProductRespone convertToProductResponse(Product product,List<Format> formats) {
+	public ProductRespone convertToProductResponse(Product product,List<FormatProductResponse> formats) {
 		List<ProductCategory> productCategories=product.getListCategory()
 				.stream().collect(Collectors.toList());
 		List<Category> categories=new ArrayList<>();
@@ -67,7 +68,7 @@ public class ProductMapper {
 									)
 							.description(product.getDescription())
 							.categoryRespones(categoryRespone)
-							.formatRespones(formatMapper.convertListFormatToResponse(formats))
+							.formatRespones(formats)
 							.reviewRespones(reviewMapper.convertToListReviewResponse(product.getListReview()
 																							.stream()
 																							.collect(Collectors.toList())
@@ -76,9 +77,8 @@ public class ProductMapper {
 							
 							
 	}
-	public Product convertRequestToUpdateProduct(ProductInfoRequest infoRequest,Product product) {
+	public Product convertRequestToUpdateProduct(ProductInfoRequest infoRequest,Product product,Set<Category> categories) {
 		Date date = Date.valueOf(LocalDate.now());
-		Set<Category> categories=new HashSet<>(categoryMapper.convertRequestToCategoryList(infoRequest.getCategoryRequests()));
 		Set<ProductCategory> productCategories=categoryMapper.convertRequestToProductCategory(categories, product);
 		return Product.builder().Id(infoRequest.getProductId())
 								.description(infoRequest.getDescription())
@@ -94,9 +94,8 @@ public class ProductMapper {
 								.listWishListDetails(product.getListWishListDetails())
 								.build();
 	}
-	public Product convertRequestToProduct(ProductRequest infoRequest,Product product) {
+	public Product convertRequestToProduct(ProductRequest infoRequest,Product product,Set<Category> categories) {
 		Date date = Date.valueOf(LocalDate.now());
-		Set<Category> categories=new HashSet<>(categoryMapper.convertRequestToCategoryList(infoRequest.getCategoryRequests()));
 		Set<ProductCategory> productCategories=categoryMapper.convertRequestToProductCategory(categories, product);
 		return Product.builder()
 								.Id(product.getId())
@@ -112,7 +111,6 @@ public class ProductMapper {
 	}
 	public Product convertRequestToInsertProduct(ProductRequest infoRequest) {
 		Date date = Date.valueOf(LocalDate.now());
-		Set<Category> categories=new HashSet<>(categoryMapper.convertRequestToCategoryList(infoRequest.getCategoryRequests()));
 		return Product.builder()
 								.description(infoRequest.getDescription())
 								.productName(infoRequest.getProductName())

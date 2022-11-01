@@ -1,7 +1,5 @@
 package com.cozastore.dto.reponse;
 
-import java.sql.Date;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,10 +11,12 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class FormatRespone {
+public class FormatProductResponse {
 	private int id;
-	
+
 	private String formatName;
 	
+	private double price;
+
 	private String description;
 }

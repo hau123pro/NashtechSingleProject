@@ -33,6 +33,8 @@ public class JwtTokenUtil implements Serializable {
 	public String generateToken(User user) {
 		Map<String, Object> claims = new HashMap<>();
 		claims.put("name", user.getEmail());
+		claims.put("role", user.getRoles());
+		
 		String token = Jwts.builder()
 				.setClaims(claims)
 				.setSubject(user.getEmail())

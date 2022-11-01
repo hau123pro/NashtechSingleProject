@@ -5,50 +5,28 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import 'swiper/css';
 import 'swiper/css/navigation';
 import "bootstrap-icons/font/bootstrap-icons.css";
-
+import React, { useState, useEffect } from 'react';
+import { CategoryResponse } from '../../../types/type';
+import categoryService from '../../../service/categoryService';
+import { Link } from 'react-router-dom';
 const FeatureCategories: React.FC = () => {
-    const category = [
-        {
-            id: 1,
-            bgColor: "#faf1ff",
-            icon: "bi bi-images",
-            color: "#a200fc",
-            categoryName: "Arts & Photography"
-        },
-        {
-            id: 2,
-            bgColor: "#faf4eb",
-            icon: "bi bi-incognito",
-            color: "black",
-            categoryName: "Fiction"
-        },
-        {
-            id: 3,
-            bgColor: "#f4e6e5",
-            icon: "bi bi-chat-square-heart",
-            color: "rgb(248, 48, 48)",
-            categoryName: "Arts & Photography"
-        },
-        {
-            id: 4,
-            bgColor: "#e6f2f4",
-            icon: "bi bi-lungs",
-            color: "#20c4ed",
-            categoryName: "Arts & Photography"
-        },
-        {
-            id: 5,
-            bgColor: "#faf4eb",
-            icon: "bi bi-mortarboard",
-            color: "#f79400",
-            categoryName: "Arts & Photography"
-        },
-    ]
+    const [category, setCategory] = useState<Array<CategoryResponse>>([]);
+    useEffect(() => {
+        categoryService.getSomeCategory().then(
+            (res) => {
+                setCategory(res.data);
+            }
+        ).catch(
+            (err) => {
+                alert(err.response.data.message);
+            }
+        )
+    }, [])
     return (
         <Container className='space-bottom'>
             <div style={{ display: "flex", justifyContent: "space-between" }} className="mb-4">
                 <div className='home-title-type'>
-                    Feature Categories
+                    Some Categories
                 </div>
                 <div>
                     All Categories
@@ -89,10 +67,11 @@ const FeatureCategories: React.FC = () => {
                                 item => {
                                     return (
                                         <SwiperSlide key={item.id}>
-                                            <Col lg={9} md={8} sm={8} xs={8} className="pt-4 pb-5 wrap-category-type" style={{ backgroundColor: item.bgColor }}>
-                                                <i className={`${item.icon} icon-category`} style={{ color: item.color }} ></i>
-                                                <div className='name-category'>{item.categoryName}</div>
-                                                <div>Shop now</div>
+                                            <Col lg={9} md={8} sm={8} xs={8} className="pt-5 pb-5 wrap-category-type" style={{ backgroundColor: "#fff6f6" }}>
+                                                <div className='name-category mt-3'><h5>{item.name}</h5></div>
+                                                <Link to={'/shop'}>
+                                                    <div className='mb-3'>Shop now</div>
+                                                </Link>
                                             </Col>
                                         </SwiperSlide>
                                     )
@@ -102,7 +81,7 @@ const FeatureCategories: React.FC = () => {
                 </Swiper>
             </div>
 
-        </Container>
+        </Container >
     )
 }
 export default FeatureCategories;

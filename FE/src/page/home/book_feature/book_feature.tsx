@@ -4,75 +4,24 @@ import { Navigation } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 import 'swiper/css';
 import 'swiper/css/navigation';
-const BookBestSelling: React.FC = () => {
-    const cardsDefault = [
-        {
-            id: "a",
-            row: 1,
-            col: 1,
-            w: 1,
-            h: 1,
-            filter: ["test", "chart"],
-            img: "https://demo4.madrasthemes.com/bookworm/wp-content/uploads/2020/08/18-120x183.jpg",
-            bname: "Dark in Death: An Eve Dallas Novel (In Death, Book 46)"
-        },
-        {
-            id: "b",
-            row: 1,
-            col: 1,
-            w: 1,
-            h: 1,
-            filter: ["test", "chart"],
-            img: "https://demo4.madrasthemes.com/bookworm/wp-content/uploads/2020/08/22-120x183.jpg",
-            bname: "Dark in Death: An Eve Dallas Novel (In Death, Book 46)"
+import React, { useState, useEffect } from 'react';
+import { ProductResponse } from '../../../types/type';
+import productService from '../../../service/productService';
+const BookFeature: React.FC = () => {
+    const [data, setData] = useState<Array<ProductResponse>>([]);
+    useEffect(() => {
+        productService.loadDataFeature().then(
+            (res) => {
+                setData(res.data);
+            }
+        )
+    }, []);
 
-        }, {
-            id: "c",
-            row: 1,
-            col: 1,
-            w: 1,
-            h: 1,
-            filter: ["test", "chart"],
-            img: "https://demo4.madrasthemes.com/bookworm/wp-content/uploads/2020/08/46-120x183.jpg",
-            bname: "Dark in Death: An Eve Dallas Novel (In Death, Book 46)"
-
-        }, {
-            id: "d",
-            row: 1,
-            col: 1,
-            w: 1,
-            h: 1,
-            filter: ["test", "chart"],
-            img: "https://demo4.madrasthemes.com/bookworm/wp-content/uploads/2020/08/30-300x449-1-120x183.jpg",
-            bname: "Dark in Death: An Eve Dallas Novel (In Death, Book 46)"
-        }
-        , {
-            id: "e",
-            row: 1,
-            col: 1,
-            w: 1,
-            h: 1,
-            filter: ["test", "chart"],
-            img: "https://demo4.madrasthemes.com/bookworm/wp-content/uploads/2020/08/3-120x183.jpg",
-            bname: "Think Like a Monk: Train Your Mind for Peace and Purpose Everyday"
-
-        }
-        , {
-            id: "f",
-            row: 1,
-            col: 1,
-            w: 1,
-            h: 1,
-            filter: ["test", "chart"],
-            img: "https://demo4.madrasthemes.com/bookworm/wp-content/uploads/2020/08/23-120x183.jpg",
-            bname: "Dark in Death: An Eve Dallas Novel (In Death, Book 46)"
-        }
-    ];
     return (
         <Container className='space-bottom mt-5'>
             <div style={{ display: "flex", justifyContent: "space-between" }} className="mb-4">
                 <div className='home-title-type'>
-                    Bestselling Books
+                    Books Feature
                 </div>
                 <div>
                     View All
@@ -110,25 +59,25 @@ const BookBestSelling: React.FC = () => {
 
 
                     {
-                        cardsDefault.map(
+                        data.map(
                             item => {
                                 return (
                                     <SwiperSlide key={item.id}>
                                         <Col lg={10} md={10} sm={8} xs={5} className="item">
                                             <div className='item-info' style={{ padding: "5%" }}>
                                                 <div style={{ paddingTop: "15%", paddingLeft: "20%", paddingRight: "20%" }}>
-                                                    <img style={{ width: "100%" }} src={item.img}></img>
+                                                    <img style={{ width: "100%" }} src={item.imgUrl}></img>
                                                 </div>
 
                                                 <div className="product-loop-info">
-                                                    <div className=' h6 text-lh-md product-mb-2 text-height-2 crop-text-2 '>
-                                                        <a href='#'>{item.bname}</a>
+                                                    <div className=' h6 text-lh-md product-mb-2 text-height-2 crop-text-2 name-height'>
+                                                        <a href='#'>{item.productName}</a>
                                                     </div>
                                                     <div className='name-author-product'>
                                                         Jessica Simson
                                                     </div>
                                                     <div className='product-price'>
-                                                        $20.20
+                                                        {item.maxPrice === item.minPrice ? `$${item.maxPrice}` : `$${item.minPrice} - $${item.maxPrice}`}
                                                     </div>
                                                 </div>
                                                 <div className='product-hover'>
@@ -155,4 +104,4 @@ const BookBestSelling: React.FC = () => {
         </Container>
     )
 }
-export default BookBestSelling;
+export default BookFeature;

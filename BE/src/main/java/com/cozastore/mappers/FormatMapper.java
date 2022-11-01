@@ -6,6 +6,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.cozastore.dto.reponse.FormatProductResponse;
 import com.cozastore.dto.reponse.FormatRespone;
 import com.cozastore.dto.request.FormatInsertRequest;
 import com.cozastore.dto.request.FormatRequest;
@@ -33,5 +34,9 @@ public class FormatMapper {
 	}
 	public FormatRespone convertToFormatResponse(Format format) {
 		return utilMapper.convertToEntity(format, FormatRespone.class);
+	}
+	public FormatProductResponse convertToFormatProductResponse(Format format) {
+		return FormatProductResponse.builder().id(format.getId()).formatName(format.getFormatName())
+				.description(format.getDescription()).build();
 	}
 }

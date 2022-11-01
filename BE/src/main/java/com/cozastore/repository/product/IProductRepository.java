@@ -20,15 +20,27 @@ public interface IProductRepository extends JpaRepository<Product, Integer>{
 			+ "and ( pc.category.id=:category or :category is null ) "
 			+ "and ( p.author.id=:author or :author is null ) "
 			+ "and ( pf.format.id=:format or :format is null ) "
-			+ "and ( pf.price>=:first or :first is null ) "
-			+ "and ( pf.price<=:final or :final is null ) ")
+			+ "and ( pf.price >= :first or :first is null ) "
+			+ "and ( pf.price <= :final or :final is null ) ")
 	public Page<Product> findProductsByFilterParams(
 			@Param("category") Integer categoryid,
 			@Param("author") Integer authorid,
 			@Param("format") Integer formatid,
-			@Param("first") Integer fisrtPrice,
-			@Param("final") Integer finalPrice,
+			@Param("first") Double fisrtPrice,
+			@Param("final") Double finalPrice,
 			Pageable pageable);
+	
+	@Query("SELECT MAX(pf.price)"
+		  + "FROM Product p, ProductFormat pf "
+		  + "WHERE  p.Id=pf.product.Id "
+		  + "and p.Id=:product")
+	public Double findProductMaxPriceById(@Param("product") Integer productid);
+	
+	@Query("SELECT MIN(pf.price)"
+			  + "FROM Product p, ProductFormat pf "
+			  + "WHERE  p.Id=pf.product.Id "
+			  + "and p.Id=:product")
+		public Double findProductMinPriceById(@Param("product") Integer productid);
 	
 	public Page<Product> findByStatus(Integer status,Pageable pageable);
 

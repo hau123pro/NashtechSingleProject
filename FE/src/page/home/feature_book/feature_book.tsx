@@ -1,7 +1,10 @@
 import { Container, Row, Col } from 'react-bootstrap';
-
+import React, { useState, useEffect } from 'react';
 
 const FeatureBook: React.FC = () => {
+    useEffect(() => {
+
+    }, []);
     const cardsDefault = [
         {
             id: "a",
@@ -109,7 +112,7 @@ const FeatureBook: React.FC = () => {
                                             <a href=''><i className="bi bi-bag"></i></a>
                                         </div>
                                         <div className="wish-list-icon">
-                                            <i className="bi bi-heart icon pointer"></i>
+                                            <i style={{ marginLeft: "26%", marginTop: "10%" }} className="bi bi-heart icon pointer"></i>
                                         </div>
                                     </div>
                                 </div>

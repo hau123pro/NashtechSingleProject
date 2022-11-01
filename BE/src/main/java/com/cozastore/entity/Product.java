@@ -67,7 +67,8 @@ public class Product implements Serializable {
 	@JsonIgnore
 	private Author author;
 	
-	
+	@Column(name="average_rating")
+	private int averageRating;
 	
 	@OneToMany(mappedBy = "product", cascade = {CascadeType.PERSIST, CascadeType.MERGE,CascadeType.REMOVE})
 	@OnDelete(action = OnDeleteAction.CASCADE)

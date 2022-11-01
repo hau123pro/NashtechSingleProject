@@ -15,6 +15,8 @@ import com.cozastore.entity.Product;
 public interface IProductService {
 	public List<ProductRespone> getAllProduct(Pageable pageable);
 	
+	public List<ProductRespone> getProductFeature();
+	
 	public ProductRespone getProductById(Integer id);
 	
 	public String updateInfoProduct(ProductInfoRequest infoRequest) throws IOException;

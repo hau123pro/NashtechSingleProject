@@ -11,14 +11,14 @@ import lombok.Setter;
 @Getter
 @Setter
 public class FilterRequest {
-	private int categoryId;
+	private Integer categoryId;
 //	private int 
-	private int formatId;
+	private Integer formatId;
 	
-	private int authorId;
+	private Integer authorId;
 	
-	private int priceStart;
+	private Double firstPrice;
 	
-	private int PriceEnd;
+	private Double finalPrice;
 	
 }
