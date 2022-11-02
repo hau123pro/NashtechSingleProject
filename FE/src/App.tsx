@@ -14,13 +14,27 @@ import CartDrawer from './component/cart/cart-drawer'
 import Order from './page/order/order';
 import Login from './page/login/login';
 import authService from './service/authService';
-import { AuthContext, authReducer, initialState } from './context/authContext';
+import { AuthContext, authReducer } from './context/authContext';
 import ErrorNotFound from './component/error/error';
+import { AuthContextInterface } from './types/type';
+const initialState: AuthContextInterface = {
+  isAuthenticated: false,
+  token: null
+};
 const App: React.FC = () => {
   const [user, dispatch] = useReducer(authReducer, initialState);
   useEffect(() => {
     console.log(user);
-    const token = user.token;
+    const token = localStorage.getItem('token');
+    if (token) {
+      dispatch({
+        type: 'Login',
+        payload: ''
+      })
+    }
+  }, [])
+  useEffect(() => {
+    const token = localStorage.getItem('token');
     if (token) {
       const decoded = jwt_decode(token);
       console.log(decoded);

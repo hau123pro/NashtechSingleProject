@@ -32,7 +32,8 @@ export interface ProductState {
     loadingAuthor: boolean,
     filter: Filter,
     category: Array<CategoryResponse>,
-    format: Array<FormatResponse>
+    format: Array<FormatResponse>,
+
 }
 
 const initState: ProductState = {
@@ -410,18 +411,18 @@ const Product: React.FC = () => {
 
                                                         <div className="product-loop-info">
                                                             <div className=' h6 text-lh-md product-mb-2 text-height-2 crop-text-2 name-height'>
-                                                                <a href='#'>{item.productName}</a>
+                                                                <a href={`productDetail/${item.id}`}>{item.productName}</a>
                                                             </div>
                                                             <div className='name-author-product'>
                                                                 Jessica Simson
                                                             </div>
                                                             <div className='product-price'>
-                                                                $20.20
+                                                                {item.maxPrice === item.minPrice ? `$${item.maxPrice}` : `$${item.minPrice} - $${item.maxPrice}`}
                                                             </div>
                                                         </div>
                                                         <div className='product-hover'>
                                                             <div style={{ marginRight: "30%" }} className="pointer add-to-cart-text">
-                                                                <a href='/productDetail'>Select Option</a>
+                                                                <a href={`productDetail/${item.id}`} > Select Option</a>
                                                             </div>
                                                             <div className="wish-list-icon">
                                                                 <i className="bi bi-heart icon pointer"></i>

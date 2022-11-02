@@ -71,7 +71,7 @@ const BookFeature: React.FC = () => {
 
                                                 <div className="product-loop-info">
                                                     <div className=' h6 text-lh-md product-mb-2 text-height-2 crop-text-2 name-height'>
-                                                        <a href='#'>{item.productName}</a>
+                                                        <a href={`productDetail/${item.id}`} >{item.productName}</a>
                                                     </div>
                                                     <div className='name-author-product'>
                                                         Jessica Simson
@@ -82,7 +82,7 @@ const BookFeature: React.FC = () => {
                                                 </div>
                                                 <div className='product-hover'>
                                                     <div style={{ marginRight: "30%" }} className="pointer add-to-cart-text">
-                                                        <a href=''>Add to cart</a>
+                                                        <a href={`productDetail/${item.id}`} >Select Option</a>
                                                     </div>
                                                     <div className="wish-list-icon">
                                                         <i className="bi bi-heart icon pointer"></i>

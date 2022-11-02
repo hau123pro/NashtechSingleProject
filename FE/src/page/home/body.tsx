@@ -1,6 +1,5 @@
 import React, { useState, useEffect, ReactElement } from 'react';
 import { user, movie, cardgrid } from "../../types/type"
-import testService from '../../service/movieService';
 import "../../assets/css/main.css"
 // import IsoTopeGrid from "react-isotope";
 import Slider from './slide/slide';
@@ -21,18 +20,7 @@ const Body: React.FC = () => {
 
   //     },[])
   const [visible, setVisible] = useState<movie[]>([]);
-  useEffect(() => {
-    const respone = testService.getProduct().then(
-      res => {
-        setVisible(res.data);
-      }
-    ).catch(
-      err => {
-        console.log(err);
-      }
-    )
-  }
-    , []);
+
 
 
 

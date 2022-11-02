@@ -1,12 +1,14 @@
 import * as React from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { Row, Col } from 'react-bootstrap';
 import TabDetail from './tab_product_detail/tab_product_detail';
 import { makeStyles } from "@material-ui/core/styles";
 import TabReview from './tab_review/tab_review';
+import { ProductDetailContext, productDetailContext, ProductDetailState } from '../../../context/productDetailContext';
+import { useEffect, useState, useContext } from "react";
+
 const useStyles = makeStyles({
     tabs: {
 
@@ -27,6 +29,7 @@ interface TabPanelProps {
     value: number;
 }
 
+
 function TabPanel(props: TabPanelProps) {
     const { children, value, index, ...other } = props;
 
@@ -40,7 +43,7 @@ function TabPanel(props: TabPanelProps) {
         >
             {value === index && (
                 <Box sx={{ p: 3 }}>
-                    <Typography>{children}</Typography>
+                    <div>{children}</div>
                 </Box>
             )}
         </div>
@@ -55,6 +58,7 @@ function a11yProps(index: number) {
 }
 
 export default function BasicTabs() {
+    const { detailState, dispatchDetail }: productDetailContext = useContext(ProductDetailContext);
     const classes = useStyles();
 
     const styles = {
@@ -94,19 +98,16 @@ export default function BasicTabs() {
                 <Row className='d-flex-center'>
                     <Col xs={8}>
                         <div>
-                            this is Description
-                        </div>
-                        <div>
-                            this is Description
+                            {detailState.product?.description}
                         </div>
                     </Col>
                 </Row>
 
             </TabPanel>
-            <TabPanel value={value} index={1}>
+            <TabPanel value={value} index={1} >
                 <TabDetail />
             </TabPanel>
-            <TabPanel value={value} index={2}>
+            <TabPanel value={value} index={2} >
                 <TabReview />
             </TabPanel>
 

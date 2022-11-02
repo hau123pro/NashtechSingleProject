@@ -37,7 +37,9 @@ export interface ProductResponse {
     description: string,
     imgUrl: string
     maxPrice: number,
-    minPrice: number
+    minPrice: number,
+    author: AuthorResponse,
+    averageRating: number
 }
 export interface AuthorResponse {
     id: number,

@@ -1,6 +1,6 @@
 import { createContext, useReducer } from "react";
 import { AuthContextInterface } from "../types/type";
-export const initialState: AuthContextInterface = {
+const initialState: AuthContextInterface = {
     isAuthenticated: false,
     token: null
 };
