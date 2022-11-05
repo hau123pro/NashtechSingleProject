@@ -16,13 +16,17 @@ import Login from './page/login/login';
 import authService from './service/authService';
 import { AuthContext, authReducer } from './context/authContext';
 import ErrorNotFound from './component/error/error';
-import { AuthContextInterface } from './types/type';
+import { AuthContextInterface, tokenBodyClaim } from './types/type';
+import cartService from './service/cartService';
+import CategoryAdmin from './page/admin/category/category';
 const initialState: AuthContextInterface = {
   isAuthenticated: false,
-  token: null
+  token: null,
+  countItemCart: 0
 };
 const App: React.FC = () => {
   const [user, dispatch] = useReducer(authReducer, initialState);
+  const [role, setRole] = useState<string>('');
   useEffect(() => {
     console.log(user);
     const token = localStorage.getItem('token');
@@ -30,37 +34,84 @@ const App: React.FC = () => {
       dispatch({
         type: 'Login',
         payload: ''
-      })
+      });
+      cartService.getCountItemCart(token).then(
+        (res) => {
+          dispatch({
+            type: 'set-Count',
+            payload: res.data
+          });
+        }
+      ).catch(
+        (err) => {
+          console.log(err);
+        }
+      );
     }
   }, [])
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
-      const decoded = jwt_decode(token);
-      console.log(decoded);
+      const decoded: tokenBodyClaim = jwt_decode(token);
+      console.log(decoded.role);
+      setRole(decoded.role);
+      if (decoded.role == "USER") {
+        cartService.getCountItemCart(token).then(
+          (res) => {
+            dispatch({
+              type: 'set-Count',
+              payload: res.data
+            });
+          }
+        ).catch(
+          (err) => {
+            console.log(err);
+          }
+        )
+      }
     }
-  }, [user])
-  return (
-    <>
-      <AuthContext.Provider value={{ user, dispatch }}>
-        <div className='container-fluid p-0'>
-          <Router>
-            <NavBar />
-            <Routes>
-              <Route path='/' element={<Body />} />
-              <Route path='/shop' element={<Product />} />
-              <Route path={`/productDetail/:id`} element={<ProductDetail />} />
-              <Route path='/cart' element={<Cart />} />
-              <Route path='/cartDrawer' element={<CartDrawer />} />
-              <Route path='/order' element={<Order />} />
-              <Route path='/login' element={<Login />} />
-              <Route path='/*' element={<ErrorNotFound />} />
-            </Routes>
+    else {
+      dispatch({
+        type: 'set-Count',
+        payload: 0
+      });
+    }
+  }, [user.token, user.countItemCart])
 
-          </Router>
-          <Footer />
-        </div>
-      </AuthContext.Provider>
+  return (
+    <>{
+      role == 'ADMIN' ?
+        <AuthContext.Provider value={{ user, dispatch }}>
+          <div className='container-fluid p-0 bg-color-admin'>
+            <Router>
+              <Routes >
+                <Route path='/admin/category' element={<CategoryAdmin />} />
+              </Routes>
+
+            </Router>
+          </div>
+        </AuthContext.Provider>
+        : <AuthContext.Provider value={{ user, dispatch }}>
+          <div className='container-fluid p-0'>
+            <Router>
+              <NavBar />
+              <Routes>
+                <Route path='/' element={<Body />} />
+                <Route path='/shop' element={<Product />} />
+                <Route path={`/productDetail/:id`} element={<ProductDetail />} />
+                <Route path='/cart' element={<Cart />} />
+                <Route path='/cartDrawer' element={<CartDrawer />} />
+                <Route path='/order' element={<Order />} />
+                <Route path='/login' element={<Login />} />
+                <Route path='/*' element={<ErrorNotFound />} />
+              </Routes>
+
+            </Router>
+            <Footer />
+          </div>
+        </AuthContext.Provider>
+
+    }
     </>
 
   );

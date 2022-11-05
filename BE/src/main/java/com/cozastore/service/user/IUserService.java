@@ -1,19 +1,31 @@
 package com.cozastore.service.user;
 
+import java.util.List;
 import java.util.Set;
 
+import org.springframework.data.domain.Pageable;
+
+import com.cozastore.dto.reponse.UserInformationRespone;
+import com.cozastore.dto.reponse.UserPageResponse;
+import com.cozastore.dto.request.UserInfoRequest;
+import com.cozastore.dto.request.UserRoleRequest;
+import com.cozastore.dto.request.UserStatusRequest;
 import com.cozastore.entity.Cart;
 import com.cozastore.entity.Orders;
 import com.cozastore.entity.User;
 
 public interface IUserService {
-	public User getUserByEmail(String email);
+	public UserInformationRespone getUserByEmail(String email);
 
-	public Cart getCartByUser(String email);
+	public String registerUser(User user, String confirmPassword);
 
-	public Set<Orders> getOrdersByUser(String email);
+	public String changePassword(String email, String password, String confirmPassword,String passwordOld);
 
-	public String registerUser(User user, String password2);
+	public UserPageResponse getAllUserByPage(Pageable pageable);
 
-	public String changePassword(String email, String password, String password2);
+	public void changeStatusUser(UserStatusRequest userStatus);
+	
+	public void changeRoleUser(UserRoleRequest roleRequest);
+	
+	public void changeInfoUser(UserInfoRequest infoRequest,String email);
 }

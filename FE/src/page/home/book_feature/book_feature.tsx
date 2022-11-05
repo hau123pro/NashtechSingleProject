@@ -12,7 +12,7 @@ const BookFeature: React.FC = () => {
     useEffect(() => {
         productService.loadDataFeature().then(
             (res) => {
-                setData(res.data);
+                setData(res.data.listProduct);
             }
         )
     }, []);

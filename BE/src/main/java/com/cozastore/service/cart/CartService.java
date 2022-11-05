@@ -2,25 +2,21 @@ package com.cozastore.service.cart;
 
 import java.sql.Date;
 import java.time.LocalDate;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-
-import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.cozastore.dto.reponse.CartItemRespone;
 import com.cozastore.dto.reponse.CartRespone;
+import com.cozastore.dto.request.CartItemIdRequest;
 import com.cozastore.dto.request.CartItemRequest;
 import com.cozastore.entity.Cart;
 import com.cozastore.entity.CartDetail;
 import com.cozastore.entity.ProductFormat;
-import com.cozastore.entity.Sale;
 import com.cozastore.entity.User;
-import com.cozastore.entity.ManytoManyID.CartProductFormatID;
+import com.cozastore.entity.ManytoManyID.CartProductFormatId;
 import com.cozastore.entity.ManytoManyID.ProductFormatID;
 import com.cozastore.exception.BadRequestException;
 import com.cozastore.exception.NotFoundException;
@@ -62,33 +58,42 @@ public class CartService implements ICartService {
 		if (cart == null)
 			throw new BadRequestException(ErrorString.CART_EMPTY);
 		List<CartItemRespone> cartItemRespones = cartMapper.convertToCartItemResponse(cart.getCartDetails());
-		Set<CartItemRespone> set = new HashSet<>(cartItemRespones);
+		List<CartItemRespone> set = new ArrayList<>(cartItemRespones);
 		CartRespone cartRespone = cartMapper.converToCartResponse(cart, set);
-		System.out.println("");
+		cartRespone.setItemRespones(set);
+		cartRespone.setCountItem(cartRepository.findCountItemByCartId(cart.getId()));
 		return cartRespone;
 	}
 
 	@Override
-	@Transactional
+//	@Transactional
 	public String deleteAllCartItem(Cart cart) {
-		for (CartDetail cartDetail : cart.getCartDetails()) {
-			cartDetailRepository.deleteById(cartDetail.getId());
-		}
+		List<CartDetail> cartDetails=cart.getCartDetails();
+//		if(cartDetails!=null)
+		cartDetails.clear();
+//		cartRepository.delete(cart);
 		return "Delete complete";
 	}
 
 	@Override
-	public String deleteCartItemById(CartItemRequest cartItemRequest) {
-		Cart cart = cartRepository.findById(cartItemRequest.getCartID())
+	public String deleteCartItemById(CartItemIdRequest cartItemRequest) {
+		Cart cart = cartRepository.findById(cartItemRequest.getCartId())
 				.orElseThrow(() -> new NotFoundException(ErrorString.CART_NOT_FOUND));
+		
+		if(cart.getCartDetails().size()==1) {
+			CartDetail cartDetail=cart.getCartDetails().get(0);
+			cart.getCartDetails().clear();
+			cartDetailRepository.delete(cartDetail);
+		}
+		else
 		for (CartDetail detail : cart.getCartDetails()) {
-			if (detail.getId().getCartID() == cartItemRequest.getCartID()
-					&& detail.getId().getFormatID() == cartItemRequest.getFormatID()
-					&& detail.getId().getProductID() == cartItemRequest.getProductID()) {
+			if (detail.getId().getCartId() == cartItemRequest.getCartId()
+					&& detail.getId().getFormatId() == cartItemRequest.getFormatId()
+					&& detail.getId().getProductId() == cartItemRequest.getProductId()) {
 				cart.getCartDetails().remove(detail);
+				cartDetailRepository.delete(detail);
 			}
 		}
-		cartRepository.save(cart);
 		return SuccessString.CART_ITEM_DELETE_SUCCESS;
 	}
 
@@ -96,32 +101,101 @@ public class CartService implements ICartService {
 	public String addProductToCart(CartItemRequest cartItemRequest, String email) {
 		User user = userRepository.findUserByEmail(email)
 				.orElseThrow(() -> new NotFoundException(ErrorString.USER_NOT_FOUND));
-		CartProductFormatID cartProductFormatID = CartProductFormatID.builder().cartID(cartItemRequest.getCartID())
-				.formatID(cartItemRequest.getFormatID()).productID(cartItemRequest.getProductID()).build();
-		ProductFormatID formatID = ProductFormatID.builder().formatID(cartItemRequest.getFormatID())
-				.productID(cartItemRequest.getProductID()).build();
+		ProductFormatID formatID = ProductFormatID.builder().formatID(cartItemRequest.getFormatId())
+				.productID(cartItemRequest.getProductId()).build();
 		ProductFormat productFormat = productFormatRepository.findById(formatID)
 				.orElseThrow(() -> new NotFoundException(ErrorString.PRODUCT_TYPE_NOT_FOUND));
 		if (productFormat.getQuantity() < cartItemRequest.getQuantity())
 			throw new BadRequestException(ErrorString.QUANTITY_NOT_ENOUGH);
-		Cart cart = cartRepository.findById(cartProductFormatID.getCartID()).orElse(null);
+		if ( cartItemRequest.getQuantity()<=0)
+			throw new BadRequestException(ErrorString.QUANTITY_NOT_ENOUGH);
+		Cart cart = user.getCart();
 		Date date = Date.valueOf(LocalDate.now());
+		List<CartDetail> cartDetails;
 		if (cart == null) {
-			cart = Cart.builder().firstPrice(productFormat.getPrice()).finalPrice(productFormat.getPrice())
-					.dateCreate(date).user(user).quantity(cartItemRequest.getQuantity()).build();
+			cart=Cart.builder().user(user).dateCreate(date).build();
 			cart = cartRepository.save(cart);
-			cartProductFormatID.setCartID(cart.getID());
+		}
+		CartProductFormatId cartProductFormatID = CartProductFormatId.builder().cartId(cart.getId()).formatId(cartItemRequest.getFormatId())
+				.productId(cartItemRequest.getProductId()).build();
+		CartDetail cartDetail = CartDetail.builder().cart(cart).productFormat(productFormat)
+				.firstPrice(productFormat.getPrice() * cartItemRequest.getQuantity())
+				.finalPrice(productFormat.getPrice() * cartItemRequest.getQuantity())
+				.quantity(cartItemRequest.getQuantity()).Id(cartProductFormatID).build();
+		cartDetails = cart.getCartDetails();
+		if(cartDetails!=null) {
+			boolean checkExist=false;
+			for(CartDetail item:cartDetails) {
+				if(item.getId().getFormatId()==cartItemRequest.getFormatId()
+						&&item.getId().getProductId()==cartItemRequest.getProductId())
+				{
+					item.setFinalPrice(
+							item.getFinalPrice() + cartDetail.getFinalPrice());
+					item.setFirstPrice(
+							item.getFirstPrice() + cartDetail.getFirstPrice());
+					item.setQuantity(item.getQuantity() + cartItemRequest.getQuantity());
+					checkExist=true;
+				}
+			}
+			if(checkExist==false)
+				cartDetails.add(cartDetail);
+		}
+		else {
+			cartDetails = new ArrayList<CartDetail>();
+			cartDetails.add(cartDetail);
 		}
 		productFormat.setQuantity(productFormat.getQuantity() - cartItemRequest.getQuantity());
-		CartDetail cartDetail = CartDetail.builder().cart(cart).productFormat(productFormat)
-				.firstPrice(productFormat.getPrice()).finalPrice(productFormat.getPrice())
-				.quantity(cartItemRequest.getQuantity()).Id(cartProductFormatID).build();
-		Set<CartDetail> cartDetails = new HashSet<>();
-		cartDetails.add(cartDetail);
 		cart.setCartDetails(cartDetails);
+		cart.setFirstPrice(cart.getFirstPrice() + cartDetail.getFirstPrice());
+		cart.setFinalPrice(cart.getFinalPrice() + cartDetail.getFinalPrice());
+		cart.setQuantity(cart.getQuantity() + cartDetail.getQuantity());
 		cartRepository.save(cart);
 		productFormatRepository.save(productFormat);
 		return SuccessString.CART_ITEM_ADD_SUCCESS;
+	}
+
+	@Override
+	public void updateCartItem(CartItemIdRequest cartItemRequest) {	
+		Cart cart = cartRepository.findById(cartItemRequest.getCartId())
+				.orElseThrow(() -> new NotFoundException(ErrorString.CART_NOT_FOUND));
+		ProductFormatID formatID = ProductFormatID.builder().formatID(cartItemRequest.getFormatId())
+				.productID(cartItemRequest.getProductId()).build();
+		ProductFormat productFormat = productFormatRepository.findById(formatID)
+				.orElseThrow(() -> new NotFoundException(ErrorString.PRODUCT_TYPE_NOT_FOUND));
+		if (productFormat.getQuantity() < cartItemRequest.getQuantity())
+			throw new BadRequestException(ErrorString.QUANTITY_NOT_ENOUGH);
+		if ( cartItemRequest.getQuantity()<=0)
+			throw new BadRequestException(ErrorString.QUANTITY_NOT_ENOUGH);
+		List<CartDetail> cartDetails=cart.getCartDetails();
+		for (CartDetail detail : cartDetails) {
+			if (detail.getId().getCartId() == cartItemRequest.getCartId()
+					&& detail.getId().getFormatId() == cartItemRequest.getFormatId()
+					&& detail.getId().getProductId() == cartItemRequest.getProductId()) {
+				cart.setQuantity(cart.getQuantity()-detail.getQuantity()+cartItemRequest.getQuantity());
+				cart.setFinalPrice(cart.getFinalPrice()-detail.getFinalPrice()+cartItemRequest.getQuantity()*productFormat.getPrice());
+				cart.setFirstPrice(cart.getFirstPrice()-detail.getFirstPrice()+cartItemRequest.getQuantity()*productFormat.getPrice());
+				detail.setQuantity(cartItemRequest.getQuantity());
+				detail.setFinalPrice(cartItemRequest.getQuantity()*productFormat.getPrice());
+				detail.setFirstPrice(cartItemRequest.getQuantity()*productFormat.getPrice());
+			}
+		}
+		cart.setCartDetails(cartDetails);
+		cartRepository.save(cart);
+	}
+
+	@Override
+	public Integer getCountItemCart(String email) {
+		User user = userRepository.findUserByEmail(email)
+				.orElseThrow(() -> new NotFoundException(ErrorString.USER_NOT_FOUND));
+		Cart cart = user.getCart();
+		if (cart == null)
+			throw new BadRequestException(ErrorString.CART_EMPTY);
+		if(cart.getCartDetails()==null)
+			throw new BadRequestException(ErrorString.CART_EMPTY);
+		Integer count=cartRepository.findCountItemByCartId(cart.getId());
+		if(count==null)
+			return 0;
+		return count;
 	}
 
 }

@@ -2,9 +2,6 @@ package com.cozastore.dto.reponse;
 
 import java.sql.Date;
 import java.util.List;
-import java.util.Set;
-
-import javax.persistence.Column;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,12 +14,14 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CartRespone {
+	private int id;
 	
 	private double firstPrice;
 	private double finalPrice;
 	
 	private Date dateCreate;
 	private int quantity;
-	private Set<CartItemRespone> itemRespones;
+	private int countItem;
+	private List<CartItemRespone> itemRespones;
 	
 }

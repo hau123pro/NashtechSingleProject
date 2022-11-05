@@ -1,9 +1,5 @@
 package com.cozastore.dto.reponse;
 
-import javax.validation.constraints.NotBlank;
-
-import com.cozastore.entity.ManytoManyID.CartProductFormatID;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,7 +12,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 public class CartItemRespone {
-	private CartProductFormatID cartProductFormatID;
+	private int productId;
+	private int formatId;
 	private String productName;
 	private String formatName;
 	private String imgUrl;

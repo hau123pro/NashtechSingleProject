@@ -8,9 +8,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -29,23 +26,23 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name="format")
+@Table(name = "format")
 public class Format {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="Id")
+	@Column(name = "Id")
 	private int id;
-	
-	@Column(name="name")
+
+	@Column(name = "name")
 	private String formatName;
-	
-	@Column(name="description")
+
+	@Column(name = "description")
 	private String description;
-	
-	@Column(name="status")
+
+	@Column(name = "status")
 	private int status;
-	
-	@OneToMany(mappedBy = "format", cascade = {CascadeType.PERSIST, CascadeType.MERGE,CascadeType.REMOVE})
+
+	@OneToMany(mappedBy = "format", cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE })
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JsonIgnore
 	private Set<ProductFormat> productFormats;

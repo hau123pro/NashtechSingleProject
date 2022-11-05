@@ -19,13 +19,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @RequestMapping("/v1/registration")
 public class RegisterationController {
-	
+
 	@Autowired
 	private AuthenticationMapper authenticationMapper;
-	
+
 	@PostMapping
-    public ResponseEntity<String> registration(@Valid @RequestBody RegistrationRequest user, BindingResult bindingResult) {
-        return ResponseEntity.ok(authenticationMapper.registerUser( user, bindingResult));
-    }
-	
+	public ResponseEntity<String> registration(@Valid @RequestBody RegistrationRequest user,
+			BindingResult bindingResult) {
+		return ResponseEntity.ok(authenticationMapper.registerUser(user, bindingResult));
+	}
+
 }

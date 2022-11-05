@@ -2,8 +2,6 @@ package com.cozastore.dto.reponse;
 
 import java.sql.Date;
 
-import javax.persistence.Column;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,7 +13,8 @@ public class OrderRespone {
 	private int id;
 	private Date dateCreate;
 	private String status;
-	private double totalPrice;
+	private double firstPrice;
+	private double finalPrice;
 	private int discount;
 	private int quantity;
 }

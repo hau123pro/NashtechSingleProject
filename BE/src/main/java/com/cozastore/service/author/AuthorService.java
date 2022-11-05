@@ -5,20 +5,21 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
+import com.cozastore.dto.reponse.AuthorPageResponse;
 import com.cozastore.dto.reponse.AuthorResponse;
 import com.cozastore.dto.reponse.HeaderResponse;
-import com.cozastore.dto.reponse.ReviewRespone;
+import com.cozastore.dto.reponse.PageResponse;
 import com.cozastore.dto.request.AuthorInfoRequest;
 import com.cozastore.dto.request.AuthorInsertRequest;
 import com.cozastore.dto.request.AuthorStatusRequest;
 import com.cozastore.entity.Author;
 import com.cozastore.exception.NotFoundException;
 import com.cozastore.mappers.AuthorMapper;
+import com.cozastore.mappers.PageMapper;
 import com.cozastore.repository.author.IAuthorRepository;
 import com.cozastore.service.cloudinary.ICloudinaryService;
 import com.cozastore.utils.constant.ErrorString;
@@ -32,30 +33,29 @@ public class AuthorService implements IAuthorService {
 
 	@Autowired
 	AuthorMapper authorMapper;
-	
+
+	@Autowired
+	PageMapper pageMapper;
+
 	@Autowired
 	ICloudinaryService cloudinaryService;
 
 	@Override
-	public HeaderResponse<AuthorResponse> getAuthorByPage(Pageable page) {
+	public AuthorPageResponse getAuthorByPage(Pageable page) {
 		Page<Author> authorList = authorRepository.findAll(page);
-		HttpHeaders responseHeaders = new HttpHeaders();
-		responseHeaders.add("page-total-count", String.valueOf(authorList.getTotalPages()));
-		responseHeaders.add("page-total-elements", String.valueOf(authorList.getTotalElements()));
-		List<AuthorResponse> respones = authorMapper.convertToResponseList(authorList.getContent());
-		HeaderResponse<AuthorResponse> headerResponse = new HeaderResponse<>(respones, responseHeaders);
-		return headerResponse;
+		List<AuthorResponse> authorResponses = authorMapper.convertToResponseList(authorList.getContent());
+		PageResponse pageResponse = pageMapper.convertPagetoPageResponse(authorList, page.getPageNumber(),
+				page.getPageSize());
+		return AuthorPageResponse.builder().authorResponses(authorResponses).pageResponse(pageResponse).build();
 	}
 
 	@Override
-	public HeaderResponse<AuthorResponse> getActiveAuthorByPage(Pageable page) {
+	public AuthorPageResponse getActiveAuthorByPage(Pageable page) {
 		Page<Author> authorList = authorRepository.findByStatus(Status.ACTIVE.getValue(), page);
-		HttpHeaders responseHeaders = new HttpHeaders();
-		responseHeaders.add("page-total-count", String.valueOf(authorList.getTotalPages()));
-		responseHeaders.add("page-total-elements", String.valueOf(authorList.getTotalElements()));
-		List<AuthorResponse> respones = authorMapper.convertToResponseList(authorList.getContent());
-		HeaderResponse<AuthorResponse> headerResponse = new HeaderResponse<>(respones, responseHeaders);
-		return headerResponse;
+		List<AuthorResponse> authorResponses = authorMapper.convertToResponseList(authorList.getContent());
+		PageResponse pageResponse = pageMapper.convertPagetoPageResponse(authorList, page.getPageNumber(),
+				page.getPageSize());
+		return AuthorPageResponse.builder().authorResponses(authorResponses).pageResponse(pageResponse).build();
 	}
 
 	@Override
@@ -64,6 +64,7 @@ public class AuthorService implements IAuthorService {
 		List<AuthorResponse> respones = authorMapper.convertToResponseList(authorList);
 		return respones;
 	}
+
 	@Override
 	public String updateAuthor(AuthorInfoRequest authorInfoRequest) throws IOException {
 		Author author = authorRepository.findById(authorInfoRequest.getId())
@@ -84,7 +85,7 @@ public class AuthorService implements IAuthorService {
 
 	@Override
 	public String insertAuthor(AuthorInsertRequest authorInsertRequest) throws IOException {
-		Author author=authorMapper.convertRequestToInsertEntity(authorInsertRequest);
+		Author author = authorMapper.convertRequestToInsertEntity(authorInsertRequest);
 		author.setStatus(Status.ACTIVE.getValue());
 		author.setImgUrl(cloudinaryService.upload(authorInsertRequest.getImgFile()));
 		authorRepository.save(author);
@@ -93,13 +94,11 @@ public class AuthorService implements IAuthorService {
 
 	@Override
 	public String updateStatusAuthor(AuthorStatusRequest authorStatusRequest) {
-		Author author=authorRepository.findById(authorStatusRequest.getId())
+		Author author = authorRepository.findById(authorStatusRequest.getId())
 				.orElseThrow(() -> new NotFoundException(ErrorString.AUTHOR_NOT_FOUND));
 		author.setStatus(authorStatusRequest.getStatus().getValue());
 		authorRepository.save(author);
 		return SuccessString.AUTHOR_UPDATE_STATUS_SUCCESS;
 	}
-
-	
 
 }

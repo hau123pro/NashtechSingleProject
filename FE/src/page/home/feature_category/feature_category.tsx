@@ -14,11 +14,11 @@ const FeatureCategories: React.FC = () => {
     useEffect(() => {
         categoryService.getSomeCategory().then(
             (res) => {
-                setCategory(res.data);
+                setCategory(res.data.cartRespones);
             }
         ).catch(
             (err) => {
-                alert(err.response.data.message);
+                alert(err);
             }
         )
     }, [])

@@ -1,11 +1,6 @@
 package com.cozastore.dto.request;
 
-import javax.persistence.Column;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-
-import com.cozastore.entity.ProductFormat;
-import com.cozastore.entity.ManytoManyID.CartProductFormatID;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,14 +13,11 @@ import lombok.Setter;
 @AllArgsConstructor
 public class CartItemRequest {
 	
-	@NotNull(message="Cart Id cannot empty")
-	private int cartID;
-	
 	@NotNull(message="Product Id cannot empty")
-	private int productID;
+	private int productId;
 	
 	@NotNull(message="Format Id cannot empty")
-	private int formatID;
+	private int formatId;
 	
 	@NotNull(message="Quantity cannot empty")
 	private int quantity;

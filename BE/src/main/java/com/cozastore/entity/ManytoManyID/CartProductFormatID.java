@@ -16,13 +16,13 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CartProductFormatID implements Serializable{
+public class CartProductFormatId implements Serializable{
 	
 		@Column(name="cart_id")
-		private int cartID;
+		private int cartId;
 		@Column(name="product_id")
-		private int productID;
+		private int productId;
 		@Column(name="format_id")
-		private int formatID;
+		private int formatId;
 	
 }

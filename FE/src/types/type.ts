@@ -76,13 +76,59 @@ export interface FormatResponse {
     description: string
 }
 export interface FormatProductResponse extends FormatResponse {
-    price: number
+    price: number,
+    quantity: number
 }
 export interface listCategory {
     category: Array<CategoryResponse>
 }
 
 export interface AuthContextInterface {
-    token: string | null;
-    isAuthenticated: boolean;
+    token: string | null,
+    isAuthenticated: boolean,
+    countItemCart: number
+}
+export interface CartAddRequest {
+    productId: number,
+    formatId: number,
+    quantity: number
+}
+export interface CartUpdateRequest extends CartAddRequest {
+    cartId: number
+}
+export interface CartResponse {
+    id: number;
+    firstPrice: number;
+    finalPrice: number;
+    dateCreate: string;
+    quantity: number;
+    countItem: number;
+}
+export interface CartItemResponse {
+    productId: number;
+    formatId: number;
+    productName: string;
+    formatName: string;
+    imgUrl: string;
+    quantity: number;
+    firstPrice: number;
+    finalPrice: number;
+}
+export interface tokenBodyClaim {
+    role: string
+}
+export interface updateQuantityCart {
+    productId: number,
+    formatId: number,
+    quantity: number
+}
+export interface PageResponse {
+    page: number,
+    size: number,
+    totalPage: number,
+    totalElement: number
+}
+export interface CategoryPageResponse {
+    cartRespones: Array<CategoryResponse>,
+    pageResponse: PageResponse | null
 }

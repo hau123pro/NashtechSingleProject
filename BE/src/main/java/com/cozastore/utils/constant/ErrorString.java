@@ -15,6 +15,7 @@ public class ErrorString {
 
 	//check pass, email
 	public static final String PASS_NOT_MATCH="Password not match!";
+	public static final String PASS_OLD_NOT_MATCH="Password old not match!";
 	public static final String EMAIL_IN_USE="Email already in use";
 	//check empty
 	public static final String PRODUCT_ID_EMPTY="Id cannot be empty";

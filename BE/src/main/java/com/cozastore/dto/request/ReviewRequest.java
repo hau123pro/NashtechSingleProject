@@ -1,11 +1,9 @@
 package com.cozastore.dto.request;
 
-import java.sql.Date;
-
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-
-import com.cozastore.dto.reponse.ReviewRespone;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,6 +25,8 @@ public class ReviewRequest {
 	private String content;
 	
 	@NotNull(message="Rating start cannot be null")
+	@Min(value=1,message="Rating cannot smaller than 1")
+	@Max(value=5,message="Rating cannot larger than 5")
 	private int rating;
 	
 }

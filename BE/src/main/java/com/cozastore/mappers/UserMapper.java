@@ -1,30 +1,18 @@
 package com.cozastore.mappers;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
-import javax.persistence.criteria.Order;
-
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.cozastore.dto.reponse.CartItemRespone;
-import com.cozastore.dto.reponse.CartRespone;
-import com.cozastore.dto.reponse.OrderRespone;
 import com.cozastore.dto.reponse.UserInformationRespone;
-import com.cozastore.dto.request.CartItemRequest;
-import com.cozastore.entity.Cart;
-import com.cozastore.entity.CartDetail;
-import com.cozastore.entity.OrderDetail;
-import com.cozastore.entity.Orders;
-import com.cozastore.entity.ManytoManyID.CartProductFormatID;
-import com.cozastore.exception.BadRequestException;
+import com.cozastore.dto.reponse.UserResponse;
+import com.cozastore.dto.request.UserInfoRequest;
+import com.cozastore.entity.User;
 import com.cozastore.service.user.IUserService;
+import com.cozastore.utils.constant.Role;
+import com.cozastore.utils.constant.Status;
 
 import lombok.RequiredArgsConstructor;
 
@@ -34,12 +22,30 @@ public class UserMapper {
 
 	@Autowired
 	private UtilMapper utilMapper;
-	
+
 	@Autowired
 	private IUserService userService;
-	
-	public UserInformationRespone getUserInfo(String email) {
-		return utilMapper.convertToEntity(userService.getUserByEmail(email), UserInformationRespone.class);
+
+	public List<UserResponse> convertListUserToResponse(List<User> users) {
+		List<UserResponse> list = new ArrayList<UserResponse>();
+		for (User user : users) {
+			UserResponse response = UserResponse.builder().userId(user.getUserId()).email(user.getEmail())
+					.dateCreate(user.getDateCreate()).name(user.getName()).phone(user.getPhone())
+					.status(Status.values()[user.getStatus()]).roles(Role.values()[user.getRoles()])
+					.dateOfBirth(user.getDateOfBirth()).build();
+			list.add(response);
+		}
+		return list;
+	}
+	public UserInformationRespone convertEntityToInfoResponse(User user) {
+		return utilMapper.convertToResponse(user, UserInformationRespone.class);
 	}
 	
+	public User convertInfoRequestToEntity(UserInfoRequest infoRequest,User user) {
+		user.setDateOfBirth(infoRequest.getDateOfBirth());
+		user.setName(infoRequest.getName());
+		user.setPhone(infoRequest.getPhone());
+		return user;
+	}
+
 }

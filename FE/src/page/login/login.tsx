@@ -2,11 +2,12 @@ import React from 'react'
 import { useEffect, useState, useContext } from "react";
 import { Grid, Paper, Avatar, TextField, Button, Typography, Link, Alert, CircularProgress } from '@mui/material';
 import LockIcon from '@mui/icons-material/Lock';
-import { userlogin, AuthState, AuthContextInterface } from "../../types/type";
+import { userlogin, AuthState, AuthContextInterface, tokenBodyClaim } from "../../types/type";
 import loginService from '../../service/loginService';
 import "./login.css"
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from '../../context/authContext';
+import jwt_decode from "jwt-decode";
 interface Context {
     dispatchUser?: any,
     user?: AuthContextInterface
@@ -50,7 +51,13 @@ const Login: React.FC = () => {
         loginService.login(data).then(
             response => {
                 localStorage.setItem("token", response.data.accesToken);
-                navigation("/");
+                const decoded: tokenBodyClaim = jwt_decode(response.data.accesToken);
+                console.log(decoded.role);
+                const role: String = decoded.role;
+                if (role == "ADMIN")
+                    navigation("/admin/category");
+                if (role == "USER")
+                    navigation("/");
                 dispatch({
                     type: "Login",
                     payload: response.data.accesToken

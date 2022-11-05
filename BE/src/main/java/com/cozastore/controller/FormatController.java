@@ -16,12 +16,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cozastore.dto.reponse.CategoryRespone;
+import com.cozastore.dto.reponse.FormatPageResponse;
 import com.cozastore.dto.reponse.FormatRespone;
 import com.cozastore.dto.reponse.HeaderResponse;
-import com.cozastore.dto.request.CategoryInsertRequest;
-import com.cozastore.dto.request.CategoryRequest;
-import com.cozastore.dto.request.CategoryStatusRequest;
 import com.cozastore.dto.request.FormatInsertRequest;
 import com.cozastore.dto.request.FormatRequest;
 import com.cozastore.dto.request.FormatStatusRequest;
@@ -34,36 +31,14 @@ public class FormatController {
 	@Autowired
 	IFormatService formatService;
 	
-	@GetMapping("/admin")
-	public ResponseEntity<List<FormatRespone>> getFormatByPage(@PageableDefault(size=8) Pageable pageable){
-		HeaderResponse<FormatRespone> headerResponse=formatService.getFormatByPage(pageable);
-		return ResponseEntity.ok().headers(headerResponse.getHeaders()).body(headerResponse.getItems());
-	}
+	
 	@GetMapping("/active")
-	public ResponseEntity<List<FormatRespone>> getFormatActiveByPage( @PageableDefault(size=8) Pageable pageable){
-		HeaderResponse<FormatRespone> headerResponse=formatService.getFormatActiveByPage(pageable);
-		return ResponseEntity.ok().headers(headerResponse.getHeaders()).body(headerResponse.getItems());
+	public ResponseEntity<FormatPageResponse> getFormatActiveByPage( @PageableDefault(size=8) Pageable pageable){
+		return ResponseEntity.ok(formatService.getFormatActiveByPage(pageable));
 	}
 	@GetMapping("/active/all")
 	public ResponseEntity<List<FormatRespone>> getAllFormatActive(){
 		return ResponseEntity.ok(formatService.getAllFormatActive());
 	}
-	@PutMapping("/admin/update")
-	public ResponseEntity<String> updateFormat(@Valid @RequestBody FormatRequest formatRequest){
-		return ResponseEntity.ok(formatService.updateFormat(formatRequest));
-	}
 	
-	@GetMapping("/admin/{id}")
-	public ResponseEntity<FormatRespone> getFormatById(@PathVariable Integer id){
-		return ResponseEntity.ok(formatService.getFormatById(id));
-	}
-	
-	@PostMapping("/admin/insert")
-	public ResponseEntity<String> insertFormat(@Valid @RequestBody FormatInsertRequest insertRequest){
-		return ResponseEntity.ok(formatService.insertFormat(insertRequest));
-	}
-	@PostMapping("/admin/update/status")
-	public ResponseEntity<String> updateFormatStatus(@Valid @RequestBody FormatStatusRequest formatStatusRequest){
-		return ResponseEntity.ok(formatService.updateStatusFormat(formatStatusRequest));
-	}
 }

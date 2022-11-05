@@ -32,16 +32,17 @@ public class JwtTokenUtil implements Serializable {
 	// generate token for user
 	public String generateToken(User user) {
 		Map<String, Object> claims = new HashMap<>();
-		claims.put("name", user.getEmail());
-		claims.put("role", user.getRoles());
-		
-		String token = Jwts.builder()
-				.setClaims(claims)
-				.setSubject(user.getEmail())
+		claims.put("name", user.getName());
+		if (user.getRoles() == 1)
+			claims.put("role", "USER");
+		if (user.getRoles() == 0)
+			claims.put("role", "ADMIN");
+		String token = Jwts.builder().setClaims(claims).setSubject(user.getEmail())
 				.signWith(SignatureAlgorithm.HS512, getSecret())
 				.setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY * 1000)).compact();
 		return token;
 	}
+
 	public String getEmailFromToken(String token) {
 		return getClaimFromToken(token, Claims::getSubject);
 	}

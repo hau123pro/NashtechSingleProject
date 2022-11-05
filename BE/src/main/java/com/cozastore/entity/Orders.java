@@ -1,7 +1,7 @@
 package com.cozastore.entity;
 
 import java.sql.Date;
-import java.util.Set;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -29,37 +29,37 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name="orders")
+@Table(name = "orders")
 public class Orders {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="Id")
-	private int ID;
-	
-	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(name = "user_id")
+	@Column(name = "Id")
+	private int id;
+
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	@JoinColumn(name = "user_id")
 	@JsonIgnore
 	private User user;
-	
-	@Column(name="date_create")
+
+	@Column(name = "date_create")
 	private Date dateCreate;
-	
-	@Column(name="status")
+
+	@Column(name = "status")
 	private int status;
-	
-	@Column(name="first_price")
+
+	@Column(name = "first_price")
 	private double firstPrice;
-	@Column(name="final_price")
+	@Column(name = "final_price")
 	private double finalPrice;
-	
-	@Column(name="discount")
+
+	@Column(name = "discount")
 	private int discount;
-	
-	@Column(name="quantity")
+
+	@Column(name = "quantity")
 	private int quantity;
-	
-	@OneToMany(mappedBy = "order", cascade = {CascadeType.PERSIST, CascadeType.MERGE,CascadeType.REMOVE})
+
+	@OneToMany(mappedBy = "order", cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE })
 	@OnDelete(action = OnDeleteAction.CASCADE)
-	private Set<OrderDetail> orderDetails;
+	private List<OrderDetail> orderDetails;
 }

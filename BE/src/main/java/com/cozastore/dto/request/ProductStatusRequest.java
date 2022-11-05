@@ -1,8 +1,5 @@
 package com.cozastore.dto.request;
 
-import java.util.List;
-
-
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;

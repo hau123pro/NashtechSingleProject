@@ -1,14 +1,11 @@
 package com.cozastore.repository.product;
 
-import java.util.List;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.cozastore.entity.Format;
 import com.cozastore.entity.Product;
 
 public interface IProductRepository extends JpaRepository<Product, Integer>{
@@ -16,7 +13,7 @@ public interface IProductRepository extends JpaRepository<Product, Integer>{
 	
 	@Query("SELECT DISTINCT p "
 			+ "FROM Product p , ProductCategory pc , ProductFormat pf "
-			+ "WHERE p.Id=pc.product.Id and p.Id=pf.product.Id "
+			+ "WHERE p.id=pc.product.id and p.id=pf.product.id "
 			+ "and ( pc.category.id=:category or :category is null ) "
 			+ "and ( p.author.id=:author or :author is null ) "
 			+ "and ( pf.format.id=:format or :format is null ) "
@@ -32,14 +29,14 @@ public interface IProductRepository extends JpaRepository<Product, Integer>{
 	
 	@Query("SELECT MAX(pf.price)"
 		  + "FROM Product p, ProductFormat pf "
-		  + "WHERE  p.Id=pf.product.Id "
-		  + "and p.Id=:product")
+		  + "WHERE  p.id=pf.product.id "
+		  + "and p.id=:product")
 	public Double findProductMaxPriceById(@Param("product") Integer productid);
 	
 	@Query("SELECT MIN(pf.price)"
 			  + "FROM Product p, ProductFormat pf "
-			  + "WHERE  p.Id=pf.product.Id "
-			  + "and p.Id=:product")
+			  + "WHERE  p.id=pf.product.id "
+			  + "and p.id=:product")
 		public Double findProductMinPriceById(@Param("product") Integer productid);
 	
 	public Page<Product> findByStatus(Integer status,Pageable pageable);

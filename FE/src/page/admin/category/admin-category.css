@@ -1,0 +1,56 @@
+.drawer-paper {
+    background: linear-gradient(195deg, rgb(66, 66, 74), rgb(25, 25, 25));
+    overflow-wrap: break-word;
+    height: 40rem;
+    background-color: "black";
+    border-radius: 0.75rem;
+}
+
+.name-admin {
+    font-family: Roboto, Helvetica, Arial, sans-serif;
+    font-size: 1.1rem;
+    text-align: center;
+}
+
+.color-white {
+    color: white;
+}
+
+.button-nav {
+    transition: box-shadow 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, background-color 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+    align-items: center;
+    padding-bottom: 0.8rem;
+    padding-top: 0.8rem;
+    margin-top: 0.2rem;
+    display: flex;
+    border-radius: 0.375rem;
+    font-size: 0.875rem
+}
+
+.button-nav:hover {
+    background-color: rgba(128, 128, 128, 0.563);
+}
+
+.bg-color-blue {
+    background: linear-gradient(195deg, rgb(73, 163, 241), rgb(26, 115, 232));
+}
+
+.icon-home {
+    color: rgb(52, 71, 103);
+    opacity: 0.5;
+    font-size: inherit !important;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.button-active {
+    width: 60%;
+    background-color: rgba(3, 186, 3, 0.835) !important;
+}
+
+.button-inactive {
+    width: 60%;
+    background-color: #ff4d4f !important;
+}

@@ -2,6 +2,7 @@ import React, { useState, useEffect, ReactElement } from 'react';
 import { userlogin } from "../types/type"
 import axios from 'axios';
 const URL_getAllCategoryActive = 'http://localhost:8080/api/v1/category/active/all';
+const URL_getAllCategoryByPage = 'http://localhost:8080/api/v1/category/active/all';
 const URL_getCategoryActiveByPage = 'http://localhost:8080/api/v1/category/active?';
 class categoryService {
 

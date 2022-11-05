@@ -1,12 +1,12 @@
 
 import { Container, Row, Col } from 'react-bootstrap';
-import { useEffect, useState, useReducer } from "react";
+import { useEffect, useState, useReducer, useContext } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import 'swiper/css';
 import 'swiper/css/navigation';
 import { Navigation } from "swiper";
 import { Alert } from '@mui/material';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -18,20 +18,27 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import Button from '@mui/material/Button';
 import "./product-detail.css"
 import Demo from './tab/tab-panel'
-import { AuthorResponse, CategoryResponse, FormatProductResponse, ProductResponse, ReviewResponse } from '../../types/type';
+import { AuthContextInterface, AuthorResponse, CartAddRequest, CategoryResponse, FormatProductResponse, ProductResponse, ReviewResponse } from '../../types/type';
 import productService from '../../service/productService';
 import ErrorNotFound from '../../component/error/error';
 import { ProductDetailContext, productDetailReducer, ProductDetailState } from '../../context/productDetailContext';
 import { makeStyles } from '@material-ui/core';
+import cartService from '../../service/cartService';
+import { AuthContext } from '../../context/authContext';
 const useStyles = makeStyles({
     input: {
-        "& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button": {
-            display: "none",
+        '& input[type=number]': {
+            '-moz-appearance': 'textfield'
         },
-        "& input[type=number]": {
-            MozAppearance: "textfield",
+        '& input[type=number]::-webkit-outer-spin-button': {
+            '-webkit-appearance': 'none',
+            margin: 0
         },
-    }
+        '& input[type=number]::-webkit-inner-spin-button': {
+            '-webkit-appearance': 'none',
+            margin: 0
+        }
+    },
 });
 const initState: ProductDetailState = {
     product: null,
@@ -45,18 +52,35 @@ const initState: ProductDetailState = {
     author: null,
     review: []
 }
+interface Context {
+    dispatch?: any,
+    user?: AuthContextInterface
+}
 const ProductDetail: React.FC = () => {
     const params = useParams<{ id: string }>();
     const [detailState, dispatchDetail] = useReducer(productDetailReducer, initState);
+    const { user, dispatch }: Context = useContext(AuthContext);
     const [formatId, setformatId] = useState<string>('');
     const [quantity, setQuantity] = useState<number>(0);
     const [isError, setIsError] = useState<boolean>(false);
+    const [valueInput, setValueInput] = useState<number>(1);
+    const navigation = useNavigate();
     // const []
     const classes = useStyles();
     const handleChange = (event: SelectChangeEvent) => {
         setformatId(event.target.value as string);
         setIsError(false);
+        // var quantity = (event.target as Element).id;
+        // setQuantity(+quantity);
+        // console.log(quantity);
     };
+    const handleClickOption = (event: any) => {
+        var quantity = +(event.target as Element).id;
+        setQuantity(quantity);
+        console.log(quantity);
+        if (quantity < valueInput)
+            setValueInput(quantity);
+    }
     useEffect(() => {
         const id = params.id !== undefined ? params.id : '';
         let a = document.getElementById('container-menu-desktop')?.classList.add("container-desktop-height");
@@ -113,10 +137,80 @@ const ProductDetail: React.FC = () => {
     const handleAddCart = () => {
         if (formatId === '')
             setIsError(true);
+        else {
+            const token = localStorage.getItem('token');
+            const cartRequest: CartAddRequest = {
+                productId: detailState.product.id,
+                formatId: +formatId,
+                quantity: valueInput
+
+            }
+            console.log(cartRequest);
+            if (token)
+                cartService.addCart(cartRequest, token).then(
+                    (res) => {
+                        alert(res.data);
+                        if (user?.countItemCart) {
+                            cartService.getCountItemCart(token).then(
+                                (res) => {
+                                    dispatch({
+                                        type: 'set-Count',
+                                        payload: res.data
+                                    });
+                                }
+                            ).catch(
+                                (err) => {
+                                    alert(err.response.data.message);
+                                }
+                            )
+                        }
+                        console.log(user?.countItemCart);
+                    }
+                ).catch(
+                    (err) => {
+                        alert(err);
+                    }
+                )
+            else
+                navigation("/login");
+        }
+    }
+    const handlePlusQuantity = () => {
+        var quantityPlus = valueInput + 1;
+        console.log(quantity);
+        if (quantity != 0) {
+            if (quantityPlus > quantity) {
+                setValueInput(quantity);
+            }
+            else {
+                setValueInput(quantityPlus);
+            }
+        } else {
+            setValueInput(1);
+        }
+    }
+    const handleMinusQuantity = () => {
+        var quantityPlus = valueInput - 1;
+        console.log(quantity);
+        if (quantityPlus == 0)
+            setValueInput(1);
+        else setValueInput(quantityPlus);
+
     }
     const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const newValue = e.target.value;
-        console.log(newValue);
+        const newValue = +e.target.value;
+        if (quantity != 0) {
+            if (newValue > quantity) {
+                setValueInput(quantity);
+            }
+            else {
+                if (newValue == 0) setValueInput(1);
+                else setValueInput(newValue);
+            }
+        } else {
+            setValueInput(1);
+        }
+
     };
     return (
         <>
@@ -172,7 +266,7 @@ const ProductDetail: React.FC = () => {
                                                                     detailState.format.map(
                                                                         (item: FormatProductResponse) => {
                                                                             return (
-                                                                                <MenuItem key={item.id} value={item.id}>{`${item.formatName}  $${item.price}`}</MenuItem>
+                                                                                <MenuItem onClick={handleClickOption} key={item.id} value={item.id} id={`${item.quantity}`}>{`${item.formatName}  $${item.price}`}</MenuItem>
                                                                             );
                                                                         }
                                                                     )
@@ -187,18 +281,20 @@ const ProductDetail: React.FC = () => {
                                                 <div className='mt-3 ps-4' style={{ display: 'flex' }}>
                                                     <TextField
                                                         id="standard-name"
-                                                        defaultValue={1}
+                                                        value={valueInput}
                                                         InputProps={{
                                                             startAdornment:
-                                                                <IconButton sx={{ borderRadius: 0 }} edge="start">
+                                                                <IconButton sx={{ borderRadius: 0 }} edge="start" onClick={handleMinusQuantity}>
                                                                     <RemoveIcon sx={{ stroke: "#ffffff", strokeWidth: 1 }} />
                                                                 </IconButton>,
                                                             endAdornment:
-                                                                <IconButton sx={{ borderRadius: 0 }} edge="end">
+                                                                <IconButton sx={{ borderRadius: 0 }} edge="end" onClick={handlePlusQuantity}>
                                                                     <AddIcon sx={{ stroke: "#ffffff", strokeWidth: 1 }} />
                                                                 </IconButton>,
                                                         }}
                                                         inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
+                                                        type='number'
+                                                        className={classes.input}
                                                         style={{ width: "9.5rem" }}
                                                         onChange={handleInput}
                                                     />

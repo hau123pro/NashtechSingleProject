@@ -91,6 +91,7 @@ const TabReview: React.FC = () => {
                 setStar2(num + 1);
             } else if (value.rating == 3) {
                 var num = star3;
+                console.log(num);
                 setStar3(num + 1);
             } else if (value.rating == 4) {
                 var num = star4;
@@ -100,7 +101,7 @@ const TabReview: React.FC = () => {
                 setStar5(num + 1);
             }
         });
-        // console.log(star);
+
         if (detailState?.review.length === 0)
             setCount(1);
         else setCount(detailState.review.length)
@@ -108,10 +109,10 @@ const TabReview: React.FC = () => {
             type: 'set-productId',
             payload: detailState.product?.id
         })
-    }, [])
+    }, [detailState.loadingAdd])
     useEffect(() => {
-        console.log(star5 / detailState.review.length);
-    }, [star5])
+        console.log(star3);
+    }, [star3])
     const submitReview = () => {
         if (state.content === null)
             dispatch({

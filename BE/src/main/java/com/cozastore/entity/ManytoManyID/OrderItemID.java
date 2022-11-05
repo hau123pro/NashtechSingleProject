@@ -6,10 +6,12 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.NoArgsConstructor;
 @Embeddable
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class OrderItemID implements Serializable{
 	@Column(name="order_id")
 	private int orderID;

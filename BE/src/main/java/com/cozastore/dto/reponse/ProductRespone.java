@@ -15,7 +15,7 @@ import lombok.Setter;
 @Builder
 public class ProductRespone {
 	
-	private int Id;
+private int Id;
 	
 	private String productName;
 	

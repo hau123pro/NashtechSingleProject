@@ -3,8 +3,6 @@ package com.cozastore.dto.request;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-import com.cozastore.utils.constant.Status;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

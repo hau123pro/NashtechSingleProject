@@ -1,7 +1,5 @@
 package com.cozastore.dto.request;
 
-import java.util.List;
-
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 

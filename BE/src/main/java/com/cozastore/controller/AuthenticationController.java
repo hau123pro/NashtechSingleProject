@@ -1,5 +1,7 @@
 package com.cozastore.controller;
 
+import java.security.Principal;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +47,7 @@ public class AuthenticationController {
 		}
 
 	}
+
 	@PostMapping("/logout")
 	public ResponseEntity<String> logout() {
 		return ResponseEntity.ok(authService.logout());
@@ -52,12 +55,8 @@ public class AuthenticationController {
 
 	@PutMapping("/changePassword")
 	public ResponseEntity<String> updateUserPassword(@Valid @RequestBody PasswordResetRequest passwordReset,
-			BindingResult bindingResult) {
-		return ResponseEntity.ok(authenticationMapper.passwordReset(passwordReset, bindingResult));
+			Principal principal, BindingResult bindingResult) {
+		return ResponseEntity.ok(authenticationMapper.passwordReset(passwordReset, principal.getName(), bindingResult));
 	}
 
-	@GetMapping("/forgot/{email}")
-	public ResponseEntity<String> forgotPassword(@PathVariable String email) {
-		return ResponseEntity.ok(authenticationMapper.sendPasswordResetCode(email));
-	}
 }

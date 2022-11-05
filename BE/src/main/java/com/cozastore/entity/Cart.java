@@ -1,7 +1,7 @@
 package com.cozastore.entity;
 
 import java.sql.Date;
-import java.util.Set;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -14,9 +14,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -32,33 +29,33 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name="cart")
+@Table(name = "cart")
 public class Cart {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="Id")
-	private int ID;
-	
+	@Column(name = "Id")
+	private int id;
+
 	@OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+	@JoinColumn(name = "user_id", referencedColumnName = "id")
 	@JsonIgnore
 	private User user;
-	
-	@Column(name="first_price")
+
+	@Column(name = "first_price")
 	private double firstPrice;
-	@Column(name="final_price")
+	@Column(name = "final_price")
 	private double finalPrice;
-	@Column(name="date_create")
+	@Column(name = "date_create")
 	private Date dateCreate;
-	@Column(name="quantity")
+	@Column(name = "quantity")
 	private int quantity;
-	
-	@OneToMany(mappedBy = "cart",cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-	private Set<CartDetail> cartDetails;
-	
-	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(name = "sale_id")
+
+	@OneToMany(mappedBy = "cart", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	private List<CartDetail> cartDetails;
+
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	@JoinColumn(name = "sale_id")
 	@JsonIgnore
 	private Sale sale;
 }

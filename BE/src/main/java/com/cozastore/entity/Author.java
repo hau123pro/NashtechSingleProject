@@ -1,6 +1,5 @@
 package com.cozastore.entity;
 
-import java.sql.Date;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -15,9 +14,6 @@ import javax.persistence.Table;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,35 +24,35 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name="author")
+@Table(name = "author")
 public class Author {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="Id")
+	@Column(name = "Id")
 	private int id;
-	
-	@Column(name="first_name")
+
+	@Column(name = "first_name")
 	private String firstName;
-	
-	@Column(name="last_name")
+
+	@Column(name = "last_name")
 	private String lastName;
-	
-	@Column(name="publish_book")
+
+	@Column(name = "publish_book")
 	private int publishBook;
-	
-	@Column(name="quantity_sale")
+
+	@Column(name = "quantity_sale")
 	private int quantitySale;
-	
-	@Column(name="description")
+
+	@Column(name = "description")
 	private String description;
-	
-	@Column(name="img_url")
+
+	@Column(name = "img_url")
 	private String imgUrl;
-	
-	@Column(name="status")
+
+	@Column(name = "status")
 	private int status;
 
-	@OneToMany(mappedBy = "author", cascade = {CascadeType.PERSIST, CascadeType.MERGE,CascadeType.REMOVE})
+	@OneToMany(mappedBy = "author", cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE })
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Set<Product> product;
 }

@@ -73,8 +73,8 @@ const NavBar: React.FC = () => {
                     <div className='help-line'>
                         <Row>
                             <Col xs={3}>
-                                <Badge badgeContent={4} color="secondary">
-                                    <ShoppingCartIcon className="icon_cart" style={{ fontSize: "30px", color: "blue" }} />
+                                <Badge badgeContent={user?.countItemCart} color="secondary">
+                                    <Link to={'/cart'}><ShoppingCartIcon className="icon_cart" style={{ fontSize: "35px", color: "blue" }} /></Link>
                                 </Badge>
                             </Col>
                             <Col xs={9}>

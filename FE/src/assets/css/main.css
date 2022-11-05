@@ -226,3 +226,7 @@ nav .navbar-nav li a {
 p {
   margin-top: 15px !important;
 }
+
+.bg-color-admin {
+  background-color: rgb(243, 245, 251);
+}

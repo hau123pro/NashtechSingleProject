@@ -19,4 +19,6 @@ public class FormatProductResponse {
 	private double price;
 
 	private String description;
+	
+	private int quantity;
 }
