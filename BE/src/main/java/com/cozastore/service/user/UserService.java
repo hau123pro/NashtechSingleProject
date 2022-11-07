@@ -33,12 +33,16 @@ import com.cozastore.utils.constant.Status;
 
 @Service
 public class UserService implements IUserService {
+	@Autowired
 	PasswordEncoder passwordEncoder;
 
+	@Autowired
 	IUserRepository userRepository;
 
+	@Autowired
 	UserMapper userMapper;
 
+	@Autowired
 	PageMapper pageMapper;
 
 	@Override
@@ -49,15 +53,15 @@ public class UserService implements IUserService {
 		return informationRespone;
 	}
 
-	@Autowired
-	public UserService(PasswordEncoder passwordEncoder, IUserRepository userRepository, UserMapper userMapper,
-			PageMapper pageMapper) {
-		super();
-		this.passwordEncoder = passwordEncoder;
-		this.userRepository = userRepository;
-		this.userMapper = userMapper;
-		this.pageMapper = pageMapper;
-	}
+//	@Autowired
+//	public UserService(PasswordEncoder passwordEncoder, IUserRepository userRepository, UserMapper userMapper,
+//			PageMapper pageMapper) {
+//		super();
+//		this.passwordEncoder = passwordEncoder;
+//		this.userRepository = userRepository;
+//		this.userMapper = userMapper;
+//		this.pageMapper = pageMapper;
+//	}
 
 	@Override
 	public String changePassword(String email, String password, String confirmPassword, String passwordOld) {
@@ -80,11 +84,11 @@ public class UserService implements IUserService {
 				&& !registrationRequest.getPassword().equals(registrationRequest.getConfirmPassword())) {
 			throw new BadRequestException(ErrorString.PASS_NOT_MATCH);
 		}
-		User user = userRepository.findUserByEmail(registrationRequest.getEmail()).orElse(null);
-		if (user != null) {
+		User user = userMapper.convertRegisterationRequestToUser(registrationRequest);
+		Optional<User> optional = userRepository.findUserByEmail(registrationRequest.getEmail());
+		if (optional.isPresent()) {
 			throw new BadRequestException(ErrorString.EMAIL_IN_USE);
 		}
-		user = userMapper.convertRegisterationRequestToUser(registrationRequest);
 		user.setStatus(Status.ACTIVE.getValue());
 		user.setRoles(Role.USER.getValue());
 		user.setPassword(passwordEncoder.encode(registrationRequest.getPassword()));
