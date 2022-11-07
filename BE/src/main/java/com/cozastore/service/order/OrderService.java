@@ -31,23 +31,29 @@ import com.cozastore.utils.constant.Status;
 @Service
 public class OrderService implements IOrderService {
 
-	@Autowired
 	private IOrderRepository iOrderRepository;
 
-	@Autowired
 	private IUserRepository userRepository;
 
-	@Autowired
 	private OrderMapper orderMapper;
 
-	@Autowired
 	private IOrderDetailRepository iOrderDetailRepository;
 
-	@Autowired
 	private ICartService iCartService;
 
+	private PageMapper pageMapper;
+
 	@Autowired
-	PageMapper pageMapper;
+	public OrderService(IOrderRepository iOrderRepository, IUserRepository userRepository, OrderMapper orderMapper,
+			IOrderDetailRepository iOrderDetailRepository, ICartService iCartService, PageMapper pageMapper) {
+		super();
+		this.iOrderRepository = iOrderRepository;
+		this.userRepository = userRepository;
+		this.orderMapper = orderMapper;
+		this.iOrderDetailRepository = iOrderDetailRepository;
+		this.iCartService = iCartService;
+		this.pageMapper = pageMapper;
+	}
 
 	@Override
 	public OrderRespone getOrderById(Integer orderId) {

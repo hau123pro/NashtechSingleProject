@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import com.cozastore.dto.reponse.UserInformationRespone;
 import com.cozastore.dto.reponse.UserResponse;
+import com.cozastore.dto.request.RegistrationRequest;
 import com.cozastore.dto.request.UserInfoRequest;
 import com.cozastore.entity.User;
 import com.cozastore.service.user.IUserService;
@@ -23,15 +24,18 @@ public class UserMapper {
 	@Autowired
 	private UtilMapper utilMapper;
 
-	@Autowired
-	private IUserService userService;
+	
 
 	public List<UserResponse> convertListUserToResponse(List<User> users) {
 		List<UserResponse> list = new ArrayList<UserResponse>();
 		for (User user : users) {
-			UserResponse response = UserResponse.builder().userId(user.getUserId()).email(user.getEmail())
-					.dateCreate(user.getDateCreate()).name(user.getName()).phone(user.getPhone())
-					.status(Status.values()[user.getStatus()]).roles(Role.values()[user.getRoles()])
+			UserResponse response = UserResponse.builder().userId(user.getUserId())
+					.email(user.getEmail())
+					.dateCreate(user.getDateCreate())
+					.name(user.getName())
+					.phone(user.getPhone())
+					.status(Status.values()[user.getStatus()])
+					.roles(Role.values()[user.getRoles()])
 					.dateOfBirth(user.getDateOfBirth()).build();
 			list.add(response);
 		}
@@ -46,6 +50,10 @@ public class UserMapper {
 		user.setName(infoRequest.getName());
 		user.setPhone(infoRequest.getPhone());
 		return user;
+	}
+	
+	public User convertRegisterationRequestToUser(RegistrationRequest registrationRequest) {
+		return utilMapper.convertToEntity(registrationRequest, User.class);
 	}
 
 }

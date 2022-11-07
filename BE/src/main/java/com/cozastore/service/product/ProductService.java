@@ -46,32 +46,40 @@ import com.cozastore.utils.constant.SuccessString;
 @Service
 public class ProductService implements IProductService {
 
-	@Autowired
 	IProductRepository productRepository;
 
-	@Autowired
 	IProductFormatRepository productFormatRepository;
 
-	@Autowired
 	ProductMapper productMapper;
 
-	@Autowired
 	IFormatRepository iFormatRepository;
 
-	@Autowired
 	IAuthorRepository authorRepository;
 
-	@Autowired
 	ICloudinaryService cloudinaryService;
 
-	@Autowired
 	ICategoryRepository categoryRepository;
 
-	@Autowired
 	FormatMapper formatMapper;
 
-	@Autowired
 	PageMapper pageMapper;
+	
+	@Autowired
+	public ProductService(IProductRepository productRepository, IProductFormatRepository productFormatRepository,
+			ProductMapper productMapper, IFormatRepository iFormatRepository, IAuthorRepository authorRepository,
+			ICloudinaryService cloudinaryService, ICategoryRepository categoryRepository, FormatMapper formatMapper,
+			PageMapper pageMapper) {
+		super();
+		this.productRepository = productRepository;
+		this.productFormatRepository = productFormatRepository;
+		this.productMapper = productMapper;
+		this.iFormatRepository = iFormatRepository;
+		this.authorRepository = authorRepository;
+		this.cloudinaryService = cloudinaryService;
+		this.categoryRepository = categoryRepository;
+		this.formatMapper = formatMapper;
+		this.pageMapper = pageMapper;
+	}
 
 	@Override
 	public ProductPageInfoResponse getAllProduct(Pageable pageable) {
@@ -79,7 +87,7 @@ public class ProductService implements IProductService {
 
 		List<ProductBaseResponse> productRespones = productMapper
 				.convertListProductToBaseResponse(products.getContent());
-		PageResponse pageResponse = pageMapper.convertPagetoPageResponse(products, 0, 6);
+		PageResponse pageResponse = pageMapper.convertPagetoPageResponse(products, pageable.getPageNumber(), pageable.getPageSize());
 		ProductPageInfoResponse infoResponse = productMapper.convertListBaseProductToInfoResponse(productRespones,
 				pageResponse);
 		return infoResponse;

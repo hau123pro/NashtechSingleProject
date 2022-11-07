@@ -28,20 +28,27 @@ import com.cozastore.utils.constant.SuccessString;
 @Service
 public class CategoryService implements ICategoryService {
 
-	@Autowired
 	ICategoryRepository categoryRepository;
 
-	@Autowired
 	CategoryMapper categoryMapper;
-	
-	@Autowired
+
 	PageMapper pageMapper;
+
+	@Autowired
+	public CategoryService(ICategoryRepository categoryRepository, CategoryMapper categoryMapper,
+			PageMapper pageMapper) {
+		super();
+		this.categoryRepository = categoryRepository;
+		this.categoryMapper = categoryMapper;
+		this.pageMapper = pageMapper;
+	}
 
 	@Override
 	public CategoryPageResponse getCategoryByPage(Pageable pageable) {
 		Page<Category> page = categoryRepository.findAll(pageable);
 		List<CategoryRespone> categoryResponses = categoryMapper.convertListToCategoryResponse(page.getContent());
-		PageResponse pageResponse=pageMapper.convertPagetoPageResponse(page, pageable.getPageNumber(), pageable.getPageSize());
+		PageResponse pageResponse = pageMapper.convertPagetoPageResponse(page, pageable.getPageNumber(),
+				pageable.getPageSize());
 		return CategoryPageResponse.builder().pageResponse(pageResponse).cartRespones(categoryResponses).build();
 	}
 
@@ -49,7 +56,8 @@ public class CategoryService implements ICategoryService {
 	public CategoryPageResponse getCategoryActiveByPage(Pageable pageable) {
 		Page<Category> page = categoryRepository.findByStatus(Status.ACTIVE.getValue(), pageable);
 		List<CategoryRespone> categoryResponses = categoryMapper.convertListToCategoryResponse(page.getContent());
-		PageResponse pageResponse=pageMapper.convertPagetoPageResponse(page, pageable.getPageNumber(), pageable.getPageSize());
+		PageResponse pageResponse = pageMapper.convertPagetoPageResponse(page, pageable.getPageNumber(),
+				pageable.getPageSize());
 		return CategoryPageResponse.builder().pageResponse(pageResponse).cartRespones(categoryResponses).build();
 	}
 

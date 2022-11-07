@@ -28,17 +28,23 @@ import com.cozastore.utils.constant.SuccessString;
 
 @Service
 public class AuthorService implements IAuthorService {
-	@Autowired
 	IAuthorRepository authorRepository;
 
-	@Autowired
 	AuthorMapper authorMapper;
 
-	@Autowired
 	PageMapper pageMapper;
 
-	@Autowired
 	ICloudinaryService cloudinaryService;
+
+	@Autowired
+	public AuthorService(IAuthorRepository authorRepository, AuthorMapper authorMapper, PageMapper pageMapper,
+			ICloudinaryService cloudinaryService) {
+		super();
+		this.authorRepository = authorRepository;
+		this.authorMapper = authorMapper;
+		this.pageMapper = pageMapper;
+		this.cloudinaryService = cloudinaryService;
+	}
 
 	@Override
 	public AuthorPageResponse getAuthorByPage(Pageable page) {

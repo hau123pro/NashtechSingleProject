@@ -28,8 +28,7 @@ public class AuthenticationMapper {
 			System.out.println(bindingResult.getFieldErrors());
 			throw new InputFieldException(bindingResult);
 		}
-		User user = mapper.map(registrationRequest, User.class);
-		return userService.registerUser(user, registrationRequest.getConfirmPassword());
+		return userService.registerUser(registrationRequest);
 	}
 
 	public String passwordReset(PasswordResetRequest passwordReset,String email, BindingResult bindingResult) {

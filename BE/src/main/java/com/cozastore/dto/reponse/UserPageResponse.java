@@ -1,5 +1,6 @@
 package com.cozastore.dto.reponse;
 
+import java.io.Serializable;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -13,10 +14,11 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class UserPageResponse {
+public class UserPageResponse implements Serializable{
 	
 	List<UserResponse> userResponses;
 	
 	PageResponse pageResponse;
+	
 	
 }

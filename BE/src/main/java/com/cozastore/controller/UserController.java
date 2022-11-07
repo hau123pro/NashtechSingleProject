@@ -96,7 +96,7 @@ public class UserController {
 		return ResponseEntity.ok(cartService.deleteCartItemById(cartItem));
 	}
 
-	@PostMapping("/add")
+	@PostMapping("/product/add")
 	public ResponseEntity<String> addProductToCart(@Valid @RequestBody CartItemRequest cartItemRequest,
 			Principal principal) {
 		return ResponseEntity.ok(cartService.addProductToCart(cartItemRequest, principal.getName()));

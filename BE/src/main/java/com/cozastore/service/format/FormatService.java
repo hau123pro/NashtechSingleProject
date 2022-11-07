@@ -28,14 +28,19 @@ import com.cozastore.utils.constant.SuccessString;
 @Service
 public class FormatService implements IFormatService {
 
-	@Autowired
 	IFormatRepository formatRepository;
 
-	@Autowired
 	FormatMapper formatMapper;
 
-	@Autowired
 	PageMapper pageMapper;
+
+	@Autowired
+	public FormatService(IFormatRepository formatRepository, FormatMapper formatMapper, PageMapper pageMapper) {
+		super();
+		this.formatRepository = formatRepository;
+		this.formatMapper = formatMapper;
+		this.pageMapper = pageMapper;
+	}
 
 	@Override
 	public FormatPageResponse getFormatByPage(Pageable pageable) {

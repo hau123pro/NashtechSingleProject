@@ -15,12 +15,19 @@ import com.cozastore.utils.JwtTokenUtil;
 @Service
 public class AuthService implements IAuthService {
 
-	@Autowired
 	private IUserRepository userRepository;
-	@Autowired
+
 	private PasswordEncoder passwordEncoder;
-	@Autowired
+
 	private JwtTokenUtil jwtTokenUtil;
+
+	@Autowired
+	public AuthService(IUserRepository userRepository, PasswordEncoder passwordEncoder, JwtTokenUtil jwtTokenUtil) {
+		super();
+		this.userRepository = userRepository;
+		this.passwordEncoder = passwordEncoder;
+		this.jwtTokenUtil = jwtTokenUtil;
+	}
 
 	public LoginResponse auth(String email, String password) {
 
@@ -29,7 +36,7 @@ public class AuthService implements IAuthService {
 			String token = jwtTokenUtil.generateToken(user.get());
 			return new LoginResponse(token);
 		}
-		 throw new  UnauthorizedException (); 
+		throw new UnauthorizedException();
 	}
 
 	public String logout() {

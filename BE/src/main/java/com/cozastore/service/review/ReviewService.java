@@ -33,20 +33,27 @@ import com.cozastore.utils.constant.SuccessString;
 @Service
 public class ReviewService implements IReviewService {
 
-	@Autowired
 	IReviewRepository reviewRepository;
 
-	@Autowired
 	ReviewMapper reviewMapper;
 
-	@Autowired
 	IProductRepository productRepository;
 
-	@Autowired
 	IUserRepository userRepository;
 
-	@Autowired
 	PageMapper pageMapper;
+	
+	
+	@Autowired
+	public ReviewService(IReviewRepository reviewRepository, ReviewMapper reviewMapper,
+			IProductRepository productRepository, IUserRepository userRepository, PageMapper pageMapper) {
+		super();
+		this.reviewRepository = reviewRepository;
+		this.reviewMapper = reviewMapper;
+		this.productRepository = productRepository;
+		this.userRepository = userRepository;
+		this.pageMapper = pageMapper;
+	}
 
 	@Override
 	public List<ReviewRespone> getAllReview() {

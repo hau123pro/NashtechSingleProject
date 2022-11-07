@@ -29,7 +29,6 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/v1/auth")
-@Tag(name = "Auth")
 public class AuthenticationController {
 
 	@Autowired

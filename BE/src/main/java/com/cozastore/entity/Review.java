@@ -40,7 +40,6 @@ public class Review {
 	@JsonIgnore
 	private Product product;
 	
-	
 	@Column(name="content")
 	private String content;
 	

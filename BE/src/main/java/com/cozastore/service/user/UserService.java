@@ -15,6 +15,7 @@ import com.cozastore.dto.reponse.PageResponse;
 import com.cozastore.dto.reponse.UserInformationRespone;
 import com.cozastore.dto.reponse.UserPageResponse;
 import com.cozastore.dto.reponse.UserResponse;
+import com.cozastore.dto.request.RegistrationRequest;
 import com.cozastore.dto.request.UserInfoRequest;
 import com.cozastore.dto.request.UserRoleRequest;
 import com.cozastore.dto.request.UserStatusRequest;
@@ -32,16 +33,12 @@ import com.cozastore.utils.constant.Status;
 
 @Service
 public class UserService implements IUserService {
-	@Autowired
 	PasswordEncoder passwordEncoder;
 
-	@Autowired
 	IUserRepository userRepository;
 
-	@Autowired
 	UserMapper userMapper;
 
-	@Autowired
 	PageMapper pageMapper;
 
 	@Override
@@ -50,6 +47,16 @@ public class UserService implements IUserService {
 		User user = optional.orElseThrow(() -> new NotFoundException(ErrorString.USER_NOT_FOUND));
 		UserInformationRespone informationRespone = userMapper.convertEntityToInfoResponse(user);
 		return informationRespone;
+	}
+
+	@Autowired
+	public UserService(PasswordEncoder passwordEncoder, IUserRepository userRepository, UserMapper userMapper,
+			PageMapper pageMapper) {
+		super();
+		this.passwordEncoder = passwordEncoder;
+		this.userRepository = userRepository;
+		this.userMapper = userMapper;
+		this.pageMapper = pageMapper;
 	}
 
 	@Override
@@ -68,16 +75,19 @@ public class UserService implements IUserService {
 	}
 
 	@Override
-	public String registerUser(User user, String password2) {
-		if (user.getPassword() != null && !user.getPassword().equals(password2)) {
+	public String registerUser(RegistrationRequest registrationRequest) {
+		if (registrationRequest.getPassword() != null
+				&& !registrationRequest.getPassword().equals(registrationRequest.getConfirmPassword())) {
 			throw new BadRequestException(ErrorString.PASS_NOT_MATCH);
 		}
-		if (userRepository.findUserByEmail(user.getEmail()).isPresent()) {
+		User user = userRepository.findUserByEmail(registrationRequest.getEmail()).orElse(null);
+		if (user != null) {
 			throw new BadRequestException(ErrorString.EMAIL_IN_USE);
 		}
+		user = userMapper.convertRegisterationRequestToUser(registrationRequest);
 		user.setStatus(Status.ACTIVE.getValue());
 		user.setRoles(Role.USER.getValue());
-		user.setPassword(passwordEncoder.encode(user.getPassword()));
+		user.setPassword(passwordEncoder.encode(registrationRequest.getPassword()));
 		long millis = System.currentTimeMillis();
 		// creating a new object of the class Date
 		Date date = new Date(millis);
@@ -117,7 +127,7 @@ public class UserService implements IUserService {
 	public void changeInfoUser(UserInfoRequest infoRequest, String email) {
 		User user = userRepository.findUserByEmail(email)
 				.orElseThrow(() -> new NotFoundException(ErrorString.USER_NOT_FOUND));
-		User userUpdate=userMapper.convertInfoRequestToEntity(infoRequest, user);
+		User userUpdate = userMapper.convertInfoRequestToEntity(infoRequest, user);
 		userRepository.save(user);
 	}
 

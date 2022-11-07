@@ -32,23 +32,30 @@ import com.cozastore.utils.constant.SuccessString;
 @Service
 public class CartService implements ICartService {
 
-	@Autowired
 	private ICartDetailRepository cartDetailRepository;
 
-	@Autowired
 	private ICartRepository cartRepository;
 
-	@Autowired
 	private IUserRepository userRepository;
 
-	@Autowired
 	private CartMapper cartMapper;
 
-	@Autowired
 	private IProductFormatRepository productFormatRepository;
 
-	@Autowired
 	private SaleRepository saleRepository;
+
+	@Autowired
+	public CartService(ICartDetailRepository cartDetailRepository, ICartRepository cartRepository,
+			IUserRepository userRepository, CartMapper cartMapper, IProductFormatRepository productFormatRepository,
+			SaleRepository saleRepository) {
+		super();
+		this.cartDetailRepository = cartDetailRepository;
+		this.cartRepository = cartRepository;
+		this.userRepository = userRepository;
+		this.cartMapper = cartMapper;
+		this.productFormatRepository = productFormatRepository;
+		this.saleRepository = saleRepository;
+	}
 
 	@Override
 	public CartRespone getCart(String email) {
@@ -68,7 +75,7 @@ public class CartService implements ICartService {
 	@Override
 //	@Transactional
 	public String deleteAllCartItem(Cart cart) {
-		List<CartDetail> cartDetails=cart.getCartDetails();
+		List<CartDetail> cartDetails = cart.getCartDetails();
 //		if(cartDetails!=null)
 		cartDetails.clear();
 //		cartRepository.delete(cart);
@@ -79,21 +86,20 @@ public class CartService implements ICartService {
 	public String deleteCartItemById(CartItemIdRequest cartItemRequest) {
 		Cart cart = cartRepository.findById(cartItemRequest.getCartId())
 				.orElseThrow(() -> new NotFoundException(ErrorString.CART_NOT_FOUND));
-		
-		if(cart.getCartDetails().size()==1) {
-			CartDetail cartDetail=cart.getCartDetails().get(0);
+
+		if (cart.getCartDetails().size() == 1) {
+			CartDetail cartDetail = cart.getCartDetails().get(0);
 			cart.getCartDetails().clear();
 			cartDetailRepository.delete(cartDetail);
-		}
-		else
-		for (CartDetail detail : cart.getCartDetails()) {
-			if (detail.getId().getCartId() == cartItemRequest.getCartId()
-					&& detail.getId().getFormatId() == cartItemRequest.getFormatId()
-					&& detail.getId().getProductId() == cartItemRequest.getProductId()) {
-				cart.getCartDetails().remove(detail);
-				cartDetailRepository.delete(detail);
+		} else
+			for (CartDetail detail : cart.getCartDetails()) {
+				if (detail.getId().getCartId() == cartItemRequest.getCartId()
+						&& detail.getId().getFormatId() == cartItemRequest.getFormatId()
+						&& detail.getId().getProductId() == cartItemRequest.getProductId()) {
+					cart.getCartDetails().remove(detail);
+					cartDetailRepository.delete(detail);
+				}
 			}
-		}
 		return SuccessString.CART_ITEM_DELETE_SUCCESS;
 	}
 
@@ -107,40 +113,36 @@ public class CartService implements ICartService {
 				.orElseThrow(() -> new NotFoundException(ErrorString.PRODUCT_TYPE_NOT_FOUND));
 		if (productFormat.getQuantity() < cartItemRequest.getQuantity())
 			throw new BadRequestException(ErrorString.QUANTITY_NOT_ENOUGH);
-		if ( cartItemRequest.getQuantity()<=0)
+		if (cartItemRequest.getQuantity() <= 0)
 			throw new BadRequestException(ErrorString.QUANTITY_NOT_ENOUGH);
 		Cart cart = user.getCart();
 		Date date = Date.valueOf(LocalDate.now());
 		List<CartDetail> cartDetails;
 		if (cart == null) {
-			cart=Cart.builder().user(user).dateCreate(date).build();
+			cart = Cart.builder().user(user).dateCreate(date).build();
 			cart = cartRepository.save(cart);
 		}
-		CartProductFormatId cartProductFormatID = CartProductFormatId.builder().cartId(cart.getId()).formatId(cartItemRequest.getFormatId())
-				.productId(cartItemRequest.getProductId()).build();
+		CartProductFormatId cartProductFormatID = CartProductFormatId.builder().cartId(cart.getId())
+				.formatId(cartItemRequest.getFormatId()).productId(cartItemRequest.getProductId()).build();
 		CartDetail cartDetail = CartDetail.builder().cart(cart).productFormat(productFormat)
 				.firstPrice(productFormat.getPrice() * cartItemRequest.getQuantity())
 				.finalPrice(productFormat.getPrice() * cartItemRequest.getQuantity())
 				.quantity(cartItemRequest.getQuantity()).Id(cartProductFormatID).build();
 		cartDetails = cart.getCartDetails();
-		if(cartDetails!=null) {
-			boolean checkExist=false;
-			for(CartDetail item:cartDetails) {
-				if(item.getId().getFormatId()==cartItemRequest.getFormatId()
-						&&item.getId().getProductId()==cartItemRequest.getProductId())
-				{
-					item.setFinalPrice(
-							item.getFinalPrice() + cartDetail.getFinalPrice());
-					item.setFirstPrice(
-							item.getFirstPrice() + cartDetail.getFirstPrice());
+		if (cartDetails != null) {
+			boolean checkExist = false;
+			for (CartDetail item : cartDetails) {
+				if (item.getId().getFormatId() == cartItemRequest.getFormatId()
+						&& item.getId().getProductId() == cartItemRequest.getProductId()) {
+					item.setFinalPrice(item.getFinalPrice() + cartDetail.getFinalPrice());
+					item.setFirstPrice(item.getFirstPrice() + cartDetail.getFirstPrice());
 					item.setQuantity(item.getQuantity() + cartItemRequest.getQuantity());
-					checkExist=true;
+					checkExist = true;
 				}
 			}
-			if(checkExist==false)
+			if (checkExist == false)
 				cartDetails.add(cartDetail);
-		}
-		else {
+		} else {
 			cartDetails = new ArrayList<CartDetail>();
 			cartDetails.add(cartDetail);
 		}
@@ -155,7 +157,7 @@ public class CartService implements ICartService {
 	}
 
 	@Override
-	public void updateCartItem(CartItemIdRequest cartItemRequest) {	
+	public void updateCartItem(CartItemIdRequest cartItemRequest) {
 		Cart cart = cartRepository.findById(cartItemRequest.getCartId())
 				.orElseThrow(() -> new NotFoundException(ErrorString.CART_NOT_FOUND));
 		ProductFormatID formatID = ProductFormatID.builder().formatID(cartItemRequest.getFormatId())
@@ -164,19 +166,21 @@ public class CartService implements ICartService {
 				.orElseThrow(() -> new NotFoundException(ErrorString.PRODUCT_TYPE_NOT_FOUND));
 		if (productFormat.getQuantity() < cartItemRequest.getQuantity())
 			throw new BadRequestException(ErrorString.QUANTITY_NOT_ENOUGH);
-		if ( cartItemRequest.getQuantity()<=0)
+		if (cartItemRequest.getQuantity() <= 0)
 			throw new BadRequestException(ErrorString.QUANTITY_NOT_ENOUGH);
-		List<CartDetail> cartDetails=cart.getCartDetails();
+		List<CartDetail> cartDetails = cart.getCartDetails();
 		for (CartDetail detail : cartDetails) {
 			if (detail.getId().getCartId() == cartItemRequest.getCartId()
 					&& detail.getId().getFormatId() == cartItemRequest.getFormatId()
 					&& detail.getId().getProductId() == cartItemRequest.getProductId()) {
-				cart.setQuantity(cart.getQuantity()-detail.getQuantity()+cartItemRequest.getQuantity());
-				cart.setFinalPrice(cart.getFinalPrice()-detail.getFinalPrice()+cartItemRequest.getQuantity()*productFormat.getPrice());
-				cart.setFirstPrice(cart.getFirstPrice()-detail.getFirstPrice()+cartItemRequest.getQuantity()*productFormat.getPrice());
+				cart.setQuantity(cart.getQuantity() - detail.getQuantity() + cartItemRequest.getQuantity());
+				cart.setFinalPrice(cart.getFinalPrice() - detail.getFinalPrice()
+						+ cartItemRequest.getQuantity() * productFormat.getPrice());
+				cart.setFirstPrice(cart.getFirstPrice() - detail.getFirstPrice()
+						+ cartItemRequest.getQuantity() * productFormat.getPrice());
 				detail.setQuantity(cartItemRequest.getQuantity());
-				detail.setFinalPrice(cartItemRequest.getQuantity()*productFormat.getPrice());
-				detail.setFirstPrice(cartItemRequest.getQuantity()*productFormat.getPrice());
+				detail.setFinalPrice(cartItemRequest.getQuantity() * productFormat.getPrice());
+				detail.setFirstPrice(cartItemRequest.getQuantity() * productFormat.getPrice());
 			}
 		}
 		cart.setCartDetails(cartDetails);
@@ -190,10 +194,10 @@ public class CartService implements ICartService {
 		Cart cart = user.getCart();
 		if (cart == null)
 			throw new BadRequestException(ErrorString.CART_EMPTY);
-		if(cart.getCartDetails()==null)
+		if (cart.getCartDetails() == null)
 			throw new BadRequestException(ErrorString.CART_EMPTY);
-		Integer count=cartRepository.findCountItemByCartId(cart.getId());
-		if(count==null)
+		Integer count = cartRepository.findCountItemByCartId(cart.getId());
+		if (count == null)
 			return 0;
 		return count;
 	}
