@@ -132,3 +132,7 @@ export interface CategoryPageResponse {
     cartRespones: Array<CategoryResponse>,
     pageResponse: PageResponse | null
 }
+export interface ProductPageResponse {
+    listProduct: Array<ProductResponse>,
+    pageResponse: PageResponse | null
+}

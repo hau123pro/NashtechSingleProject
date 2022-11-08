@@ -124,6 +124,10 @@ const Cart: React.FC = () => {
                         type: "set-update-loading",
                         payload: -1
                     });
+                    dispatch({
+                        type: "set-empty",
+                        payload: true
+                    });
                 }
             ).catch(
                 (err) => {
@@ -197,8 +201,9 @@ const Cart: React.FC = () => {
         }
 
     }
-    const handleInput = (quantity: number, formatId: number, productId: number) => {
-        const newValue = quantity;
+    const handleInput = (formatId: number, productId: number, e: React.ChangeEvent<HTMLInputElement>) => {
+        const newValue = +e.target.value;
+        alert(newValue);
         const token = localStorage.getItem('token');
         const cartItemRequest: CartUpdateRequest = {
             formatId: formatId,
@@ -212,7 +217,7 @@ const Cart: React.FC = () => {
                     const updateCart: updateQuantityCart = {
                         formatId: formatId,
                         productId: productId,
-                        quantity: quantity
+                        quantity: newValue
                     }
                     dispatch({
                         type: "set-update-loading",
@@ -378,7 +383,7 @@ const Cart: React.FC = () => {
                                                                 <div className='d-flex align-item-center'>
                                                                     <img style={{ maxWidth: '30%' }} src={item.imgUrl} alt="" />
                                                                     <div className='ms-3'>
-                                                                        Book 1
+                                                                        {item.productName}
                                                                     </div>
                                                                 </div>
                                                             </TableCell>
@@ -400,11 +405,12 @@ const Cart: React.FC = () => {
                                                                                 <AddIcon sx={{ stroke: "#ffffff", strokeWidth: 1 }} />
                                                                             </IconButton>,
                                                                     }}
+                                                                    inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
                                                                     type='number'
                                                                     className={classes.input}
                                                                     style={{ width: "6.5rem" }}
-                                                                    onChange={() =>
-                                                                        handleInput(item.quantity, item.formatId, item.productId)
+                                                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                                                                        handleInput(item.formatId, item.productId, e)
                                                                     }
                                                                 />
                                                             </TableCell>

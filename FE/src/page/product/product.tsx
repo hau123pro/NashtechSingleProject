@@ -91,10 +91,10 @@ const todoReducer = (state: any = initState, action: any) => {
         case 'get-product':
             return {
                 ...state,
-                product: action.payload,
+                product: action.payload.listProduct,
                 loadingProduct: true,
-                pagesCount: action.payload.length > 0 ? action.payload[0].pageResponse.totalPage : 0,
-                totalElement: action.payload.length > 0 ? action.payload[0].pageResponse.totalElement : 0,
+                pagesCount: action.payload.listProduct.length > 0 ? action.payload.pageResponse.totalPage : 0,
+                totalElement: action.payload.listProduct.length > 0 ? action.payload.pageResponse.totalElement : 0,
             };
         case "change-pagging":
             return {
@@ -190,6 +190,7 @@ const Product: React.FC = () => {
 
             }
         )
+        console.log("vao ham");
     }, [state.filter])
     // useEffect(() => {
     //     console.log(state);

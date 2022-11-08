@@ -1,7 +1,7 @@
 import React, { useState, useEffect, ReactElement } from 'react';
 import { userlogin } from "../types/type"
 import axios from 'axios';
-const URL_addOrder = 'http://localhost:8080/api/v1/order/add';
+const URL_addOrder = 'http://localhost:8080/api/v1/client/order/add';
 // const URL_getCategoryActiveByPage = 'http://localhost:8080/api/v1/category/active?';
 class categoryService {
 

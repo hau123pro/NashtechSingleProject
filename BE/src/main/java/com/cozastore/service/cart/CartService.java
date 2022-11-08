@@ -77,8 +77,16 @@ public class CartService implements ICartService {
 	public String deleteAllCartItem(Cart cart) {
 		List<CartDetail> cartDetails = cart.getCartDetails();
 //		if(cartDetails!=null)
+		List<CartProductFormatId> ids=new ArrayList<>();
+		for(CartDetail cartDetail:cartDetails) {
+			ids.add(cartDetail.getId());
+		}
 		cartDetails.clear();
-//		cartRepository.delete(cart);
+		cartDetailRepository.deleteAllById(ids);
+		cart.setFinalPrice(0);
+		cart.setFirstPrice(0);
+		cart.setQuantity(0);
+		cartRepository.save(cart);
 		return "Delete complete";
 	}
 

@@ -7,6 +7,7 @@ export interface ProductDetailState {
     loadingformat: boolean,
     loadingAuthor: boolean,
     loadingAdd: boolean,
+    loading: boolean,
     category: Array<CategoryResponse>,
     format: Array<FormatProductResponse>,
     author: AuthorResponse | null,
@@ -23,6 +24,7 @@ const initState: ProductDetailState = {
     loadingformat: false,
     loadingAuthor: false,
     loadingAdd: false,
+    loading: false,
     category: [],
     format: [],
     author: null,
@@ -67,6 +69,11 @@ export const productDetailReducer = (state = initState, action: any) => {
             return {
                 ...state,
                 loadingAdd: action.payload,
+            };
+        case 'set-loading':
+            return {
+                ...state,
+                loading: action.payload,
             };
         default:
             throw new Error();

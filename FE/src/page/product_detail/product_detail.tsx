@@ -47,6 +47,7 @@ const initState: ProductDetailState = {
     loadingformat: false,
     loadingAuthor: false,
     loadingAdd: false,
+    loading: false,
     category: [],
     format: [],
     author: null,
@@ -124,16 +125,31 @@ const ProductDetail: React.FC = () => {
     }, [])
     useEffect(() => {
         console.log(detailState);
-        if (detailState.loadingAdd)
+        if (detailState.loadingAdd) {
             productService.loadProductById(detailState.product.id).then(
                 (res) => {
                     dispatchDetail({
                         type: 'set-review',
                         payload: res.data.reviewRespones
                     });
+                    dispatchDetail({
+                        type: 'set-product',
+                        payload: res.data
+                    });
                 }
             )
+            dispatchDetail({
+                type: 'set-loading',
+                payload: true
+            });
+        }
     }, [detailState.loadingAdd])
+    useEffect(() => {
+        dispatchDetail({
+            type: 'set-loadingAdd',
+            payload: false
+        });
+    }, [detailState.loading])
     const handleAddCart = () => {
         if (formatId === '')
             setIsError(true);

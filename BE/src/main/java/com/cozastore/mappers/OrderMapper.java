@@ -73,7 +73,7 @@ public class OrderMapper {
 		List<CartDetail> cartDetails = new ArrayList<>(user.getCart().getCartDetails());
 		List<OrderDetail> details = new ArrayList<>();
 		for (CartDetail cartDetail : cartDetails) {
-			OrderItemID id = OrderItemID.builder().orderID(orders.getId())
+			OrderItemID id = OrderItemID.builder().orderID(orders.getOrderId())
 					.productID(cartDetail.getProductFormat().getId().getProductID())
 					.formatID(cartDetail.getProductFormat().getFormat().getId()).build();
 			OrderDetail detail = convertCartDetailToOrderDetail(cartDetail);

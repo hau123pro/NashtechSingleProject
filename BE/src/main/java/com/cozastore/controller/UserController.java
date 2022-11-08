@@ -44,12 +44,12 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/v1/client")
-@PreAuthorize("hasAuthority('ROLE_USER')")
+//@PreAuthorize("hasAuthority('ROLE_USER')")
 public class UserController {
 
 	@Autowired
 	IUserService userService;
-	
+
 	@Autowired
 	private IOrderService orderService;
 
@@ -63,9 +63,9 @@ public class UserController {
 	public ResponseEntity<UserInformationRespone> getInfor(Principal principal) {
 		return ResponseEntity.ok(userService.getUserByEmail(principal.getName()));
 	}
-	
+
 	@PutMapping(value = "/info/update")
-	public ResponseEntity<Object> updateInfoUser(@Valid @RequestBody UserInfoRequest infoRequest,Principal principal) {
+	public ResponseEntity<Object> updateInfoUser(@Valid @RequestBody UserInfoRequest infoRequest, Principal principal) {
 		userService.changeInfoUser(infoRequest, principal.getName());
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
@@ -90,19 +90,24 @@ public class UserController {
 		return ResponseEntity.ok(orderService.getAllItemOrderById(orderId));
 	}
 
-	@PostMapping("/delete/item")
+	@PostMapping("/cart/delete/item")
 	public ResponseEntity<String> removeItemInCart(@RequestBody CartItemIdRequest cartItem) {
 //		return ResponseEntity.ok(""+cartItem.getProductID());
 		return ResponseEntity.ok(cartService.deleteCartItemById(cartItem));
 	}
 
-	@PostMapping("/product/add")
+	@PostMapping("/order/add")
+	public void addOrder(Principal principal) {
+		orderService.addOrder(principal.getName());
+	}
+
+	@PostMapping("/cart/add")
 	public ResponseEntity<String> addProductToCart(@Valid @RequestBody CartItemRequest cartItemRequest,
 			Principal principal) {
 		return ResponseEntity.ok(cartService.addProductToCart(cartItemRequest, principal.getName()));
 	}
 
-	@PutMapping("/update")
+	@PutMapping("/cart/update")
 	public void updateProductToCart(@Valid @RequestBody CartItemIdRequest cartItemRequest) {
 		cartService.updateCartItem(cartItemRequest);
 	}

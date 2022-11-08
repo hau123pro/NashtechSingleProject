@@ -1,10 +1,11 @@
 import axios from 'axios';
 import { ReviewState } from '../page/product_detail/tab/tab_review/tab_review';
 import { CartAddRequest, CartUpdateRequest } from '../types/type';
-const URL_addItemCart = 'http://localhost:8080/api/v1/cart/add';
+const URL_addItemCart = 'http://localhost:8080/api/v1/client/cart/add';
 const URL_getCountItemCart = 'http://localhost:8080/api/v1/cart/countItem';
 const URL_getCart = 'http://localhost:8080/api/v1/cart';
-const URL_updateCart = 'http://localhost:8080/api/v1/cart/update';
+const URL_updateCart = 'http://localhost:8080/api/v1/client/cart/update';
+const URL_deleteItemCart = 'http://localhost:8080/api/v1/client/cart/delete/item';
 class cartService {
     async addCart(data: CartAddRequest, token: string) {
         return await axios({

@@ -92,7 +92,7 @@ public class ReviewService implements IReviewService {
 		review.setUser(user);
 		review.setDateCreate(date);
 		review.setStatus(Status.ACTIVE.getValue());
-		Set<Review> reviews = product.getListReview();
+		List<Review> reviews = product.getListReview();
 		reviews.add(review);
 		product.setListReview(reviews);
 		int countRating = 0;

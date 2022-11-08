@@ -105,10 +105,16 @@ const TabReview: React.FC = () => {
         if (detailState?.review.length === 0)
             setCount(1);
         else setCount(detailState.review.length)
+
         dispatch({
             type: 'set-productId',
             payload: detailState.product?.id
         })
+        dispatchDetail({
+            type: 'set-loading',
+            payload: false
+        });
+        console.log(detailState);
     }, [detailState.loadingAdd])
     useEffect(() => {
         console.log(star3);

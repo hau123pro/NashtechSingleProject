@@ -25,9 +25,9 @@ public class ProductBaseResponse {
 	
 	private int averageRating;
 	
-	private double maxPrice;
+	private Double maxPrice;
 	
-	private double minPrice;
+	private Double minPrice;
 	
 	private AuthorResponse authorResponse;
 }

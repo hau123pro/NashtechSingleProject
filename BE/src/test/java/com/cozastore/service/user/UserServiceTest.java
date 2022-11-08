@@ -48,14 +48,11 @@ public class UserServiceTest {
 	@Mock
 	IUserRepository userRepository;
 
-	@Spy
-	UserMapper userMapper = new UserMapper();
-
-	@Spy
-	PageMapper pageMapper = new PageMapper();
+	@Mock
+	UserMapper userMapper;
 
 	@Mock
-	Pageable pageable;
+	PageMapper pageMapper;
 
 	@Mock
 	PasswordEncoder passwordEncoder;
@@ -63,7 +60,6 @@ public class UserServiceTest {
 	@BeforeEach
 	void setUpBefore() {
 //		userRepository=mock(IUserRepository.class);
-
 	}
 
 	@Test
@@ -78,11 +74,10 @@ public class UserServiceTest {
 		content.add(value);
 		Page<User> page = new PageImpl<>(content);
 		when(userRepository.findAll(pageable)).thenReturn(page);
-		expect.setPageResponse(pageMapper.convertPagetoPageResponse(page, pageable.getPageNumber(),
-				pageable.getPageSize()));
+		expect.setPageResponse(
+				pageMapper.convertPagetoPageResponse(page, pageable.getPageNumber(), pageable.getPageSize()));
 		expect.setUserResponses(userMapper.convertListUserToResponse(content));
-		assertThat(service.getAllUserByPage(pageable)).usingRecursiveComparison()
-        .isEqualTo(expect);
+		assertThat(service.getAllUserByPage(pageable)).usingRecursiveComparison().isEqualTo(expect);
 	}
 
 	@Test
@@ -110,65 +105,69 @@ public class UserServiceTest {
 		user.setPassword("");
 		when(userRepository.findUserByEmail("")).thenReturn(Optional.of(user));
 		when(passwordEncoder.matches("", "")).thenReturn(true);
-		String success=service.changePassword("", "", "", "");
+		String success = service.changePassword("", "", "", "");
 		assertThat(success).isEqualTo("Password successfully changed!");
 	}
-	
+
 	@Test
 	void changeStatus_whenDataInValid_shouldThrowExeption() {
-		UserStatusRequest statusRequest=mock(UserStatusRequest.class);
+		UserStatusRequest statusRequest = mock(UserStatusRequest.class);
 		when(userRepository.findUserByEmail(null)).thenReturn(Optional.empty());
 		NotFoundException actual = Assertions.assertThrows(NotFoundException.class,
 				() -> service.changeStatusUser(statusRequest));
 		assertThat(actual.getMessage()).isEqualTo(ErrorString.USER_NOT_FOUND);
 	}
-	
+
 	@Test
 	void changeStatus_whenDataValid_shouldSaveEntity() {
-		UserStatusRequest statusRequest=new UserStatusRequest();
+		UserStatusRequest statusRequest = new UserStatusRequest();
 		statusRequest.setStatus(Status.ACTIVE);
-		User user=mock(User.class);
+		User user = mock(User.class);
 		when(userRepository.findUserByEmail(null)).thenReturn(Optional.of(user));
 		service.changeStatusUser(statusRequest);
 		verify(userRepository).save(user);
 	}
-	
+
 	@Test
 	void changeRole_whenDataInValid_shouldThrowExeption() {
-		UserRoleRequest roleRequest=mock(UserRoleRequest.class);
+		UserRoleRequest roleRequest = mock(UserRoleRequest.class);
 		when(userRepository.findUserByEmail(null)).thenReturn(Optional.empty());
 		NotFoundException actual = Assertions.assertThrows(NotFoundException.class,
 				() -> service.changeRoleUser(roleRequest));
 		assertThat(actual.getMessage()).isEqualTo(ErrorString.USER_NOT_FOUND);
 	}
-	
+
 	@Test
 	void changeRole_whenDataValid_shouldSaveEntity() {
-		UserRoleRequest roleRequest=new UserRoleRequest();
+		UserRoleRequest roleRequest = new UserRoleRequest();
 		roleRequest.setRole(Role.USER);
-		User user=mock(User.class);
+		User user = mock(User.class);
 		when(userRepository.findUserByEmail(null)).thenReturn(Optional.of(user));
 		service.changeRoleUser(roleRequest);
 		verify(userRepository).save(user);
 	}
-	
+
 	@Test
 	void registerUser_whenEmailInUser_shouldThrowExeption() {
-		RegistrationRequest registrationRequest=mock(RegistrationRequest.class);
-		User user=mock(User.class);
+		RegistrationRequest registrationRequest = mock(RegistrationRequest.class);
+		User user = mock(User.class);
 		when(userRepository.findUserByEmail(null)).thenReturn(Optional.of(user));
 		BadRequestException actual = Assertions.assertThrows(BadRequestException.class,
 				() -> service.registerUser(registrationRequest));
 		assertThat(actual.getMessage()).isEqualTo(ErrorString.EMAIL_IN_USE);
 	}
-	
+
 	@Test
 	void registerUser_whenDataValid_shouldSaveUser() {
-		RegistrationRequest registrationRequest=mock(RegistrationRequest.class);
-		User user=mock(User.class);
+		RegistrationRequest registrationRequest = new RegistrationRequest();
+		registrationRequest.setPassword("");
+		registrationRequest.setConfirmPassword("");
+		User user = mock(User.class);
 		when(userRepository.findUserByEmail(null)).thenReturn(Optional.empty());
+		when(passwordEncoder.encode("")).thenReturn("");
+		when(userMapper.convertRegisterationRequestToUser(registrationRequest)).thenReturn(user);
 		service.registerUser(registrationRequest);
 		verify(userRepository).save(user);
 	}
-	
+
 }

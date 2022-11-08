@@ -1,5 +1,6 @@
 package com.cozastore.mappers;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -44,8 +45,8 @@ public class CategoryMapper {
 		return utilMapper.convertToResponse(category, CategoryRespone.class);
 	}
 
-	public Set<ProductCategory> convertRequestToProductCategory(Set<Category> categories, Product product) {
-		Set<ProductCategory> productCategories = new HashSet<>();
+	public List<ProductCategory> convertRequestToProductCategory(List<Category> categories, Product product) {
+		List<ProductCategory> productCategories = new ArrayList<>();
 		for (Category category : categories) {
 			ProductCategoryId id = ProductCategoryId.builder().categoryID(category.getId()).productID(product.getId())
 					.build();

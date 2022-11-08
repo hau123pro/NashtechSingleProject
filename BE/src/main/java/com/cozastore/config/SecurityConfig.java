@@ -47,8 +47,8 @@ public class SecurityConfig {
 				.antMatchers("/swagger-ui/**").permitAll()
 				.antMatchers("/api-docs/**").permitAll()
 				.antMatchers("/v1/author/**").permitAll()
-				.antMatchers("/v1/client/**").permitAll()
-//				.antMatchers("/v1/client/**").hasAuthority("ROLE_USER")
+				.antMatchers("/v1/client/**").hasAuthority("ROLE_USER")
+				.antMatchers("/v1/admin/**").hasAuthority("ROLE_ADMIN")
 				.antMatchers("/v1/registration**").permitAll()
 				
 				.and()

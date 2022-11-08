@@ -23,11 +23,6 @@ public class OrderController {
 
 	@Autowired
 	private IOrderService orderService;
-
-	@PostMapping("/add")
-	public void addOrder(Principal principal) {
-		orderService.addOrder(principal.getName());
-	}
 	
 	@GetMapping("/")
 	public ResponseEntity<OrderPageResponse> getAllOrderByPage(Pageable pageable){

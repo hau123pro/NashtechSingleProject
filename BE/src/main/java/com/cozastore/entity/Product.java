@@ -2,6 +2,7 @@ package com.cozastore.entity;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -69,16 +70,16 @@ public class Product implements Serializable {
 	@OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE,
 			CascadeType.REMOVE })
 	@OnDelete(action = OnDeleteAction.CASCADE)
-	private Set<Review> listReview;
+	private List<Review> listReview;
 
 	@OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE,
 			CascadeType.REMOVE })
-	private Set<ProductCategory> listCategory;
+	private List<ProductCategory> listCategory;
 
 	@OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE,
 			CascadeType.REMOVE })
 	@JsonIgnore
-	private Set<ProductFormat> productFormats;
+	private List<ProductFormat> productFormats;
 
 //	@OneToMany(mappedBy = "product", cascade = {CascadeType.PERSIST, CascadeType.MERGE,CascadeType.REMOVE})
 //	@OnDelete(action = OnDeleteAction.CASCADE)

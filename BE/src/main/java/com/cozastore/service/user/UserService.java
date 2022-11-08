@@ -84,20 +84,13 @@ public class UserService implements IUserService {
 				&& !registrationRequest.getPassword().equals(registrationRequest.getConfirmPassword())) {
 			throw new BadRequestException(ErrorString.PASS_NOT_MATCH);
 		}
-		User user = userMapper.convertRegisterationRequestToUser(registrationRequest);
 		Optional<User> optional = userRepository.findUserByEmail(registrationRequest.getEmail());
+
 		if (optional.isPresent()) {
 			throw new BadRequestException(ErrorString.EMAIL_IN_USE);
 		}
-		user.setStatus(Status.ACTIVE.getValue());
-		user.setRoles(Role.USER.getValue());
+		User user = userMapper.convertRegisterationRequestToUser(registrationRequest);
 		user.setPassword(passwordEncoder.encode(registrationRequest.getPassword()));
-		long millis = System.currentTimeMillis();
-		// creating a new object of the class Date
-		Date date = new Date(millis);
-		user.setDateCreate(date);
-		user.setDateOfBirth(date);
-		user.setPhone("");
 		userRepository.save(user);
 		return "User successfully registered.";
 	}

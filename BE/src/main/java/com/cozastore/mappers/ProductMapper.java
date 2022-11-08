@@ -65,9 +65,9 @@ public class ProductMapper {
 	}
 
 	public Product convertRequestToUpdateProduct(ProductInfoRequest infoRequest, Product product,
-			Set<Category> categories) {
+			List<Category> categories) {
 		Date date = Date.valueOf(LocalDate.now());
-		Set<ProductCategory> productCategories = categoryMapper.convertRequestToProductCategory(categories, product);
+		List<ProductCategory> productCategories = categoryMapper.convertRequestToProductCategory(categories, product);
 		return Product.builder().id(infoRequest.getProductId()).description(infoRequest.getDescription())
 				.productName(infoRequest.getProductName()).dateCreate(product.getDateCreate())
 				.imgUrl(product.getImgUrl()).dateUpdate(date).status(product.getStatus()).author(product.getAuthor())
@@ -77,9 +77,9 @@ public class ProductMapper {
 				.build();
 	}
 
-	public Product convertRequestToProduct(ProductRequest infoRequest, Product product, Set<Category> categories) {
+	public Product convertRequestToProduct(ProductRequest infoRequest, Product product, List<Category> categories) {
 		Date date = Date.valueOf(LocalDate.now());
-		Set<ProductCategory> productCategories = categoryMapper.convertRequestToProductCategory(categories, product);
+		List<ProductCategory> productCategories = categoryMapper.convertRequestToProductCategory(categories, product);
 		return Product.builder().id(product.getId()).description(infoRequest.getDescription())
 				.productName(infoRequest.getProductName()).imgUrl(product.getImgUrl()).dateCreate(date).dateUpdate(date)
 				.author(product.getAuthor()).listCategory(productCategories).status(Status.ACTIVE.getValue()).build();
@@ -87,8 +87,9 @@ public class ProductMapper {
 
 	public Product convertRequestToInsertProduct(ProductRequest infoRequest) {
 		Date date = Date.valueOf(LocalDate.now());
-		return Product.builder().description(infoRequest.getDescription()).productName(infoRequest.getProductName())
+		Product product =Product.builder().description(infoRequest.getDescription()).productName(infoRequest.getProductName())
 				.dateCreate(date).dateUpdate(date).status(Status.ACTIVE.getValue()).build();
+		return product;
 	}
 
 	public List<ProductBaseResponse> convertListProductToBaseResponse(List<Product> products) {

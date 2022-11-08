@@ -45,41 +45,41 @@ import com.cozastore.utils.constant.SuccessString;
 
 @Service
 public class ProductService implements IProductService {
-
-	IProductRepository productRepository;
-
-	IProductFormatRepository productFormatRepository;
-
-	ProductMapper productMapper;
-
-	IFormatRepository iFormatRepository;
-
-	IAuthorRepository authorRepository;
-
-	ICloudinaryService cloudinaryService;
-
-	ICategoryRepository categoryRepository;
-
-	FormatMapper formatMapper;
-
-	PageMapper pageMapper;
-	
 	@Autowired
-	public ProductService(IProductRepository productRepository, IProductFormatRepository productFormatRepository,
-			ProductMapper productMapper, IFormatRepository iFormatRepository, IAuthorRepository authorRepository,
-			ICloudinaryService cloudinaryService, ICategoryRepository categoryRepository, FormatMapper formatMapper,
-			PageMapper pageMapper) {
-		super();
-		this.productRepository = productRepository;
-		this.productFormatRepository = productFormatRepository;
-		this.productMapper = productMapper;
-		this.iFormatRepository = iFormatRepository;
-		this.authorRepository = authorRepository;
-		this.cloudinaryService = cloudinaryService;
-		this.categoryRepository = categoryRepository;
-		this.formatMapper = formatMapper;
-		this.pageMapper = pageMapper;
-	}
+	IProductRepository productRepository;
+	@Autowired
+	IProductFormatRepository productFormatRepository;
+	@Autowired
+	ProductMapper productMapper;
+	@Autowired
+	IFormatRepository iFormatRepository;
+	@Autowired
+	IAuthorRepository authorRepository;
+	@Autowired
+	ICloudinaryService cloudinaryService;
+	@Autowired
+	ICategoryRepository categoryRepository;
+	@Autowired
+	FormatMapper formatMapper;
+	@Autowired
+	PageMapper pageMapper;
+
+//	@Autowired
+//	public ProductService(IProductRepository productRepository, IProductFormatRepository productFormatRepository,
+//			ProductMapper productMapper, IFormatRepository iFormatRepository, IAuthorRepository authorRepository,
+//			ICloudinaryService cloudinaryService, ICategoryRepository categoryRepository, FormatMapper formatMapper,
+//			PageMapper pageMapper) {
+//		super();
+//		this.productRepository = productRepository;
+//		this.productFormatRepository = productFormatRepository;
+//		this.productMapper = productMapper;
+//		this.iFormatRepository = iFormatRepository;
+//		this.authorRepository = authorRepository;
+//		this.cloudinaryService = cloudinaryService;
+//		this.categoryRepository = categoryRepository;
+//		this.formatMapper = formatMapper;
+//		this.pageMapper = pageMapper;
+//	}
 
 	@Override
 	public ProductPageInfoResponse getAllProduct(Pageable pageable) {
@@ -87,10 +87,11 @@ public class ProductService implements IProductService {
 
 		List<ProductBaseResponse> productRespones = productMapper
 				.convertListProductToBaseResponse(products.getContent());
-		PageResponse pageResponse = pageMapper.convertPagetoPageResponse(products, pageable.getPageNumber(), pageable.getPageSize());
-		ProductPageInfoResponse infoResponse = productMapper.convertListBaseProductToInfoResponse(productRespones,
-				pageResponse);
-		return infoResponse;
+		PageResponse pageResponse = pageMapper.convertPagetoPageResponse(products, pageable.getPageNumber(),
+				pageable.getPageSize());
+//		ProductPageInfoResponse infoResponse = productMapper.convertListBaseProductToInfoResponse(productRespones,
+//				pageResponse);
+		return ProductPageInfoResponse.builder().listProduct(productRespones).pageResponse(pageResponse).build();
 	}
 
 	@Override
@@ -99,10 +100,14 @@ public class ProductService implements IProductService {
 				.findAll(PageRequest.of(0, 6, Sort.by(Sort.Direction.DESC, "averageRating")));
 		List<ProductBaseResponse> productRespones = productMapper
 				.convertListProductToBaseResponse(products.getContent());
+		for (ProductBaseResponse baseResponse : productRespones) {
+			Double maxPrice = productRepository.findProductMaxPriceById(baseResponse.getId());
+			Double minPrice = productRepository.findProductMinPriceById(baseResponse.getId());
+			baseResponse.setMaxPrice(maxPrice);
+			baseResponse.setMinPrice(minPrice);
+		}
 		PageResponse pageResponse = pageMapper.convertPagetoPageResponse(products, 0, 6);
-		ProductPageInfoResponse infoResponse = productMapper.convertListBaseProductToInfoResponse(productRespones,
-				pageResponse);
-		return infoResponse;
+		return ProductPageInfoResponse.builder().listProduct(productRespones).pageResponse(pageResponse).build();
 	}
 
 	@Override
@@ -110,11 +115,15 @@ public class ProductService implements IProductService {
 		Page<Product> products = productRepository.findByStatus(Status.ACTIVE.getValue(), pageable);
 		List<ProductBaseResponse> productRespones = productMapper
 				.convertListProductToBaseResponse(products.getContent());
+		for (ProductBaseResponse baseResponse : productRespones) {
+			Double maxPrice = productRepository.findProductMaxPriceById(baseResponse.getId());
+			Double minPrice = productRepository.findProductMinPriceById(baseResponse.getId());
+			baseResponse.setMaxPrice(maxPrice);
+			baseResponse.setMinPrice(minPrice);
+		}
 		PageResponse pageResponse = pageMapper.convertPagetoPageResponse(products, pageable.getPageNumber(),
 				pageable.getPageSize());
-		ProductPageInfoResponse infoResponse = productMapper.convertListBaseProductToInfoResponse(productRespones,
-				pageResponse);
-		return infoResponse;
+		return ProductPageInfoResponse.builder().listProduct(productRespones).pageResponse(pageResponse).build();
 	}
 
 	@Override
@@ -123,11 +132,15 @@ public class ProductService implements IProductService {
 				filter.getAuthorId(), filter.getFormatId(), filter.getFirstPrice(), filter.getFinalPrice(), pageable);
 		List<ProductBaseResponse> productRespones = productMapper
 				.convertListProductToBaseResponse(products.getContent());
+		for (ProductBaseResponse baseResponse : productRespones) {
+			Double maxPrice = productRepository.findProductMaxPriceById(baseResponse.getId());
+			Double minPrice = productRepository.findProductMinPriceById(baseResponse.getId());
+			baseResponse.setMaxPrice(maxPrice);
+			baseResponse.setMinPrice(minPrice);
+		}
 		PageResponse pageResponse = pageMapper.convertPagetoPageResponse(products, pageable.getPageNumber(),
 				pageable.getPageSize());
-		ProductPageInfoResponse infoResponse = productMapper.convertListBaseProductToInfoResponse(productRespones,
-				pageResponse);
-		return infoResponse;
+		return ProductPageInfoResponse.builder().listProduct(productRespones).pageResponse(pageResponse).build();
 	}
 
 	@Override
@@ -136,10 +149,10 @@ public class ProductService implements IProductService {
 			throw new BadRequestException(ErrorString.PRODUCT_ID_EMPTY);
 		Product product = productRepository.findById(id)
 				.orElseThrow(() -> new NotFoundException(ErrorString.PRODUCT_NOT_FOUND));
-		List<ProductFormat> formats = productFormatRepository.findByProductId(product.getId());
+		List<ProductFormat> formats = productFormatRepository.findByProductId(id);
 		List<FormatProductResponse> listFormat = new ArrayList<>();
-		Double maxPrice = productRepository.findProductMaxPriceById(product.getId());
-		Double minPrice = productRepository.findProductMinPriceById(product.getId());
+		Double maxPrice = productRepository.findProductMaxPriceById(id);
+		Double minPrice = productRepository.findProductMinPriceById(id);
 		for (ProductFormat format : formats) {
 			FormatProductResponse formatProductResponse = formatMapper
 					.convertToFormatProductResponse(format.getFormat());
@@ -165,7 +178,7 @@ public class ProductService implements IProductService {
 				.orElseThrow(() -> new NotFoundException(ErrorString.FORMAT_NOT_FOUND));
 		Author author = authorRepository.findById(infoRequest.getAuthorId())
 				.orElseThrow(() -> new NotFoundException(ErrorString.AUTHOR_NOT_FOUND));
-		Set<Category> categories = new HashSet<>();
+		List<Category> categories = new ArrayList<>();
 		for (Integer i : infoRequest.getCategoryIds()) {
 			Category category = categoryRepository.findById(i)
 					.orElseThrow(() -> new NotFoundException(ErrorString.CATEGORY_NOT_FOUND));
@@ -182,7 +195,7 @@ public class ProductService implements IProductService {
 			productFormat.setPrice(infoRequest.getPrice());
 			productFormat.setQuantity(infoRequest.getQuantity());
 		}
-		Set<ProductFormat> productFormats = new HashSet<>();
+		List<ProductFormat> productFormats = new ArrayList<>();
 		productFormats.add(productFormat);
 		product.setProductFormats(productFormats);
 		product.setImgUrl(cloudinaryService.upload(infoRequest.getImgFile()));
@@ -198,7 +211,7 @@ public class ProductService implements IProductService {
 				.orElseThrow(() -> new NotFoundException(ErrorString.FORMAT_NOT_FOUND));
 		Author author = authorRepository.findById(infoRequest.getAuthorId())
 				.orElseThrow(() -> new NotFoundException(ErrorString.AUTHOR_NOT_FOUND));
-		Set<Category> categories = new HashSet<>();
+		List<Category> categories = new ArrayList<>();
 		for (Integer i : infoRequest.getCategoryIds()) {
 			Category category = categoryRepository.findById(i)
 					.orElseThrow(() -> new NotFoundException(ErrorString.CATEGORY_NOT_FOUND));
@@ -214,7 +227,7 @@ public class ProductService implements IProductService {
 		ProductFormatID productFormatID = ProductFormatID.builder().productID(productFormat.getProduct().getId())
 				.formatID(infoRequest.getFormatId()).build();
 		productFormat.setId(productFormatID);
-		Set<ProductFormat> productFormats = new HashSet<>();
+		List<ProductFormat> productFormats = new ArrayList<>();
 		productFormats.add(productFormat);
 		product.setProductFormats(productFormats);
 		productRepository.save(product);
