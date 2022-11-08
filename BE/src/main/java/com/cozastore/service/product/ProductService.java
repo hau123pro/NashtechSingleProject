@@ -1,4 +1,4 @@
-package com.cozastore.service.product;
+	package com.cozastore.service.product;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -240,6 +240,7 @@ public class ProductService implements IProductService {
 		Product product = productRepository.findById(productStatusRequest.getId())
 				.orElseThrow(() -> new NotFoundException(ErrorString.PRODUCT_NOT_FOUND));
 		product.setStatus(productStatusRequest.getStatus());
+		productRepository.save(product);
 		return SuccessString.PRODUCT_UPDATE_STATUS_SUCCESS;
 	}
 

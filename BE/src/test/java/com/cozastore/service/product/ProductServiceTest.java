@@ -13,6 +13,7 @@ import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -26,6 +27,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import static org.mockito.Mockito.times;
 
 import com.cozastore.dto.reponse.CategoryRespone;
 import com.cozastore.dto.reponse.ProductPageInfoResponse;
@@ -35,6 +37,7 @@ import com.cozastore.dto.reponse.UserPageResponse;
 import com.cozastore.dto.request.FilterRequest;
 import com.cozastore.dto.request.ProductInfoRequest;
 import com.cozastore.dto.request.ProductRequest;
+import com.cozastore.dto.request.ProductStatusRequest;
 import com.cozastore.entity.Author;
 import com.cozastore.entity.Category;
 import com.cozastore.entity.Format;
@@ -42,6 +45,7 @@ import com.cozastore.entity.Product;
 import com.cozastore.entity.ProductFormat;
 import com.cozastore.entity.Review;
 import com.cozastore.entity.User;
+import com.cozastore.entity.ManytoManyID.ProductFormatID;
 import com.cozastore.exception.NotFoundException;
 import com.cozastore.mappers.FormatMapper;
 import com.cozastore.mappers.PageMapper;
@@ -172,6 +176,7 @@ public class ProductServiceTest {
 		List<Integer> categoryIds= new ArrayList<>();
 		categoryIds.add(1);
 		infoRequest.setCategoryIds(categoryIds);
+		ArgumentCaptor<ProductFormat> productFormatCaptor=ArgumentCaptor.forClass(ProductFormat.class);
 		when(iFormatRepository.findById(0)).thenReturn(Optional.of(format));
 		when(authorRepository.findById(0)).thenReturn(Optional.of(author));
 		when(categoryRepository.findById(1)).thenReturn(Optional.empty());
@@ -236,7 +241,7 @@ public class ProductServiceTest {
 		assertThat(actual.getMessage()).isEqualTo(ErrorString.AUTHOR_NOT_FOUND);
 	}
 	@Test
-	void updateProduct_whenCategoryNotFound_shouldReturnNotFoundException() {
+	void updateProduct_whenCategoryNotFound_shouldThrowNotFoundException() {
 		ProductInfoRequest infoRequest = new ProductInfoRequest();
 		Product product=mock(Product.class);
 		Format format=mock(Format.class);
@@ -259,6 +264,8 @@ public class ProductServiceTest {
 		Product product=mock(Product.class);
 		Format format=mock(Format.class);
 		Author author=mock(Author.class);
+		ProductFormatID productFormatId=mock(ProductFormatID.class);
+		ArgumentCaptor<ProductFormat> argumentCaptor=ArgumentCaptor.forClass(ProductFormat.class);
 		Category category=mock(Category.class);
 		ProductFormat productFormat=mock(ProductFormat.class);
 		List<Integer> categoryIds= new ArrayList<>();
@@ -271,8 +278,28 @@ public class ProductServiceTest {
 		when(infoRequest.getCategoryIds()).thenReturn(categoryIds);
 		when(product.getId()).thenReturn(1);
 		productService.insertProduct(infoRequest);
-		
-		
+		verify(product).setImgUrl(cloudinaryService.upload(infoRequest.getImgFile()));
+		verify(productRepository, times(2)).save(product);
+		verify(productFormatRepository).save(argumentCaptor.capture());
 	}
-
+	
+	@Test
+	void updateStatusProduct_whenProductNotFound_shouldThrowNotFoundException() throws IOException {
+		Product product=mock(Product.class);
+		ProductStatusRequest productStatusRequest=mock(ProductStatusRequest.class);
+		when(productRepository.findById(productStatusRequest.getId())).thenReturn(Optional.empty());
+		NotFoundException actual = Assertions.assertThrows(NotFoundException.class,
+				() -> productService.updateStatusProduct(productStatusRequest));
+		assertThat(actual.getMessage()).isEqualTo(ErrorString.PRODUCT_NOT_FOUND);
+	}
+	
+	@Test
+	void updateStatusProduct_whenDataValid_shouldSaveStatus() throws IOException {
+		Product product=mock(Product.class);
+		ProductStatusRequest productStatusRequest=mock(ProductStatusRequest.class);
+		when(productRepository.findById(0)).thenReturn(Optional.of(product));
+		productService.updateStatusProduct(productStatusRequest);
+		verify(productRepository).save(product);
+	}
+	
 }

@@ -11,6 +11,9 @@ import lombok.Setter;
 
 @AllArgsConstructor
 @Builder
+@NoArgsConstructor
+@Getter
+@Setter
 public class ReviewPageResponse {
 	
 	List<ReviewRespone> reviewRespones;

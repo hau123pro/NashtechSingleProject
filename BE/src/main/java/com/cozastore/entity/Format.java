@@ -17,6 +17,7 @@ import org.hibernate.annotations.OnDeleteAction;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -27,6 +28,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Entity
 @Table(name = "format")
+@EqualsAndHashCode
 public class Format {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

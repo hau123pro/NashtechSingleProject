@@ -12,6 +12,7 @@ import com.cozastore.entity.ManytoManyID.ProductFormatID;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,6 +24,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "product_format")
 @Builder
+@EqualsAndHashCode
 public class ProductFormat {
 	@EmbeddedId
 	private ProductFormatID id;

@@ -28,20 +28,23 @@ import com.cozastore.utils.constant.SuccessString;
 @Service
 public class CategoryService implements ICategoryService {
 
+	@Autowired
 	ICategoryRepository categoryRepository;
 
+	@Autowired
 	CategoryMapper categoryMapper;
 
+	@Autowired
 	PageMapper pageMapper;
 
-	@Autowired
-	public CategoryService(ICategoryRepository categoryRepository, CategoryMapper categoryMapper,
-			PageMapper pageMapper) {
-		super();
-		this.categoryRepository = categoryRepository;
-		this.categoryMapper = categoryMapper;
-		this.pageMapper = pageMapper;
-	}
+//	@Autowired
+//	public CategoryService(ICategoryRepository categoryRepository, CategoryMapper categoryMapper,
+//			PageMapper pageMapper) {
+//		super();
+//		this.categoryRepository = categoryRepository;
+//		this.categoryMapper = categoryMapper;
+//		this.pageMapper = pageMapper;
+//	}
 
 	@Override
 	public CategoryPageResponse getCategoryByPage(Pageable pageable) {
